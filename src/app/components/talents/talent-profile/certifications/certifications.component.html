@@ -1,0 +1,11 @@
+<div class="card card-body border-0 shadow mb-4 mb-xl-0 mt-2">
+  <div class="d-flex justify-content-between">
+    <h2 class="h5 mb-4">Certifications</h2>
+    <a (click)="handleOpenAddCertification()" class="custom-icon"><i class="bi bi-plus-circle"></i></a>
+  </div>
+  <ul class="list-group list-group-flush">
+    <app-certification *ngFor="let certification of certifications" [certification]="certification"></app-certification>
+  </ul>
+  <app-add-certification *ngIf="openAddCertification"></app-add-certification>
+  <app-edit-certification *ngIf="openEditCertification" [certification]="selectedCertification"></app-edit-certification>
+</div>

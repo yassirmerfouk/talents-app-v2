@@ -1,0 +1,11 @@
+<div class="card card-body border-0 shadow mb-4 mb-xl-0 mt-3">
+  <div class="d-flex justify-content-between">
+    <h2 class="h5 mb-4">Educations</h2>
+    <a (click)="handleOpenAddEducation()" class="custom-icon"><i class="bi bi-plus-circle"></i></a>
+  </div>
+  <ul class="list-group list-group-flush">
+    <app-education *ngFor="let education of educations" [education]="education"></app-education>
+  </ul>
+  <app-add-education *ngIf="openAddEducation"></app-add-education>
+  <app-edit-education *ngIf="openEditEducation" [education]="selectedEducation"></app-edit-education>
+</div>

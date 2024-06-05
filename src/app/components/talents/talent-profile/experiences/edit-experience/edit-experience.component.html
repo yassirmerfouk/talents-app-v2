@@ -1,0 +1,97 @@
+<div class="modal fade show" style="display: block;">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h6 class="h6 modal-title">Update your experience</h6>
+        <button (click)="handleCloseEditExperience()" type="button" class="btn-close"></button>
+      </div>
+      <form *ngIf="experience" [formGroup]="experienceForm" (ngSubmit)="handleUpdateExperience()">
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Title</label>
+              <input formControlName="title" type="text" class="form-control" placeholder="Title">
+            </div>
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Company</label>
+              <input formControlName="company" type="text" class="form-control" placeholder="Company">
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Country</label>
+              <input formControlName="country" type="text" class="form-control" placeholder="Country">
+            </div>
+            <div class="col-md-6 mb-3">
+              <label class="form-label">City</label>
+              <input formControlName="city" type="text" class="form-control" placeholder="City">
+            </div>
+          </div>
+          <div class="row">
+            <div class="mb-3 col-6">
+              <select formControlName="monthOfStart" class="form-select">
+                <option value="1">January</option>
+                <option value="2">February</option>
+                <option value="3">March</option>
+                <option value="4">April</option>
+                <option value="5">May</option>
+                <option value="6">June</option>
+                <option value="7">July</option>
+                <option value="8">August</option>
+                <option value="9">September</option>
+                <option value="10">October</option>
+                <option value="11">November</option>
+                <option value="12">December</option>
+              </select>
+            </div>
+            <div class="mb-3 col-6">
+              <select formControlName="yearOfStart" class="form-select">
+                <option value="2024">2024</option>
+                <option value="2023">2023</option>
+                <option value="2022">2022</option>
+                <option value="2021">2021</option>
+                <option value="2020">2020</option>
+              </select>
+            </div>
+          </div>
+          <div class="row">
+            <div class="mb-3 col-6">
+              <select formControlName="monthOfEnd" class="form-select">
+                <option value="1">January</option>
+                <option value="2">February</option>
+                <option value="3">March</option>
+                <option value="4">April</option>
+                <option value="5">May</option>
+                <option value="6">June</option>
+                <option value="7">July</option>
+                <option value="8">August</option>
+                <option value="9">September</option>
+                <option value="10">October</option>
+                <option value="11">November</option>
+                <option value="12">December</option>
+              </select>
+            </div>
+            <div class="mb-3 col-6">
+              <select formControlName="yearOfEnd" class="form-select">
+                <option value="2024">2024</option>
+                <option value="2023">2023</option>
+                <option value="2022">2022</option>
+                <option value="2021">2021</option>
+                <option value="2020">2020</option>
+              </select>
+            </div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Description</label>
+            <textarea formControlName="description" class="form-control" placeholder="Description" rows="4"></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary btn-sm">Close</button>
+          <button type="submit" class="btn btn-primary btn-sm">Update</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+

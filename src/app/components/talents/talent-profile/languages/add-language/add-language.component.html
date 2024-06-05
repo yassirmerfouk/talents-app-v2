@@ -1,0 +1,35 @@
+<div class="modal fade show" style="display: block;">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h6 class="h6 modal-title">Add new language</h6>
+        <button (click)="handleCloseAddLanguage()" type="button" class="btn-close"></button>
+      </div>
+      <form [formGroup]="languageForm" (ngSubmit)="handleAddLanguage()">
+        <div class="modal-body">
+          <div class="mb-3">
+            <label class="form-label">Title</label>
+            <input formControlName="title" type="text" class="form-control" placeholder="Title">
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Level</label>
+            <select formControlName="level" class="form-select">
+              <option value="">Select...</option>
+              <option value="A1">A1</option>
+              <option value="A2">A2</option>
+              <option value="B1">B1</option>
+              <option value="B2">B2</option>
+              <option value="C1">C1</option>
+              <option value="C2">C2</option>
+            </select>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary btn-sm">Close</button>
+          <button type="submit" class="btn btn-primary btn-sm">Add</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+

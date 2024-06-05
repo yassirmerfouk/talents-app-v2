@@ -1,0 +1,141 @@
+{
+  "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
+  "version": 1,
+  "newProjectRoot": "projects",
+  "projects": {
+    "talents-app": {
+      "projectType": "application",
+      "schematics": {
+        "@schematics/angular:component": {
+          "standalone": false
+        },
+        "@schematics/angular:directive": {
+          "standalone": false
+        },
+        "@schematics/angular:pipe": {
+          "standalone": false
+        }
+      },
+      "root": "",
+      "sourceRoot": "src",
+      "prefix": "app",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:application",
+          "options": {
+            "outputPath": "dist/talents-app",
+            "index": "src/index.html",
+            "browser": "src/main.ts",
+            "polyfills": [
+              "zone.js"
+            ],
+            "tsConfig": "tsconfig.app.json",
+            "assets": [
+              "src/favicon.ico",
+              "src/assets"
+            ],
+            "styles": [
+              "src/styles.css",
+              "node_modules/bootstrap-icons/font/bootstrap-icons.min.css",
+              "template/css/volt.css",
+              "template/vendor/apexcharts/dist/apexcharts.css",
+              "template/vendor/choices.js/public/assets/styles/choices.min.css",
+              "template/vendor/dropzone/dist/min/dropzone.min.css",
+              "template/vendor/fullcalendar/main.min.css",
+              "template/vendor/leaflet/dist/leaflet.css",
+              "template/vendor/notyf/notyf.min.css",
+              "template/vendor/sweetalert2/dist/sweetalert2.min.css"
+            ],
+            "scripts": [
+              "template/assets/js/volt.js",
+              "template\\vendor\\@popperjs\\core\\dist\\umd/popper.min.js",
+              "template\\vendor\\apexcharts\\dist/apexcharts.min.js",
+              "template\\vendor\\bootstrap\\dist\\js/bootstrap.min.js",
+              "template\\vendor\\choices.js\\public\\assets\\scripts/choices.min.js",
+              "template\\vendor\\countup.js\\dist/countUp.umd.js",
+              "template\\vendor\\dropzone\\dist\\min/dropzone.min.js",
+              "template\\vendor\\fullcalendar/main.min.js",
+              "template\\vendor\\leaflet\\dist/leaflet.js",
+              "template\\vendor\\notyf/notyf.min.js",
+              "template\\vendor\\nouislider\\distribute/nouislider.min.js",
+              "template\\vendor\\onscreen\\dist/on-screen.umd.min.js",
+              "template\\vendor\\simplebar\\dist/simplebar.min.js",
+              "template\\vendor\\simple-datatables\\dist\\umd/simple-datatables.js",
+              "template\\vendor\\smooth-scroll\\dist/smooth-scroll.polyfills.min.js",
+              "template\\vendor\\sortablejs/Sortable.min.js",
+              "template\\vendor\\svgmap\\dist/svgMap.min.js",
+              "template\\vendor\\svg-pan-zoom\\dist/svg-pan-zoom.min.js",
+              "template\\vendor\\sweetalert2\\dist/sweetalert2.min.js",
+              "template\\vendor\\vanillajs-datepicker\\dist\\js/datepicker.min.js"
+            ]
+          },
+          "configurations": {
+            "production": {
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "500kb",
+                  "maximumError": "1mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "2kb",
+                  "maximumError": "4kb"
+                }
+              ],
+              "outputHashing": "all"
+            },
+            "development": {
+              "optimization": false,
+              "extractLicenses": false,
+              "sourceMap": true,
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.development.ts"
+                }
+              ]
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "configurations": {
+            "production": {
+              "buildTarget": "talents-app:build:production"
+            },
+            "development": {
+              "buildTarget": "talents-app:build:development"
+            }
+          },
+          "defaultConfiguration": "development"
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "buildTarget": "talents-app:build"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "polyfills": [
+              "zone.js",
+              "zone.js/testing"
+            ],
+            "tsConfig": "tsconfig.spec.json",
+            "assets": [
+              "src/favicon.ico",
+              "src/assets"
+            ],
+            "styles": [
+              "src/styles.css"
+            ],
+            "scripts": []
+          }
+        }
+      }
+    }
+  }
+}

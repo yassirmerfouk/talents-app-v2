@@ -1,0 +1,109 @@
+<div *ngIf="talent" class="row">
+  <div class="col-12 col-xl-8">
+    <div class="card card-body border-0 shadow mb-4">
+      <h2 class="h5 mb-4">Profile informations</h2>
+      <form [formGroup]="talentForm" (ngSubmit)="handleUpdateProfile()">
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label class="form-label">First name</label>
+            <input formControlName="firstName" type="text" class="form-control">
+          </div>
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Last name</label>
+            <input formControlName="lastName" type="text" class="form-control">
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Email</label>
+            <input formControlName="email" type="email" class="form-control">
+          </div>
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Phone</label>
+            <input formControlName="phone" type="text" class="form-control">
+          </div>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Title</label>
+          <input formControlName="title" type="text" class="form-control">
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Summary</label>
+          <textarea formControlName="summary" class="form-control" rows="3"></textarea>
+        </div>
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Birth date</label>
+            <input formControlName="dateOfBirth" type="date" class="form-control">
+          </div>
+          <div class="col-md-6 mb-3">
+            <label class="form-label">City</label>
+            <select formControlName="city" class="form-select">
+              <option value="Casablanca">Casablanca</option>
+              <option value="Marrakech">Marrakech</option>
+              <option value="Safi">Safi</option>
+            </select>
+          </div>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Address</label>
+          <textarea formControlName="address" class="form-control" rows="2"></textarea>
+        </div>
+        <div class="d-flex justify-content-end">
+          <button type="submit" class="btn btn-primary btn-sm">Update</button>
+        </div>
+      </form>
+    </div>
+
+    <app-experiences [experiences]="talent.experiences"></app-experiences>
+
+    <app-educations [educations]="talent.educations"></app-educations>
+
+    <app-projects [projects]="talent.projects"></app-projects>
+
+
+  </div>
+  <div class="col-12 col-xl-4">
+    <div class="row">
+      <div class="col-12 mb-4">
+        <div class="card shadow border-0 text-center p-0">
+          <div class="profile-cover rounded-top">
+            <img style="width: 100%; filter: blur(2px);" class="profile-cover rounded-top"
+                 src="assets/img/profile-cover.jpg">
+          </div>
+          <div class="card-body pb-1"><img style="position: relative;"
+                                           [src]="talent.image ? talent.image : 'assets/img/no-image.jpg'"
+                                           class="avatar-xl rounded-circle mx-auto mt-n7 mb-2" alt="Neil Portrait">
+            <h4 class="h4">{{talent.firstName + ' ' + talent.lastName}} <i class="bi bi-check-circle-fill custom-icon"
+                                                                           [ngClass]="{'text-success' : talent.status == 'VERIFIED', 'text-warning' : talent.status == 'WAITING', 'text-gray' : talent.status == 'NOT_VERIFIED'}"></i>
+            </h4>
+            <h5 class="fw-normal">{{talent.title}}</h5>
+            <p class="text-gray mb-1">{{talent.city}}, MAROC</p>
+          </div>
+          <form [formGroup]="imageForm" (ngSubmit)="handleUpdateImage()">
+            <div class="mb-3 p-1 d-flex justify-content-between"><input
+              (change)="handleSelectImage($event)"
+              class="form-control me-1" type="file" id="formFile">
+              <button class="no-border"><i class="bi bi-check-circle-fill custom-icon"></i></button>
+            </div>
+          </form>
+        </div>
+        <div class="d-flex justify-content-center mt-3">
+          <!--<i class="bi bi-check-circle-fill custom-icon-big"
+             [ngClass]="{
+             'text-success' : talent.status == 'VERIFIED',
+             'text-warning' : talent.status == 'WAITING',
+             'text-gray' : talent.status == 'NOT_VERIFIED',
+             }"
+          ></i>-->
+          <button *ngIf="talent.status == 'NOT_VERIFIED'" (click)="handleAskForVerification()"
+                  class="btn btn-secondary btn-sm">Ask for verification
+          </button>
+        </div>
+
+        <app-languages [languages]="talent.languages"></app-languages>
+        <app-certifications [certifications]="talent.certifications"></app-certifications>
+      </div>
+    </div>
+  </div>
+</div>

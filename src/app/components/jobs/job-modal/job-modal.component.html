@@ -1,0 +1,38 @@
+<div class="modal fade show" style="display: block;">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h6 class="h6 modal-title">Apply to job</h6>
+        <button (click)="handleCloseJob()" type="button" class="btn-close"></button>
+      </div>
+      <div class="modal-body">
+        <div *ngIf="job">
+          <div class="">
+            <div class="d-flex justify-content-between">
+              <h6 class="h6 fw-bold mb-0 custom-link">{{job.title}}</h6>
+              <h6 class="small pe-4">{{job.type == 'FULL_TIME' ? 'Full TIME' : 'PART TIME'}}</h6>
+            </div>
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item d-flex align-items-center justify-content-between px-0 border-bottom">
+                <div>
+                  <p class="small pe-4">{{job.sector}}</p>
+                  <p class="small pe-4 mt-2">Years of experiences : {{job.yearsOfExperiences}} years</p>
+                  <p class="small pe-4 mt-2">Number of talents : {{job.numberOfTalents}} talents</p>
+                  <p class="small pe-4 mt-2">Salary : {{job.minSalary}} - {{job.maxSalary}}</p>
+                  <p class="small pe-4">Client : <a [routerLink]="'/client/' + job.client.id" class="text-info"><u>{{job.client.firstName + ' ' + job.client.lastName}}</u></a></p>
+                  <p class="small pe-4 mt-2">{{job.description}}</p>
+                  <p class="small pe-4 mt-3 text-end fw-bold">{{job.createdAt | date : 'short'}}</p>
+                  <div *ngIf="authStateService.hasAuthority('TALENT')" class="d-flex justify-content-end pe-4 ps-4 mt-3">
+                    <button [disabled]="job.applied" (click)="handleApplyToJob(job.id)" class="btn btn-primary btn-sm col-3">Apply to job</button>
+                  </div>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+

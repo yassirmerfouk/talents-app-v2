@@ -1,0 +1,11 @@
+<li class="list-group-item d-flex align-items-center justify-content-between px-0 border-bottom">
+  <div>
+    <h3 class="h6 mb-1">{{experience.title}} - {{experience.company}}</h3>
+    <p class="small pe-4">{{experience.city}}, {{experience.company}}</p>
+    <p class="small pe-4">{{experience.description}}</p>
+  </div>
+  <div class="d-flex justify-content-between">
+    <a class="me-2"><i (click)="handleOpenEditExperience(experience)" class="bi bi-pencil-fill"></i></a>
+    <a><i (click)="handleDeleteExperience(experience.id)" class="bi bi-trash-fill"></i></a>
+  </div>
+</li>

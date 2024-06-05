@@ -1,0 +1,80 @@
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-12 d-flex align-items-center justify-content-center">
+      <div class="col-8 bg-white shadow border-0 rounded border-light p-3">
+        <div class="text-center text-md-center mb-4 mt-md-0">
+          <h1 class="mb-0 h3">Create Account</h1>
+        </div>
+        <form [formGroup]="talentRegistration" (ngSubmit)="handleRegistration()">
+          <div class="row">
+            <div class="col-6 form-group mb-4"><label>First name</label>
+              <div class="input-group">
+                <input formControlName="firstName" type="text" placeholder="First name" class="form-control">
+              </div>
+              <div *ngIf="errors?.has('firstName')" class="text-danger mt-2 small">{{errors?.get('firstName')}}</div>
+            </div>
+            <div class="col-6 form-group mb-4"><label>Last name</label>
+              <div class="input-group">
+                <input formControlName="lastName" type="text" placeholder="Last name" class="form-control">
+              </div>
+              <div *ngIf="errors?.has('lastName')" class="text-danger mt-2 small">{{errors?.get('lastName')}}</div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-6 form-group mb-4"><label>Email</label>
+              <div class="input-group">
+                <input formControlName="email" type="email" placeholder="email" class="form-control">
+              </div>
+              <div *ngIf="errors?.has('email')" class="text-danger mt-2 small">{{errors?.get('email')}}</div>
+            </div>
+            <div class="col-6 form-group mb-4"><label>Password</label>
+              <div class="input-group">
+                <input formControlName="password" type="password" placeholder="Password" class="form-control">
+              </div>
+              <div *ngIf="errors?.has('password')" class="text-danger mt-2 small">{{errors?.get('password')}}</div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-6 form-group mb-4"><label>Phone</label>
+              <div class="input-group">
+                <input formControlName="phone" type="text" placeholder="Phone" class="form-control">
+              </div>
+              <div *ngIf="errors?.has('phone')" class="text-danger mt-2 small">{{errors?.get('phone')}}</div>
+            </div>
+            <div class="col-6 form-group mb-4"><label>Title</label>
+              <div class="input-group">
+                <input formControlName="title" type="text" placeholder="Title" class="form-control">
+              </div>
+              <div *ngIf="errors?.has('title')" class="text-danger mt-2 small">{{errors?.get('title')}}</div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-6 form-group mb-4"><label>Birth date</label>
+              <div class="input-group">
+                <input formControlName="dateOfBirth" type="date" class="form-control">
+              </div>
+              <div *ngIf="errors?.has('dateOfBirth')"
+                   class="text-danger mt-2 small">{{errors?.get('dateOfBirth')}}</div>
+            </div>
+            <div class="col-6 form-group mb-4"><label>City</label>
+              <div class="input-group">
+                <select formControlName="city" class="form-select">
+                  <option value="">Select...</option>
+                  <option value="Casablanca">Casablanca</option>
+                  <option value="Marrakech">Marrakech</option>
+                  <option value="Safi">Safi</option>
+                </select>
+              </div>
+              <div *ngIf="errors?.has('city')" class="text-danger mt-2 small">{{errors?.get('city')}}</div>
+            </div>
+          </div>
+          <div class="d-grid">
+            <button type="submit" class="btn btn-gray-800">Create account</button>
+          </div>
+        </form>
+        <div class="d-flex justify-content-center align-items-center mt-4"><span class="fw-normal">Already have an account?
+                  <a routerLink="/auth/login" class="fw-bold">Login here</a></span></div>
+      </div>
+    </div>
+  </div>
+</div>

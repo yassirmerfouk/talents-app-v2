@@ -1,0 +1,64 @@
+<div class="d-flex justify-content-end container">
+  <a (click)="handleCloseEditJob()">
+    <i class="bi bi-x-lg custom-icon"></i>
+  </a>
+</div>
+<div *ngIf="job" class="row">
+  <div class="col-12 col-xl-12">
+    <div class="card card-body border-0 shadow mb-4">
+      <form [formGroup]="jobForm" (ngSubmit)="handleUpdateJob()">
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Tile</label>
+            <input formControlName="title" type="text" class="form-control">
+          </div>
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Sector</label>
+            <input formControlName="sector" type="text" class="form-control">
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Min salary</label>
+            <input formControlName="minSalary" type="number" class="form-control">
+          </div>
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Max salary</label>
+            <input formControlName="maxSalary" type="number" class="form-control">
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Period</label>
+            <input formControlName="period" type="number" class="form-control">
+          </div>
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Experience</label>
+            <input formControlName="yearsOfExperiences" type="number" class="form-control">
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Number of talents</label>
+            <input formControlName="numberOfTalents" type="number" class="form-control">
+          </div>
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Type</label>
+            <select formControlName="type" class="form-select">
+              <option value="">Select...</option>
+              <option value="FULL_TIME">FULL TIME</option>
+              <option value="PART_TIME">PART TIME</option>
+            </select>
+          </div>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Description</label>
+          <textarea formControlName="description" class="form-control" rows="6"></textarea>
+        </div>
+        <div class="d-flex justify-content-end">
+          <button type="submit" class="btn btn-primary btn-sm">Update</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,11 @@
+<div class="card card-body border-0 shadow mb-4 mb-xl-0">
+ <div class="d-flex justify-content-between">
+   <h2 class="h5 mb-4">Experiences</h2>
+ <a (click)="handleOpenAddExperience()" class="custom-icon"><i class="bi bi-plus-circle"></i></a>
+ </div>
+  <ul class="list-group list-group-flush">
+    <app-experience *ngFor="let experience of experiences" [experience]="experience"></app-experience>
+  </ul>
+  <app-add-experience *ngIf="openAddExperience"></app-add-experience>
+  <app-edit-experience *ngIf="openEditExperience" [experience]="selectedExperience"></app-edit-experience>
+</div>

@@ -1,0 +1,36 @@
+<div class="modal fade show" style="display: block;">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h6 class="h6 modal-title">Add new certification</h6>
+        <button (click)="handleCloseAddCertification()" type="button" class="btn-close"></button>
+      </div>
+      <form [formGroup]="certificationForm" (ngSubmit)="handleAddCertification()">
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Title</label>
+              <input formControlName="title" type="text" class="form-control" placeholder="Title">
+            </div>
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Issued at</label>
+              <input formControlName="issuedAt" type="date" class="form-control">
+            </div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Resource</label>
+            <input formControlName="resource" type="text" class="form-control" placeholder="Resource">
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Description</label>
+            <textarea formControlName="description" class="form-control" placeholder="Description"></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary btn-sm">Close</button>
+          <button type="submit" class="btn btn-primary btn-sm">Add</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

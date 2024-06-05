@@ -1,0 +1,147 @@
+<div *ngIf="talent" class="row">
+  <div class="col-12 col-xl-4">
+    <div class="row">
+      <div class="col-12 mb-4">
+        <div class="card shadow border-0 text-center p-0">
+          <div class="profile-cover rounded-top">
+            <img style="width: 100%; filter: blur(2px);" class="profile-cover rounded-top"
+                 src="assets/img/profile-cover.jpg">
+          </div>
+          <div class="card-body pb-1"><img style="position: relative;"
+                                           [src]="talent.image ? talent.image : 'assets/img/no-image.jpg'"
+                                           class="avatar-xl rounded-circle mx-auto mt-n7 mb-2" alt="Neil Portrait">
+            <h4 class="h4">{{talent.firstName + ' ' + talent.lastName}} <i class="bi bi-check-circle-fill custom-icon"
+                                                                           [ngClass]="{'text-success' : talent.status == 'VERIFIED', 'text-warning' : talent.status == 'WAITING', 'text-gray' : talent.status == 'NOT_VERIFIED'}"></i>
+            </h4>
+            <h5 class="fw-normal">{{talent.title}}</h5>
+            <p class="text-gray mb-1">{{talent.city}}, MAROC</p>
+          </div>
+          <p class="small pe-2 ps-2">{{talent.summary}}</p>
+        </div>
+        <div class="card card-body border-0 shadow mb-4 mb-xl-0 mt-2">
+          <div class="d-flex justify-content-between">
+            <h2 class="h5 mb-2">Languages</h2>
+          </div>
+          <ul class="list-group list-group-flush">
+            <li *ngFor="let language of talent.languages"
+                class="list-group-item d-flex align-items-center justify-content-between px-0 border-bottom">
+              <div>
+                <h3 class="h6 mb-1">{{language.title}}</h3>
+                <p class="small pe-4">Level : {{language.level}}</p>
+              </div>
+            </li>
+          </ul>
+        </div>
+        <div class="card card-body border-0 shadow mb-4 mb-xl-0 mt-2">
+          <div class="d-flex justify-content-between">
+            <h2 class="h5 mb-2">Certifications</h2>
+          </div>
+          <ul class="list-group list-group-flush">
+            <li *ngFor="let certification of talent.certifications"
+                class="list-group-item d-flex align-items-center justify-content-between px-0 border-bottom">
+              <div>
+                <h3 class="h6 mb-1">{{certification.title}}</h3>
+                <p class="small pe-4">Issued at : {{certification.issuedAt}}</p>
+                <p *ngIf="certification.description" class="small pe-4">{{certification.description}}</p>
+              </div>
+            </li>
+          </ul>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+  <div class="col-12 col-xl-8">
+
+    <div class="card card-body border-0 shadow mb-4 mb-xl-0 pt-0 pb-0">
+      <div class="row mt-4 mb-3 align-items-center">
+        <div class="d-flex">
+          <div class="col-sm-4 text-uppercase">Email</div>
+          <div class="col-sm-8">
+            <p class="text-dark mb-0" style="font-size: 15px;">
+              {{talent.email}}
+            </p>
+          </div>
+        </div>
+        <div class="d-flex mt-2">
+          <div class="col-sm-4 text-uppercase">Phone</div>
+          <div class="col-sm-8">
+            <p class="text-dark mb-0" style="font-size: 15px;">
+              {{talent.phone}}
+            </p>
+          </div>
+        </div>
+        <div class="d-flex mt-2">
+          <div class="col-sm-4 text-uppercase">Birth date</div>
+          <div class="col-sm-8">
+            <p class="text-dark mb-0" style="font-size: 15px;">
+              {{talent.dateOfBirth}}
+            </p>
+          </div>
+        </div>
+        <div class="d-flex mt-2">
+          <div class="col-sm-4 text-uppercase">Address</div>
+          <div class="col-sm-8">
+            <p class="text-dark mb-0" style="font-size: 15px;">
+              {{talent.address}}
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card card-body border-0 shadow mb-4 mb-xl-0 mt-2">
+      <div class="d-flex justify-content-between">
+        <h2 class="h5 mb-2">Experiences</h2>
+      </div>
+      <ul class="list-group list-group-flush">
+        <li *ngFor="let experience of talent.experiences"
+            class="list-group-item d-flex align-items-center justify-content-between px-0 border-bottom">
+          <div>
+            <h3 class="h6 mb-1">{{experience.title}} - {{experience.company}}</h3>
+            <p class="small pe-4">{{experience.city}}, {{experience.company}}</p>
+            <p class="small pe-4">{{experience.description}}</p>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <div class="card card-body border-0 shadow mb-4 mb-xl-0 mt-3">
+      <div class="d-flex justify-content-between">
+        <h2 class="h5 mb-2">Educations</h2>
+      </div>
+      <ul class="list-group list-group-flush">
+        <li *ngFor="let education of talent.educations"
+            class="list-group-item d-flex align-items-center justify-content-between px-0 border-bottom">
+          <div>
+            <h3 class="h6 mb-1">{{education.level}} - {{education.domain}}</h3>
+            <p class="small pe-4">{{education.university}}, {{education.city}}</p>
+            <p class="small pe-4">{{education.monthOfStart}} {{education.yearOfStart}}
+              to {{education.monthOfEnd}} {{education.yearOfEnd}}</p>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <div class="card card-body border-0 shadow mb-4 mb-xl-0 mt-3">
+      <div class="d-flex justify-content-between">
+        <h2 class="h5 mb-2">Projects</h2>
+      </div>
+      <ul class="list-group list-group-flush">
+        <li *ngFor="let project of talent.projects"
+            class="list-group-item d-flex align-items-center justify-content-between px-0 border-bottom">
+          <div>
+            <h3 class="h6 mb-1">{{project.title}}</h3>
+            <p class="small pe-4">{{project.shortDescription}}</p>
+            <p class="small pe-4">{{project.resource}}</p>
+          </div>
+        </li>
+
+      </ul>
+    </div>
+
+
+  </div>
+</div>
+
