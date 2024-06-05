@@ -1,12 +1,11 @@
 import {Component, inject, OnDestroy, OnInit} from '@angular/core';
 import {Page} from "../../../models/page.model";
 import {Job} from "../../../models/job.model";
-import {JobService} from "../../../services/job.service";
 import {FormBuilder, FormGroup} from "@angular/forms";
-import {ActionEvent} from "../../../state/action-event.event";
 import {EventService} from "../../../services/event.service";
 import {EventType} from "../../../state/event-type.enum";
-import {HttpErrorResponse} from "@angular/common/http";
+import {Store} from "../../../state/store.service";
+import {Subscription} from "rxjs";
 
 @Component({
   selector: 'app-jobs',
@@ -15,10 +14,11 @@ import {HttpErrorResponse} from "@angular/common/http";
 })
 export class JobsComponent implements OnInit, OnDestroy {
 
-  private jobService: JobService = inject(JobService);
-  private formBuilder: FormBuilder = inject(FormBuilder);
+  private store: Store = inject(Store);
   private eventService: EventService = inject(EventService);
+  private stateSubscription !: Subscription;
 
+  private formBuilder: FormBuilder = inject(FormBuilder);
 
   public jobsPage !: Page<Job>;
 
@@ -32,48 +32,33 @@ export class JobsComponent implements OnInit, OnDestroy {
 
   public selectedJob !: Job;
 
+  public error !: string;
+
   public ngOnInit(): void {
-    console.log("jobs created");
+
+    this.stateSubscription = this.store.state$.subscribe(
+      (state: any) => {
+        this.jobsPage = state.jobsState.jobsPage;
+        this.openJob = state.jobsState.openJob;
+        this.selectedJob = state.jobsState.selectedJob;
+        this.error = state.jobsState.error;
+      }
+    );
+
     this.searchForm = this.formBuilder.group({
       keyword: this.formBuilder.control("")
     });
-    this.searchJobs();
-    this.eventService.event$.subscribe(
-      ($event: ActionEvent) => this.handleEvent($event)
-    );
-  }
 
-  public handleEvent($event: ActionEvent): void {
-    switch ($event.eventType) {
-      case EventType.OPEN_JOB :
-        this.openJob = true;
-        this.selectedJob = $event.payload;
-        break;
-      case EventType.CLOSE_JOB :
-        this.openJob = false;
-        break;
-      case EventType.APPLY_TO_JOB :
-        this.applyToJob($event.payload);
-        break;
-    }
+    this.searchJobs();
   }
 
   public searchJobs(): void {
-    this.jobService.searchJobs(this.keyword, this.page, this.size).subscribe({
-      next: (jobsPage: Page<Job>) => {
-        this.jobsPage = jobsPage;
-      }
-    });
-  }
-
-  public applyToJob(id: number): void {
-    this.jobService.applyToJob(id).subscribe({
-      next: () => {
-        console.log("apply success");
-        this.selectedJob.applied = true;
-      },
-      error: (error: HttpErrorResponse) => {
-        console.log(error);
+    this.eventService.dispatchEvent({
+      eventType : EventType.SEARCH_JOBS,
+      payload : {
+        keyword : this.keyword,
+        page : this.page,
+        size : this.size
       }
     });
   }
@@ -99,11 +84,12 @@ export class JobsComponent implements OnInit, OnDestroy {
   }
 
   public handleOpenJob(job: Job): void {
-    this.eventService.publishEvent({eventType: EventType.OPEN_JOB, payload: job});
+    this.eventService.dispatchEvent({eventType: EventType.OPEN_JOB, payload: job});
   }
 
   public ngOnDestroy() {
-    /*console.log("Jobs destroyed");*/
+    if(this.stateSubscription)
+      this.stateSubscription.unsubscribe();
   }
 
 }

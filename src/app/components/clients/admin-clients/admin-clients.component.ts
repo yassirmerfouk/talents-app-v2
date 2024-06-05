@@ -1,20 +1,22 @@
-import {Component, inject, OnInit} from '@angular/core';
-import {ClientService} from "../../../services/client.service";
+import {Component, inject, OnDestroy, OnInit} from '@angular/core';
 import {Page} from "../../../models/page.model";
 import {Client} from "../../../models/client.model";
 import {FormBuilder, FormGroup} from "@angular/forms";
-import {UserService} from "../../../services/user.service";
-import {HttpErrorResponse} from "@angular/common/http";
+import {Store} from "../../../state/store.service";
+import {EventService} from "../../../services/event.service";
+import {Subscription} from "rxjs";
+import {EventType} from "../../../state/event-type.enum";
 
 @Component({
   selector: 'app-admin-clients',
   templateUrl: './admin-clients.component.html',
   styleUrl: './admin-clients.component.css'
 })
-export class AdminClientsComponent implements OnInit {
+export class AdminClientsComponent implements OnInit, OnDestroy {
 
-  private clientService : ClientService = inject(ClientService);
-  private userService : UserService = inject(UserService);
+  private store : Store = inject(Store);
+  private eventService : EventService = inject(EventService);
+  private stateSubscription !: Subscription;
 
   private formBuilder: FormBuilder = inject(FormBuilder);
 
@@ -27,17 +29,27 @@ export class AdminClientsComponent implements OnInit {
   public filterForm !: FormGroup;
 
   public ngOnInit(): void {
-    this.getClients();
+
+    this.stateSubscription = this.store.state$.subscribe(
+      (state : any) => {
+        this.clientsPage = state.clientsState.clientsPage;
+      }
+    );
 
     this.filterForm = this.formBuilder.group({
       status: this.formBuilder.control("all"),
     });
+
+    this.getClients();
   }
 
   public getClients() : void {
-    this.clientService.getClients(this.status,this.page,this.size).subscribe({
-      next : (clientsPage : Page<Client>) => {
-        this.clientsPage = clientsPage;
+    this.eventService.dispatchEvent({
+      eventType : EventType.GET_CLIENTS,
+      payload : {
+        status : this.status,
+        page : this.page,
+        size : this.size
       }
     });
   }
@@ -48,37 +60,16 @@ export class AdminClientsComponent implements OnInit {
     this.getClients();
   }
 
-  public handleVerifyUser(id : number) : void {
-    this.userService.verifyUser(id).subscribe({
-      next : () => {
-        this.clientsPage.content = this.clientsPage.content.map((cli : Client) => {
-          if(cli.id == id) cli.status = 'VERIFIED'; return cli;
-        });
-      },
-      error : (error : HttpErrorResponse) => console.log(error)
-    });
+  public handleVerifyUser(client : Client) : void {
+    this.eventService.dispatchEvent({eventType : EventType.VERIFY_USER, payload : client});
   }
 
-  public handleBanUser(id : number) : void {
-    this.userService.banUser(id).subscribe({
-      next : () => {
-        this.clientsPage.content = this.clientsPage.content.map((cli : Client) => {
-          if(cli.id == id) cli.status = 'BANNED'; return cli;
-        });
-      },
-      error : (error : HttpErrorResponse) => console.log(error)
-    });
+  public handleBanUser(client : Client) : void {
+    this.eventService.dispatchEvent({eventType : EventType.BAN_USER, payload : client});
   }
 
-  public handlePermitUser(id : number) : void {
-    this.userService.banUser(id).subscribe({
-      next : () => {
-        this.clientsPage.content = this.clientsPage.content.map((cli : Client) => {
-          if(cli.id == id) cli.status = 'NOT_VERIFIED'; return cli;
-        });
-      },
-      error : (error : HttpErrorResponse) => console.log(error)
-    });
+  public handlePermitUser(client : Client) : void {
+    this.eventService.dispatchEvent({eventType : EventType.PERMIT_USER, payload : client});
   }
 
   public handleChangePage(page : number) : void {
@@ -94,6 +85,11 @@ export class AdminClientsComponent implements OnInit {
   public handleNextPage() : void{
     this.page++;
     this.getClients();
+  }
+
+  public ngOnDestroy() : void {
+    if(this.stateSubscription)
+      this.stateSubscription.unsubscribe();
   }
 
 }

@@ -46,6 +46,6 @@ export class EditJobComponent implements OnInit{
   }
 
   public handleCloseEditJob() : void {
-    this.eventService.publishEvent({eventType : EventType.CLOSE_EDIT_JOB});
+    this.eventService.dispatchEvent({eventType : EventType.CLOSE_EDIT_JOB});
   }
 }

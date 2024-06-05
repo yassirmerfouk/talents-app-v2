@@ -1,5 +1,5 @@
 import {inject, Injectable} from "@angular/core";
-import {Subject} from "rxjs";
+import {Observable, Subject} from "rxjs";
 import {ActionEvent} from "./action-event.event";
 import {AuthenticationRequest, AuthenticationResponse} from "../models/authentication.model";
 import {HttpErrorResponse} from "@angular/common/http";
@@ -13,6 +13,10 @@ import {Page} from "../models/page.model";
 import {Job} from "../models/job.model";
 import {JobService} from "../services/job.service";
 import {Application} from "../models/application.model";
+import {Client, ClientRequest} from "../models/client.model";
+import {ClientService} from "../services/client.service";
+import {User} from "../models/user.model";
+import {UserService} from "../services/user.service";
 
 @Injectable({
   providedIn: 'root'
@@ -21,20 +25,23 @@ export class Reducer {
 
   private store: Store = inject(Store);
 
-  private dispatcher: Subject<ActionEvent> = new Subject<ActionEvent>();
+  private dispatcherSubject: Subject<ActionEvent> = new Subject<ActionEvent>();
+  public dispatcher$: Observable<ActionEvent> = this.dispatcherSubject.asObservable();
 
   private authService: AuthService = inject(AuthService);
   private authStateService: AuthStateService = inject(AuthStateService);
   private jobService: JobService = inject(JobService);
+  private clientService: ClientService = inject(ClientService);
+  private userService: UserService = inject(UserService);
 
   private router: Router = inject(Router);
 
   public dispatch($event: ActionEvent): void {
-    this.dispatcher.next($event);
+    this.dispatcherSubject.next($event);
   }
 
   public constructor() {
-    this.dispatcher.subscribe(
+    this.dispatcher$.subscribe(
       ($event: ActionEvent) => {
         switch ($event.eventType) {
           case EventType.LOGIN :
@@ -66,6 +73,66 @@ export class Reducer {
             break;
           case EventType.GET_JOB_SELECTED_APPLICATIONS :
             this.getSelectedJobApplications($event.payload);
+            break;
+          case EventType.SELECT_TALENT :
+            this.selectTalentForJob($event.payload);
+            break;
+          case EventType.APPROVE_TALENT :
+            this.approveTalentForJob($event.payload);
+            break;
+          case EventType.SEARCH_JOBS :
+            this.searchJobs($event.payload);
+            break;
+          case EventType.OPEN_JOB :
+            this.openJob($event.payload);
+            break;
+          case EventType.CLOSE_JOB :
+            this.closeJob();
+            break;
+          case EventType.APPLY_TO_JOB :
+            this.applyToJob($event.payload);
+            break;
+          case EventType.GET_CLIENTS :
+            this.getClients($event.payload);
+            break;
+          case EventType.VERIFY_USER :
+            this.verifyUser($event.payload);
+            break;
+          case EventType.BAN_USER :
+            this.banUser($event.payload);
+            break;
+          case EventType.PERMIT_USER :
+            this.permitUser($event.payload);
+            break;
+          case EventType.GET_CLIENT :
+            this.getClient($event.payload);
+            break;
+          case EventType.GET_CLIENT_PROFILE :
+            this.getClientProfile();
+            break;
+          case EventType.UPDATE_CLIENT_PROFILE :
+            this.updateClientProfile($event.payload);
+            break;
+          case EventType.UPDATE_IMAGE :
+            this.updateImage($event.payload);
+            break;
+          case EventType.ASK_VERIFICATION :
+            this.askForVerification($event.payload);
+            break;
+          case EventType.GET_MY_JOBS :
+            this.getMyJobs($event.payload);
+            break;
+          case EventType.OPEN_ADD_JOB :
+            this.openAddJob();
+            break;
+          case EventType.CLOSE_ADD_JOB :
+            this.closeAddJob();
+            break;
+          case EventType.OPEN_EDIT_JOB :
+            this.openEditJob($event.payload);
+            break;
+          case EventType.CLOSE_EDIT_JOB :
+            this.closeEditJob();
             break;
         }
       }
@@ -208,7 +275,7 @@ export class Reducer {
       next: (jobsPage: Page<Job>) => {
         this.store.setState({
           jobsState: {jobsPage: jobsPage}
-        })
+        });
       },
       error: (error: HttpErrorResponse) => {
         console.log(error)
@@ -247,7 +314,7 @@ export class Reducer {
         console.log(error)
         this.store.setState({
           jobsState: {error: error.error.message}
-        })
+        });
       }
     });
   }
@@ -255,14 +322,217 @@ export class Reducer {
   public getSelectedJobApplications(id: number): void {
     this.jobService.getSelectedJobApplication(id).subscribe({
       next: (selectedApplications: Array<Application>) => {
-        let jobsState = {...this.store.state.jobsState, ...{selectedApplications : selectedApplications}}
+        let jobsState = {...this.store.state.jobsState, ...{selectedApplications: selectedApplications}}
         this.store.setState({
           jobsState: jobsState
         });
       },
       error: (error: HttpErrorResponse) => {
         console.log(error);
+        this.store.setState({
+          jobsState: {error: error.error.message}
+        });
       }
     });
   }
+
+  public selectTalentForJob(application: Application): void {
+    this.jobService.selectTalentForJob(application.jobId, application.talent.id).subscribe({
+      next: () => {
+        application.selected = !application.selected;
+      },
+      error: (error: HttpErrorResponse) => {
+        console.log(error);
+        this.store.setState({
+          jobsState: {error: error.error.message}
+        });
+      }
+    });
+  }
+
+  public approveTalentForJob(application: Application): void {
+    this.jobService.approveTalent(application.jobId, application.talent.id).subscribe({
+      next: () => {
+        application.approved = !application.approved
+      },
+      error: (error: HttpErrorResponse) => {
+        console.log(error);
+        this.store.setState({
+          jobsState: {error: error.error.message}
+        });
+      }
+    });
+  }
+
+  public searchJobs(payload: any): void {
+    this.jobService.searchJobs(payload.keyword, payload.page, payload.size).subscribe({
+      next: (jobsPage: Page<Job>) => {
+        this.store.setState({
+          jobsState: {jobsPage: jobsPage}
+        });
+      }
+    });
+  }
+
+  public openJob(job: Job): void {
+    let jobsState = {...this.store.state.jobsState, ...{openJob: true, selectedJob: job}};
+    this.store.setState({jobsState: jobsState});
+  }
+
+  public closeJob(): void {
+    let jobsState = {...this.store.state.jobsState, ...{openJob: false}};
+    this.store.setState({jobsState: jobsState});
+  }
+
+  public applyToJob(id: number): void {
+    this.jobService.applyToJob(id).subscribe({
+      next: () => {
+        let selectedJob: Job = this.store.state.jobsState.selectedJob;
+        selectedJob.applied = true;
+        let jobsState = {...this.store.state.jobsState, ...{openJob: true, selectedJob: selectedJob}};
+        this.store.setState({jobsState: jobsState});
+      },
+      error: (error: HttpErrorResponse) => {
+        console.log(error);
+      }
+    });
+  }
+
+  public getClients(payload: any): void {
+    this.clientService.getClients(payload.status, payload.page, payload.size).subscribe({
+      next: (clientsPage: Page<Client>) => {
+        this.store.setState({clientsState: {clientsPage: clientsPage}});
+      }
+    });
+  }
+
+  public verifyUser(user: User): void {
+    this.userService.verifyUser(user.id).subscribe({
+      next: () => {
+        user.status = 'VERIFIED'
+      },
+      error: (error: HttpErrorResponse) => console.log(error)
+    });
+  }
+
+  public banUser(user: User): void {
+    this.userService.banUser(user.id).subscribe({
+      next: () => {
+        user.status = 'BANNED';
+      },
+      error: (error: HttpErrorResponse) => console.log(error)
+    });
+  }
+
+  public permitUser(user: User): void {
+    this.userService.banUser(user.id).subscribe({
+      next: () => {
+        user.status = 'NOT_VERIFIED';
+      },
+      error: (error: HttpErrorResponse) => console.log(error)
+    });
+  }
+
+  public getClient(id: number): void {
+    this.clientService.getClient(id).subscribe({
+      next: (client: Client) => {
+        this.store.setState({clientState: {client: client}});
+      },
+      error: (error: HttpErrorResponse) => console.log(error)
+    });
+  }
+
+  public getClientProfile(): void {
+    this.clientService.profile().subscribe({
+      next: (client: Client) => {
+        this.store.setState({clientState: {client: client}});
+      },
+      error: (error: HttpErrorResponse) => console.log(error)
+    });
+  }
+
+  public updateClientProfile(clientRequest: ClientRequest): void {
+    this.clientService.updateProfile(clientRequest).subscribe({
+      next: (client: Client) => {
+        this.store.setState({clientState: {client: client}});
+      },
+      error: (error: HttpErrorResponse) => console.log(error)
+    });
+  }
+
+  private updateImage(image: any): void {
+    this.userService.updateImage(image).subscribe({
+      next: (image: any) => {
+        let clientState = {...this.store.state.clientState, ...{image: image}}
+        this.store.setState({clientState: clientState});
+      },
+      error: (error: HttpErrorResponse) => {
+        console.log(error);
+      }
+    });
+  }
+
+  private askForVerification(user: User): void {
+    this.userService.askForVerification().subscribe({
+      next: () => {
+        user.status = 'WAITING';
+      },
+      error: (error: HttpErrorResponse) => {
+        console.log(error);
+      }
+    });
+  }
+
+  public getMyJobs(payload: any): void {
+    this.jobService.getMyJobs(payload.page, payload.size).subscribe({
+      next: (jobsPage: Page<Job>) => {
+        this.store.setState({
+          jobsState: {jobsPage: jobsPage, displayJobs: true}
+        });
+      },
+      error: (error: HttpErrorResponse) => console.log(error)
+    });
+  }
+
+  public openAddJob(): void {
+    let jobsState = {...this.store.state.jobsState, ...{openAddJob: true, openEditJob: false, displayJobs: true}};
+    this.store.setState({
+      jobsState: jobsState
+    });
+  }
+
+  public closeAddJob(): void {
+    let jobsState = {...this.store.state.jobsState, ...{openAddJob: false, openEditJob: false, displayJobs: true}};
+    this.store.setState({
+      jobsState: jobsState
+    });
+  }
+
+  public openEditJob(job: Job): void {
+    let jobsState = {
+      ...this.store.state.jobsState, ...{
+        openAddJob: false,
+        openEditJob: true,
+        displayJobs: false,
+        selectedJob: job
+      }
+    };
+    this.store.setState({
+      jobsState: jobsState
+    });
+  }
+
+  public closeEditJob(): void {
+    let jobsState = {
+      ...this.store.state.jobsState, ...{
+        openAddJob: false,
+        openEditJob: false,
+        displayJobs: true,
+      }
+    };
+    this.store.setState({
+      jobsState: jobsState
+    });
+  }
+
 }

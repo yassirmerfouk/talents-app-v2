@@ -31,7 +31,7 @@ export class AddJobComponent implements OnInit{
   }
 
   public handleCloseAddJob() : void {
-    this.eventService.publishEvent({eventType : EventType.CLOSE_ADD_JOB});
+    this.eventService.dispatchEvent({eventType : EventType.CLOSE_ADD_JOB});
   }
 
   public handleAddJob() : void {

@@ -1,7 +1,7 @@
 <div class="d-flex justify-content-end mb-2 container">
    <a (click)="handleOpenAddJob()"> <i class="bi bi-plus-circle fa-2x custom-icon"></i></a>
 </div>
-<div class="table-responsive">
+<div *ngIf="jobsPage" class="table-responsive">
   <table class="table table-hover table-centered table-nowrap mb-0 rounded">
     <thead class="thead-light">
     <tr>

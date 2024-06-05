@@ -4,6 +4,7 @@ import {Router} from "@angular/router";
 import {EventService} from "./services/event.service";
 import {ActionEvent} from "./state/action-event.event";
 import {EventType} from "./state/event-type.enum";
+import {Reducer} from "./state/reducer.service";
 
 @Component({
   selector: 'app-root',
@@ -26,6 +27,8 @@ export class AppComponent implements OnInit {
 
   private body !: any;
 
+  private reducer : Reducer = inject(Reducer);
+
   public ngOnInit(): void {
     let accessToken = this.authStateService.getTokenFromLocalStorage();
     if (accessToken) {
@@ -37,7 +40,7 @@ export class AppComponent implements OnInit {
 
     this.body = this.renderer.selectRootElement('body', true);
 
-    this.eventService.event$.subscribe(
+    this.reducer.dispatcher$.subscribe(
       ($event: ActionEvent) => {
         if ($event.eventType.startsWith('OPEN') && $event.eventType != EventType.OPEN_EDIT_JOB) {
           this.changeStyle = true;

@@ -6,7 +6,7 @@
 <div class="card border-0 shadow mb-4">
   <div class="card-body">
     <div *ngIf="displayJobs">
-      <app-my-jobs-list *ngIf="jobsPage" [jobsPage]="jobsPage"></app-my-jobs-list>
+      <app-my-jobs-list></app-my-jobs-list>
     </div>
   </div>
   <app-add-job *ngIf="openAddJob"></app-add-job>

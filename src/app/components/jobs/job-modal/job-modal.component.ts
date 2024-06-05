@@ -18,10 +18,10 @@ export class JobModalComponent {
   public job !: Job;
 
   public handleCloseJob(): void {
-    this.eventService.publishEvent({eventType: EventType.CLOSE_JOB});
+    this.eventService.dispatchEvent({eventType: EventType.CLOSE_JOB});
   }
 
   public handleApplyToJob(id: number): void {
-      this.eventService.publishEvent({eventType: EventType.APPLY_TO_JOB, payload: id});
+    this.eventService.dispatchEvent({eventType : EventType.APPLY_TO_JOB, payload : id});
   }
 }

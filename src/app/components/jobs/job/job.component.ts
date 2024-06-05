@@ -1,28 +1,28 @@
-import {Component, inject, OnInit} from '@angular/core';
-import {JobService} from "../../../services/job.service";
+import {Component, inject, OnDestroy, OnInit} from '@angular/core';
 import {Job} from "../../../models/job.model";
 import {ActivatedRoute} from "@angular/router";
-import {HttpErrorResponse} from "@angular/common/http";
 import {Page} from "../../../models/page.model";
 import {Application} from "../../../models/application.model";
 import {AuthStateService} from "../../../services/auth.state.service";
 import {Store} from "../../../state/store.service";
 import {EventService} from "../../../services/event.service";
 import {EventType} from "../../../state/event-type.enum";
+import {Subscription} from "rxjs";
 
 @Component({
   selector: 'app-job',
   templateUrl: './job.component.html',
   styleUrl: './job.component.css'
 })
-export class JobComponent implements OnInit {
-
-  private jobService: JobService = inject(JobService);
-  private activatedRoute: ActivatedRoute = inject(ActivatedRoute);
-  private authStateService: AuthStateService = inject(AuthStateService);
+export class JobComponent implements OnInit, OnDestroy {
 
   private store: Store = inject(Store);
   private eventService: EventService = inject(EventService);
+  private stateSubscription !: Subscription;
+
+  private activatedRoute: ActivatedRoute = inject(ActivatedRoute);
+  private authStateService: AuthStateService = inject(AuthStateService);
+
 
   private id !: number;
   public job !: Job;
@@ -34,21 +34,26 @@ export class JobComponent implements OnInit {
   public selectedApplications !: Array<Application>;
 
   public ngOnInit() {
-    this.store.state$.subscribe(
+
+  this.stateSubscription = this.store.state$.subscribe(
       (state: any) => {
         this.job = state.jobsState.job;
         this.applicationsPage = state.jobsState.applicationsPage;
         this.selectedApplications = state.jobsState.selectedApplications;
       }
     );
+
     this.activatedRoute.params.subscribe(
-      (params: any) => this.id = params['id']
+      (params: any) => {
+        this.id = params['id'];
+        if (this.id){
+          this.getJob();
+          this.getJobApplications();
+          this.getSelectedJobApplications();
+        }
+      }
     );
-    if (this.id){
-      this.getJob();
-      this.getJobApplications();
-      this.getSelectedJobApplications();
-    }
+
   }
 
   public getJob(): void {
@@ -78,25 +83,11 @@ export class JobComponent implements OnInit {
   }
 
   public handleOnChangeSelection(application: Application): void {
-    this.jobService.selectTalentForJob(application.jobId, application.talent.id).subscribe({
-      next: () => {
-        application.selected = !application.selected;
-      },
-      error: (error: HttpErrorResponse) => {
-        console.log(error);
-      }
-    });
+    this.eventService.dispatchEvent({eventType : EventType.SELECT_TALENT, payload : application});
   }
 
   public handleOnChangeApprove(application: Application): void {
-    this.jobService.approveTalent(application.jobId, application.talent.id).subscribe({
-      next: () => {
-        application.approved = !application.approved
-      },
-      error: (error: HttpErrorResponse) => {
-        console.log(error);
-      }
-    });
+    this.eventService.dispatchEvent({eventType : EventType.APPROVE_TALENT, payload : application});
   }
 
   public handleChangePage(page: number): void {
@@ -112,5 +103,10 @@ export class JobComponent implements OnInit {
   public handleNextPage(): void {
     this.page++;
     this.getJobApplications();
+  }
+
+  public ngOnDestroy() : void {
+    if(this.stateSubscription)
+      this.stateSubscription.unsubscribe();
   }
 }

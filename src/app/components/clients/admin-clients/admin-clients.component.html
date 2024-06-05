@@ -11,7 +11,7 @@
     </form>
   </div>
 </div>
-<div class="card border-0 shadow mb-4">
+<div *ngIf="clientsPage" class="card border-0 shadow mb-4">
   <div class="card-body">
     <div class="table-responsive">
       <table class="table table-hover table-centered table-nowrap mb-0 rounded">
@@ -65,19 +65,19 @@
                   Show </a
                 >
                 <a *ngIf="client.status == 'WAITING'" class="dropdown-item d-flex align-items-center"
-                   (click)="handleVerifyUser(client.id)"
+                   (click)="handleVerifyUser(client)"
                 >
                   <i class="bi bi-check-square-fill text-success me-1 custom-icon-sm"></i>
                   Verify </a
                 >
                 <a *ngIf="client.status != 'BANNED'" class="dropdown-item d-flex align-items-center"
-                   (click)="handleBanUser(client.id)"
+                   (click)="handleBanUser(client)"
                 >
                   <i class="bi bi-person-fill-dash text-danger me-1 custom-icon-sm"></i>
                   Ban </a
                 >
                 <a *ngIf="client.status == 'BANNED'" class="dropdown-item d-flex align-items-center"
-                   (click)="handlePermitUser(client.id)"
+                   (click)="handlePermitUser(client)"
                 >
                   <i class="bi bi-arrow-repeat me-1 custom-icon-sm"></i>
                   Permit </a

@@ -76,7 +76,7 @@ export class AdminJobsComponent implements OnInit, OnDestroy {
     this.getJobs();
   }
 
-  public ngOnDestroy() {
+  public ngOnDestroy() : void {
     if(this.stateSubscription)
       this.stateSubscription.unsubscribe();
   }
