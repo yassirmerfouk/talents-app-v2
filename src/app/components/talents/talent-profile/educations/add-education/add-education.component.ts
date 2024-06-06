@@ -12,6 +12,7 @@ import {EventType} from "../../../../../state/event-type.enum";
 export class AddEducationComponent implements OnInit{
 
   private eventService : EventService = inject(EventService);
+
   private formBuilder : FormBuilder = inject(FormBuilder);
 
   public educationForm !: FormGroup;
@@ -32,10 +33,10 @@ export class AddEducationComponent implements OnInit{
 
   public handleAddEducation() : void{
     let education : Education = this.educationForm.value;
-    this.eventService.publishEvent({eventType : EventType.ADD_EDUCATION, payload : education});
+    this.eventService.dispatchEvent({eventType : EventType.ADD_EDUCATION, payload : education});
   }
 
   public handleCloseAddEducation() : void{
-    this.eventService.publishEvent({eventType : EventType.CLOSE_ADD_EDUCATION});
+    this.eventService.dispatchEvent({eventType : EventType.CLOSE_ADD_EDUCATION});
   }
 }

@@ -27,15 +27,11 @@ import {Subscription} from "rxjs";
 })
 export class TalentProfileComponent implements OnInit, OnDestroy {
 
-  private store : Store = inject(Store);
-  private eventService : EventService = inject(EventService);
+  private store: Store = inject(Store);
+  private eventService: EventService = inject(EventService);
   private stateSubscription !: Subscription;
 
   private userService: UserService = inject(UserService);
-  private talentService: TalentService = inject(TalentService);
-  private experienceService: ExperienceService = inject(ExperienceService);
-  private educationService: EducationService = inject(EducationService);
-  private projectService: ProjectService = inject(ProjectService);
   private languageService: LanguageService = inject(LanguageService);
   private certificationService: CertificationService = inject(CertificationService);
 
@@ -50,9 +46,9 @@ export class TalentProfileComponent implements OnInit, OnDestroy {
   public ngOnInit(): void {
 
     this.stateSubscription = this.store.state$.subscribe(
-      (state : any) => {
+      (state: any) => {
         this.talent = state.talentState.talent;
-        if(this.talent){
+        if (this.talent) {
           this.talentForm = this.formBuilder.group({
             lastName: this.formBuilder.control(this.talent.lastName),
             firstName: this.formBuilder.control(this.talent.firstName),
@@ -75,8 +71,8 @@ export class TalentProfileComponent implements OnInit, OnDestroy {
 
   }
 
-  private getTalentProfile() : void {
-    this.eventService.dispatchEvent({eventType : EventType.GET_TALENT_PROFILE});
+  private getTalentProfile(): void {
+    this.eventService.dispatchEvent({eventType: EventType.GET_TALENT_PROFILE});
   }
 
   public handleSelectImage($event: any): void {
@@ -89,85 +85,13 @@ export class TalentProfileComponent implements OnInit, OnDestroy {
   }
 
   public handleAskForVerification(): void {
-    this.eventService.dispatchEvent({eventType: EventType.ASK_VERIFICATION, payload : this.talent});
+    this.eventService.dispatchEvent({eventType: EventType.ASK_VERIFICATION, payload: this.talent});
   }
 
   private updateImage(): void {
     this.userService.updateImage(this.image).subscribe({
       next: (image: any) => {
         this.talent.image = image;
-      },
-      error: (error: HttpErrorResponse) => {
-        console.log(error);
-      }
-    });
-  }
-
-  public addEducation(education: Education): void {
-    this.educationService.addEducation(education).subscribe({
-      next: (education: Education) => {
-        this.talent.educations.unshift(education);
-      },
-      error: (error: HttpErrorResponse) => {
-        console.log(error);
-      }
-    });
-  }
-
-  public updateEducation(education: Education): void {
-    this.educationService.updateEducation(education).subscribe({
-      next: (education: Education) => {
-        this.talent.educations = this.talent.educations.map((edu: Education) => {
-          if (edu.id == education.id) edu = education;
-          return edu;
-        });
-      },
-      error: (error: HttpErrorResponse) => {
-        console.log(error);
-      }
-    });
-  }
-
-  public deleteEducation(id: number): void {
-    this.educationService.deleteEducation(id).subscribe({
-      next: () => {
-        this.talent.educations = this.talent.educations.filter((education: Education) => education.id != id);
-      },
-      error: (error: HttpErrorResponse) => {
-        console.log(error);
-      }
-    });
-  }
-
-  public addProject(project: Project): void {
-    this.projectService.addProject(project).subscribe({
-      next: (project: Project) => {
-        this.talent.projects.unshift(project);
-      },
-      error: (error: HttpErrorResponse) => {
-        console.log(error);
-      }
-    });
-  }
-
-  public updateProject(project: Project): void {
-    this.projectService.updateProject(project).subscribe({
-      next: (project: Project) => {
-        this.talent.projects = this.talent.projects.map((pro: Project) => {
-          if (pro.id == project.id) pro = project;
-          return pro;
-        })
-      },
-      error: (error: HttpErrorResponse) => {
-        console.log(error);
-      }
-    });
-  }
-
-  public deleteProject(id: number): void {
-    this.projectService.deleteProject(id).subscribe({
-      next: () => {
-        this.talent.projects = this.talent.projects.filter((project: Project) => project.id != id);
       },
       error: (error: HttpErrorResponse) => {
         console.log(error);
@@ -251,9 +175,8 @@ export class TalentProfileComponent implements OnInit, OnDestroy {
   }
 
 
-
-  public ngOnDestroy() : void {
-    if(this.stateSubscription)
+  public ngOnDestroy(): void {
+    if (this.stateSubscription)
       this.stateSubscription.unsubscribe();
   }
 }

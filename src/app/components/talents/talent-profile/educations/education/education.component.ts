@@ -16,12 +16,12 @@ export class EducationComponent {
   public education !: Education;
 
   public handleOpenEditEducation(education : Education) : void {
-    this.eventService.publishEvent({eventType : EventType.OPEN_EDIT_EDUCATION, payload : education})
+    this.eventService.dispatchEvent({eventType : EventType.OPEN_EDIT_EDUCATION, payload : education})
   }
 
   public handleDeleteEducation(id : number) : void{
-    let confirmation = confirm("Vous etes sur?");
+    let confirmation = confirm("Are you sure?");
     if(confirmation)
-      this.eventService.publishEvent({eventType : EventType.DELETE_EDUCATION, payload : id});
+      this.eventService.dispatchEvent({eventType : EventType.DELETE_EDUCATION, payload : id});
   }
 }

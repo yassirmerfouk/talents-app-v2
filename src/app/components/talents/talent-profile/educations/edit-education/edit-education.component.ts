@@ -37,11 +37,11 @@ export class EditEducationComponent implements OnInit{
   }
 
   public handleCloseEditEducation() : void{
-    this.eventService.publishEvent({eventType : EventType.CLOSE_EDIT_EDUCATION});
+    this.eventService.dispatchEvent({eventType : EventType.CLOSE_EDIT_EDUCATION});
   }
 
   public handleUpdateEducation() : void{
     let education : Education = this.educationForm.value;
-   this.eventService.publishEvent({eventType : EventType.UPDATE_EDUCATION, payload : education});
+   this.eventService.dispatchEvent({eventType : EventType.UPDATE_EDUCATION, payload : education});
   }
 }

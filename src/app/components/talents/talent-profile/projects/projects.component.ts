@@ -1,17 +1,20 @@
-import {Component, inject, Input, OnInit} from '@angular/core';
+import {Component, inject, Input, OnDestroy, OnInit} from '@angular/core';
 import {EventService} from "../../../../services/event.service";
 import {Project} from "../../../../models/project.model";
 import {EventType} from "../../../../state/event-type.enum";
-import {ActionEvent} from "../../../../state/action-event.event";
+import {Store} from "../../../../state/store.service";
+import {Subscription} from "rxjs";
 
 @Component({
   selector: 'app-projects',
   templateUrl: './projects.component.html',
   styleUrl: './projects.component.css'
 })
-export class ProjectsComponent implements OnInit{
+export class ProjectsComponent implements OnInit, OnDestroy{
 
+  private store : Store = inject(Store);
   private eventService : EventService = inject(EventService);
+  private stateSubscription !: Subscription;
 
   @Input()
   public projects !: Array<Project>;
@@ -22,30 +25,22 @@ export class ProjectsComponent implements OnInit{
   public selectedProject !: Project;
 
   public ngOnInit() : void {
-    this.eventService.event$.subscribe(
-      ($event : ActionEvent) => this.handleEvent($event)
-    )
-  }
-
-  private handleEvent($event : ActionEvent) : void{
-    switch ($event.eventType){
-      case EventType.OPEN_ADD_PROJECT :
-        this.openAddProject = true;
-        break;
-      case EventType.CLOSE_ADD_PROJECT :
-        this.openAddProject = false;
-        break;
-      case EventType.OPEN_EDIT_PROJECT :
-        this.openEditProject = true;
-        this.selectedProject = $event.payload;
-        break;
-      case EventType.CLOSE_EDIT_PROJECT :
-        this.openEditProject = false;
-        break;
-    }
+    this.stateSubscription = this.store.state$.subscribe(
+      (state : any) => {
+        console.log(state.projectsState);
+        this.openAddProject = state.projectsState?.openAddProject;
+        this.openEditProject = state.projectsState?.openEditProject;
+        this.selectedProject = state.projectsState?.selectedProject;
+      }
+    );
   }
 
   public handleOpenAddProject() : void {
-    this.eventService.publishEvent({eventType : EventType.OPEN_ADD_PROJECT})
+    this.eventService.dispatchEvent({eventType : EventType.OPEN_ADD_PROJECT})
+  }
+
+  public ngOnDestroy() : void {
+    if(this.stateSubscription)
+      this.stateSubscription.unsubscribe();
   }
 }

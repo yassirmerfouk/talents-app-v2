@@ -16,18 +16,12 @@ export class ProjectComponent {
   public project !: Project;
 
   public handleOpenEditProject(project : Project) : void{
-    this.eventService.publishEvent({
-      eventType : EventType.OPEN_EDIT_PROJECT,
-      payload : project
-    });
+    this.eventService.dispatchEvent({eventType : EventType.OPEN_EDIT_PROJECT, payload : project});
   }
 
   public handleDeleteProject(id : number) : void{
-    let confirmation = confirm("Are you sure");
+    let confirmation = confirm("Are you sure?");
     if(confirmation)
-      this.eventService.publishEvent({
-        eventType : EventType.DELETE_PROJECT,
-        payload : id
-      });
+      this.eventService.dispatchEvent({eventType : EventType.DELETE_PROJECT, payload : id});
   }
 }

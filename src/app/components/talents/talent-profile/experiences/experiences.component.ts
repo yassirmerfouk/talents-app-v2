@@ -28,9 +28,9 @@ export class ExperiencesComponent implements OnInit, OnDestroy{
   public ngOnInit() : void {
     this.stateSubscription = this.store.state$.subscribe(
       (state : any) => {
-        this.openAddExperience = state.experiencesState.openAddExperience;
-        this.openEditExperience = state.experiencesState.openEditExperience;
-        this.selectedExperience = state.experiencesState.selectedExperience;
+        this.openAddExperience = state.experiencesState?.openAddExperience;
+        this.openEditExperience = state.experiencesState?.openEditExperience;
+        this.selectedExperience = state.experiencesState?.selectedExperience;
       }
     );
   }

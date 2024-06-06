@@ -33,10 +33,10 @@ export class EditProjectComponent implements OnInit{
 
   public handleUpdateProject() : void {
     let project : Project = this.projectForm.value;
-    this.eventService.publishEvent({eventType : EventType.UPDATE_PROJECT, payload : project});
+    this.eventService.dispatchEvent({eventType : EventType.UPDATE_PROJECT, payload : project});
   }
 
   public handleCloseUpdateProject() : void {
-    this.eventService.publishEvent({eventType : EventType.CLOSE_EDIT_PROJECT});
+    this.eventService.dispatchEvent({eventType : EventType.CLOSE_EDIT_PROJECT});
   }
 }

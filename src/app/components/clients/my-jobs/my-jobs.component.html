@@ -27,7 +27,7 @@
             <td class="text-primary fw-bold">{{job.id}}</td>
             <td class="fw-bold">{{job.title}}</td>
             <td>{{job.sector}}</td>
-            <td>{{job.createdAt}}</td>
+            <td>{{job.createdAt | date : 'short'}}</td>
             <td>{{job.type}}</td>
             <td>
                     <span class="fw-normal"

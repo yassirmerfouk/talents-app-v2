@@ -27,11 +27,11 @@ export class AddProjectComponent implements OnInit{
 
   public handleAddProject() : void {
     let project : Project = this.projectForm.value;
-    this.eventService.publishEvent({eventType : EventType.ADD_PROJECT, payload : project});
+    this.eventService.dispatchEvent({eventType : EventType.ADD_PROJECT, payload : project});
   }
 
   public handleCloseAddProject() : void {
-    this.eventService.publishEvent({eventType : EventType.CLOSE_ADD_PROJECT});
+    this.eventService.dispatchEvent({eventType : EventType.CLOSE_ADD_PROJECT});
   }
 
 }

@@ -21,6 +21,12 @@ import {Talent, TalentRequest} from "../models/talent.model";
 import {TalentService} from "../services/talent.service";
 import {Experience} from "../models/experience.model";
 import {ExperienceService} from "../services/experience.service";
+import {Education} from "../models/education.model";
+import {EducationService} from "../services/education.service";
+import {Project} from "../models/project.model";
+import {ProjectService} from "../services/project.service";
+import {Language} from "../models/language.model";
+import {LanguageService} from "../services/language.service";
 
 @Injectable({
   providedIn: 'root'
@@ -39,6 +45,9 @@ export class Reducer {
   private userService: UserService = inject(UserService);
   private talentService: TalentService = inject(TalentService);
   private experienceService: ExperienceService = inject(ExperienceService);
+  private educationService: EducationService = inject(EducationService);
+  private projectService: ProjectService = inject(ProjectService);
+  private languageService: LanguageService = inject(LanguageService);
 
   private router: Router = inject(Router);
 
@@ -181,6 +190,69 @@ export class Reducer {
             break;
           case EventType.DELETE_EXPERIENCE :
             this.deleteExperience($event.payload);
+            break;
+          case EventType.ADD_EDUCATION :
+            this.addEducation($event.payload);
+            break;
+          case EventType.UPDATE_EDUCATION :
+            this.updateEducation($event.payload);
+            break;
+          case EventType.DELETE_EDUCATION :
+            this.deleteEducation($event.payload);
+            break;
+          case EventType.OPEN_ADD_EDUCATION :
+            this.openAddEducation();
+            break;
+          case EventType.CLOSE_ADD_EDUCATION:
+            this.closeAddEducation();
+            break;
+          case EventType.OPEN_EDIT_EDUCATION:
+            this.openEditEducation($event.payload);
+            break;
+          case EventType.CLOSE_EDIT_EDUCATION :
+            this.closeEditEducation();
+            break;
+          case EventType.ADD_PROJECT :
+            this.addProject($event.payload);
+            break;
+          case EventType.UPDATE_PROJECT :
+            this.updateProject($event.payload);
+            break;
+          case EventType.DELETE_PROJECT :
+            this.deleteProject($event.payload);
+            break;
+          case EventType.OPEN_ADD_PROJECT:
+            this.openAddProject();
+            break;
+          case EventType.CLOSE_ADD_PROJECT:
+            this.closeAddProject();
+            break;
+          case EventType.OPEN_EDIT_PROJECT:
+            this.openEditProject($event.payload);
+            break;
+          case EventType.CLOSE_EDIT_PROJECT :
+            this.closeEditProject();
+            break;
+          case EventType.ADD_LANGUAGE :
+            this.addLanguage($event.payload);
+            break;
+          case EventType.UPDATE_LANGUAGE :
+            this.updateLanguage($event.payload);
+            break;
+          case EventType.DELETE_LANGUAGE :
+            this.deleteLanguage($event.payload);
+            break;
+          case EventType.OPEN_ADD_LANGUAGE :
+            this.openAddLanguage();
+            break;
+          case EventType.CLOSE_ADD_LANGUAGE :
+            this.closeAddLanguage();
+            break;
+          case EventType.OPEN_EDIT_LANGUAGE :
+            this.openEditLanguage($event.payload);
+            break;
+          case EventType.CLOSE_EDIT_LANGUAGE :
+            this.closeEditLanguage();
             break;
         }
       }
@@ -687,7 +759,7 @@ export class Reducer {
         talent.experiences.unshift(experience);
         let talentState = {...this.store.state.talentState, ...{talent: talent}};
         this.store.setState(talentState);
-        this.dispatcherSubject.next({eventType : EventType.CLOSE_ADD_EXPERIENCE});
+        this.dispatcherSubject.next({eventType: EventType.CLOSE_ADD_EXPERIENCE});
       },
       error: (error: HttpErrorResponse) => {
         console.log(error);
@@ -719,7 +791,7 @@ export class Reducer {
         });
         let talentState = {...this.store.state.talentState, ...{talent: talent}};
         this.store.setState(talentState);
-        this.dispatcherSubject.next({eventType : EventType.CLOSE_EDIT_EXPERIENCE});
+        this.dispatcherSubject.next({eventType: EventType.CLOSE_EDIT_EXPERIENCE});
       },
       error: (error: HttpErrorResponse) => {
         console.log(error);
@@ -741,4 +813,211 @@ export class Reducer {
     });
   }
 
+  public addEducation(education: Education): void {
+    this.educationService.addEducation(education).subscribe({
+      next: (education: Education) => {
+        let talent = this.store.state.talentState.talent;
+        talent.educations.unshift(education);
+        let talentState = {...this.store.state.talentState, ...{talent: talent}};
+        this.store.setState(talentState);
+        this.dispatcherSubject.next({eventType: EventType.CLOSE_ADD_EDUCATION});
+      },
+      error: (error: HttpErrorResponse) => {
+        console.log(error);
+      }
+    });
+  }
+
+  public updateEducation(education: Education): void {
+    this.educationService.updateEducation(education).subscribe({
+      next: (education: Education) => {
+        let talent = this.store.state.talentState.talent;
+        talent.educations = talent.educations.map((edu: Education) => {
+          if (edu.id == education.id) edu = education;
+          return edu;
+        });
+        let talentState = {...this.store.state.talentState, ...{talent: talent}};
+        this.store.setState(talentState);
+        this.dispatcherSubject.next({eventType: EventType.CLOSE_EDIT_EDUCATION});
+      },
+      error: (error: HttpErrorResponse) => {
+        console.log(error);
+      }
+    });
+  }
+
+  public deleteEducation(id: number): void {
+    this.educationService.deleteEducation(id).subscribe({
+      next: () => {
+        let talent = this.store.state.talentState.talent;
+        talent.educations = talent.educations.filter((education: Education) => education.id != id);
+        let talentState = {...this.store.state.talentState, ...{talent: talent}};
+        this.store.setState(talentState);
+      },
+      error: (error: HttpErrorResponse) => {
+        console.log(error);
+      }
+    });
+  }
+
+  private openAddEducation(): void {
+    this.store.setState({educationsState: {openAddEducation: true, openEditEducation: false}});
+  }
+
+  private closeAddEducation(): void {
+    this.store.setState({educationsState: {openAddEducation: false, openEditEducation: false}});
+  }
+
+  private openEditEducation(education: Education): void {
+    this.store.setState({
+      educationsState: {
+        openAddEducation: false,
+        openEditEducation: true,
+        selectedEducation: education
+      }
+    });
+  }
+
+  private closeEditEducation(): void {
+    this.store.setState({educationsState: {openAddEducation: false, openEditEducation: false}});
+  }
+
+  public addProject(project: Project): void {
+    this.projectService.addProject(project).subscribe({
+      next: (project: Project) => {
+        let talent = this.store.state.talentState.talent;
+        talent.projects.unshift(project);
+        let talentState = {...this.store.state.talentState, ...{talent: talent}};
+        this.store.setState(talentState);
+        this.dispatcherSubject.next({eventType: EventType.CLOSE_ADD_PROJECT});
+      },
+      error: (error: HttpErrorResponse) => {
+        console.log(error);
+      }
+    });
+  }
+
+  public updateProject(project: Project): void {
+    this.projectService.updateProject(project).subscribe({
+      next: (project: Project) => {
+        let talent = this.store.state.talentState.talent;
+        talent.projects = talent.projects.map((pro: Project) => {
+          if (pro.id == project.id) pro = project;
+          return pro;
+        });
+        let talentState = {...this.store.state.talentState, ...{talent: talent}};
+        this.store.setState(talentState);
+        this.dispatcherSubject.next({eventType: EventType.CLOSE_EDIT_PROJECT});
+      },
+      error: (error: HttpErrorResponse) => {
+        console.log(error);
+      }
+    });
+  }
+
+  public deleteProject(id: number): void {
+    this.projectService.deleteProject(id).subscribe({
+      next: () => {
+        let talent = this.store.state.talentState.talent;
+        talent.projects = talent.projects.filter((project: Project) => project.id != id);
+        let talentState = {...this.store.state.talentState, ...{talent: talent}};
+        this.store.setState(talentState);
+      },
+      error: (error: HttpErrorResponse) => {
+        console.log(error);
+      }
+    });
+  }
+
+  private openAddProject(): void {
+    this.store.setState({projectsState: {openAddProject: true, openEditProject: false}});
+  }
+
+  private closeAddProject(): void {
+    this.store.setState({projectsState: {openAddProject: false, openEditProject: false}});
+  }
+
+  private openEditProject(project: Project): void {
+    this.store.setState({
+      projectsState: {
+        openAddProject: false,
+        openEditProject: true,
+        selectedProject: project
+      }
+    });
+  }
+
+  private closeEditProject(): void {
+    this.store.setState({projectsState: {openAddProject: false, openEditProject: false}});
+  }
+
+  public addLanguage(language: Language): void {
+    this.languageService.addLanguage(language).subscribe({
+      next: (language: Language) => {
+        let talent = this.store.state.talentState.talent;
+        talent.languages.push(language);
+        let talentState = {...this.store.state.talentState, ...{talent: talent}};
+        this.store.setState(talentState);
+        this.dispatcherSubject.next({eventType: EventType.CLOSE_ADD_LANGUAGE});
+      },
+      error: (error: HttpErrorResponse) => {
+        console.log(error);
+      }
+    });
+  }
+
+  public updateLanguage(language: Language): void {
+    this.languageService.updateLanguage(language).subscribe({
+      next: (language: Language) => {
+        let talent = this.store.state.talentState.talent;
+        talent.languages = talent.languages.map((lang: Language) => {
+          if (lang.id == language.id) lang = language;
+          return lang;
+        });
+        let talentState = {...this.store.state.talentState, ...{talent: talent}};
+        this.store.setState(talentState);
+        this.dispatcherSubject.next({eventType: EventType.CLOSE_EDIT_LANGUAGE});
+
+      },
+      error: (error: HttpErrorResponse) => {
+        console.log(error);
+      }
+    });
+  }
+
+  public deleteLanguage(id: number): void {
+    this.languageService.deleteLanguage(id).subscribe({
+      next: () => {
+        let talent = this.store.state.talentState.talent;
+        talent.languages = talent.languages.filter((language: Language) => language.id != id);
+        let talentState = {...this.store.state.talentState, ...{talent: talent}};
+        this.store.setState(talentState);
+      },
+      error: (error: HttpErrorResponse) => {
+        console.log(error);
+      }
+    });
+  }
+
+  private openAddLanguage(): void {
+    this.store.setState({languagesState: {openAddLanguage: true, openEditLanguage: false}});
+  }
+
+  private closeAddLanguage(): void {
+    this.store.setState({languagesState: {openAddLanguage: false, openEditLanguage: false}});
+  }
+
+  private openEditLanguage(language: Language): void {
+    this.store.setState({
+      languagesState: {
+        openAddLanguage: false,
+        openEditLanguage: true,
+        selectedLanguage: language
+      }
+    });
+  }
+
+  private closeEditLanguage(): void {
+    this.store.setState({languagesState: {openAddLanguage: false, openEditLanguage: false}});
+  }
 }
