@@ -19,10 +19,6 @@ export class EditExperienceComponent implements OnInit{
   @Input()
   public experience !: Experience;
 
-  public handleCloseEditExperience() : void{
-    this.eventService.publishEvent({eventType : EventType.CLOSE_EDIT_EXPERIENCE});
-  }
-
   public ngOnInit() : void {
     if(this.experience){
       this.experienceForm = this.formBuilder.group({
@@ -40,8 +36,12 @@ export class EditExperienceComponent implements OnInit{
     }
   }
 
+  public handleCloseEditExperience() : void{
+    this.eventService.dispatchEvent({eventType : EventType.CLOSE_EDIT_EXPERIENCE});
+  }
+
   public handleUpdateExperience() : void{
     let experience : Experience = this.experienceForm.value;
-    this.eventService.publishEvent({eventType : EventType.UPDATE_EXPERIENCE, payload : experience});
+    this.eventService.dispatchEvent({eventType : EventType.UPDATE_EXPERIENCE, payload : experience});
   }
 }

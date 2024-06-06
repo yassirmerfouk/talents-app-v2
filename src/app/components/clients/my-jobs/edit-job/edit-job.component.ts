@@ -39,10 +39,7 @@ export class EditJobComponent implements OnInit{
   public handleUpdateJob() : void {
     let jobRequest : JobRequest = this.jobForm.value;
     jobRequest.skills = [];
-    this.eventService.publishEvent({
-      eventType : EventType.UPDATE_JOB,
-      payload : jobRequest
-    });
+    this.eventService.dispatchEvent({eventType : EventType.UPDATE_JOB, payload : jobRequest});
   }
 
   public handleCloseEditJob() : void {

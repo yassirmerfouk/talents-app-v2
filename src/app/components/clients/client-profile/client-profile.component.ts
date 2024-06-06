@@ -69,10 +69,7 @@ export class ClientProfileComponent implements OnInit, OnDestroy {
 
   public handleUpdateProfile(): void {
     let clientRequest: ClientRequest = this.clientForm.value;
-    this.eventService.dispatchEvent({
-      eventType: EventType.UPDATE_CLIENT_PROFILE,
-      payload: clientRequest
-    });
+    this.eventService.dispatchEvent({eventType: EventType.UPDATE_CLIENT_PROFILE, payload: clientRequest});
   }
 
   public handleUpdateImage(): void {

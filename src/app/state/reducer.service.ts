@@ -10,13 +10,17 @@ import {EventType} from "./event-type.enum";
 import {Store} from "./store.service";
 import {ClientRegistration, TalentRegistration} from "../models/registration.model";
 import {Page} from "../models/page.model";
-import {Job} from "../models/job.model";
+import {Job, JobRequest} from "../models/job.model";
 import {JobService} from "../services/job.service";
 import {Application} from "../models/application.model";
 import {Client, ClientRequest} from "../models/client.model";
 import {ClientService} from "../services/client.service";
 import {User} from "../models/user.model";
 import {UserService} from "../services/user.service";
+import {Talent, TalentRequest} from "../models/talent.model";
+import {TalentService} from "../services/talent.service";
+import {Experience} from "../models/experience.model";
+import {ExperienceService} from "../services/experience.service";
 
 @Injectable({
   providedIn: 'root'
@@ -33,6 +37,8 @@ export class Reducer {
   private jobService: JobService = inject(JobService);
   private clientService: ClientService = inject(ClientService);
   private userService: UserService = inject(UserService);
+  private talentService: TalentService = inject(TalentService);
+  private experienceService: ExperienceService = inject(ExperienceService);
 
   private router: Router = inject(Router);
 
@@ -133,6 +139,48 @@ export class Reducer {
             break;
           case EventType.CLOSE_EDIT_JOB :
             this.closeEditJob();
+            break;
+          case EventType.ADD_JOB :
+            this.addJob($event.payload);
+            break;
+          case EventType.UPDATE_JOB :
+            this.updateJob($event.payload);
+            break;
+          case EventType.DELETE_JOB :
+            this.deleteJob($event.payload);
+            break;
+          case EventType.GET_TALENTS :
+            this.getTalents($event.payload);
+            break;
+          case EventType.GET_TALENT :
+            this.getTalent($event.payload);
+            break;
+          case EventType.GET_TALENT_PROFILE :
+            this.getTalentProfile();
+            break;
+          case EventType.UPDATE_TALENT_PROFILE :
+            this.updateTalentProfile($event.payload);
+            break;
+          case EventType.OPEN_ADD_EXPERIENCE :
+            this.openAddExperience();
+            break;
+          case EventType.CLOSE_ADD_EXPERIENCE :
+            this.closeAddExperience();
+            break;
+          case EventType.ADD_EXPERIENCE :
+            this.addExperience($event.payload);
+            break;
+          case EventType.OPEN_EDIT_EXPERIENCE :
+            this.openEditExperience($event.payload);
+            break;
+          case EventType.CLOSE_EDIT_EXPERIENCE :
+            this.closeEditExperience();
+            break;
+          case EventType.UPDATE_EXPERIENCE :
+            this.updateExperience($event.payload);
+            break;
+          case EventType.DELETE_EXPERIENCE :
+            this.deleteExperience($event.payload);
             break;
         }
       }
@@ -532,6 +580,164 @@ export class Reducer {
     };
     this.store.setState({
       jobsState: jobsState
+    });
+  }
+
+  public addJob(jobRequest: JobRequest): void {
+    this.jobService.addJob(jobRequest).subscribe({
+      next: (job: Job) => {
+        let jobsPage = this.store.state.jobsState.jobsPage;
+        jobsPage.content.unshift(job);
+        let jobsState = {...this.store.state.jobsState, ...{jobsPage: jobsPage}};
+        this.store.setState(jobsState);
+      },
+      error: (error: HttpErrorResponse) => console.log(error)
+    })
+  }
+
+  public updateJob(jobRequest: JobRequest): void {
+    this.jobService.updateJob(jobRequest).subscribe({
+      next: (job: Job) => {
+        let jobsPage = this.store.state.jobsState.jobsPage;
+        jobsPage.content = jobsPage.content.map((jb: Job) => {
+          if (jb.id == jobRequest.id) jb = job;
+          return jb;
+        });
+        let jobsState = {...this.store.state.jobsState, ...{jobsPage: jobsPage}};
+        this.store.setState(jobsState);
+      },
+      error: (error: HttpErrorResponse) => console.log(error)
+    });
+  }
+
+  public deleteJob(id: number): void {
+    this.jobService.deleteJob(id).subscribe({
+      next: () => {
+        let jobsPage = this.store.state.jobsState.jobsPage;
+        jobsPage.content = jobsPage.content.filter((job: Job) => job.id != id);
+        let jobsState = {...this.store.state.jobsState, ...{jobsPage: jobsPage}};
+        this.store.setState(jobsState);
+      },
+      error: (error: HttpErrorResponse) => console.log(error)
+    });
+  }
+
+  public getTalents(payload: any): void {
+    this.talentService.getTalents(payload.status, payload.page, payload.size).subscribe({
+      next: (talentsPage: Page<Talent>) => {
+        this.store.setState({talentsState: {talentsPage: talentsPage}});
+      },
+      error: (error: HttpErrorResponse) => console.log(error)
+    });
+  }
+
+  public getTalent(id: number): void {
+    this.talentService.getTalent(id).subscribe({
+      next: (talent: Talent) => {
+        this.reverseTalent(talent);
+        this.store.setState({talentState: {talent: talent}});
+      },
+      error: (error: HttpErrorResponse) => console.log(error)
+    });
+  }
+
+
+  private reverseTalent(talent: Talent): void {
+    talent.experiences = talent.experiences.reverse();
+    talent.educations = talent.educations.reverse();
+    talent.projects = talent.projects.reverse();
+  }
+
+  public getTalentProfile(): void {
+    this.talentService.profile().subscribe({
+      next: (talent: Talent) => {
+        this.reverseTalent(talent);
+        this.store.setState({talentState: {talent: talent}});
+      },
+      error: (error: HttpErrorResponse) => {
+        console.log(error)
+      }
+    });
+  }
+
+  private updateTalentProfile(talentRequest: TalentRequest): void {
+    this.talentService.updateProfile(talentRequest).subscribe({
+      next: (talent: any) => {
+        this.reverseTalent(talent);
+        this.store.setState({talentState: {talent: talent}});
+      },
+      error: (error: HttpErrorResponse) => {
+        console.log(error);
+      }
+    });
+  }
+
+  private openAddExperience(): void {
+    this.store.setState({experiencesState: {openAddExperience: true, openEditExperience: false}});
+  }
+
+  private closeAddExperience(): void {
+    this.store.setState({experiencesState: {openAddExperience: false, openEditExperience: false}});
+  }
+
+  private addExperience(experience: Experience): void {
+    this.experienceService.addExperience(experience).subscribe({
+      next: (experience: Experience) => {
+        let talent = this.store.state.talentState.talent;
+        talent.experiences.unshift(experience);
+        let talentState = {...this.store.state.talentState, ...{talent: talent}};
+        this.store.setState(talentState);
+        this.dispatcherSubject.next({eventType : EventType.CLOSE_ADD_EXPERIENCE});
+      },
+      error: (error: HttpErrorResponse) => {
+        console.log(error);
+      }
+    });
+  }
+
+  private openEditExperience(experience: Experience): void {
+    this.store.setState({
+      experiencesState: {
+        openAddExperience: false,
+        openEditExperience: true,
+        selectedExperience: experience
+      }
+    });
+  }
+
+  private closeEditExperience(): void {
+    this.store.setState({experiencesState: {openAddExperience: false, openEditExperience: false}});
+  }
+
+  private updateExperience(experience: Experience): void {
+    this.experienceService.updateExperience(experience).subscribe({
+      next: (experience: Experience) => {
+        let talent = this.store.state.talentState.talent;
+        talent.experiences = talent.experiences.map((exp: Experience) => {
+          if (exp.id == experience.id) exp = experience;
+          return exp;
+        });
+        let talentState = {...this.store.state.talentState, ...{talent: talent}};
+        this.store.setState(talentState);
+        this.dispatcherSubject.next({eventType : EventType.CLOSE_EDIT_EXPERIENCE});
+      },
+      error: (error: HttpErrorResponse) => {
+        console.log(error);
+      }
+    });
+  }
+
+  private deleteExperience(id: number): void {
+    this.experienceService.deleteExperience(id).subscribe({
+      next: () => {
+        let talent = this.store.state.talentState.talent;
+        talent.experiences = talent.experiences.filter((experience: { id: number; }) => experience.id != id);
+        let talentState = {...this.store.state.talentState, ...{talent: talent}};
+        this.store.setState(talentState);
+      },
+      error: (error: HttpErrorResponse) => {
+        console.log(error);
+      }
     });
   }
 

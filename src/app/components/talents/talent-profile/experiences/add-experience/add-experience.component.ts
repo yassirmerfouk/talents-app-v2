@@ -12,6 +12,7 @@ import {Experience} from "../../../../../models/experience.model";
 export class AddExperienceComponent implements OnInit{
 
   private eventService : EventService = inject(EventService);
+
   private formBuilder : FormBuilder = inject(FormBuilder);
 
   public experienceForm !: FormGroup;
@@ -32,10 +33,10 @@ export class AddExperienceComponent implements OnInit{
 
   public handleAddExperience() : void{
     let experience : Experience = this.experienceForm.value;
-    this.eventService.publishEvent({eventType : EventType.ADD_EXPERIENCE, payload : experience});
+    this.eventService.dispatchEvent({eventType : EventType.ADD_EXPERIENCE, payload : experience});
   }
 
   public handleCloseAddExperience() : void {
-    this.eventService.publishEvent({eventType : EventType.CLOSE_ADD_EXPERIENCE});
+    this.eventService.dispatchEvent({eventType : EventType.CLOSE_ADD_EXPERIENCE});
   }
 }

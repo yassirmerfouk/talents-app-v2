@@ -14,8 +14,8 @@ import {EventType} from "../../../state/event-type.enum";
 })
 export class AdminClientsComponent implements OnInit, OnDestroy {
 
-  private store : Store = inject(Store);
-  private eventService : EventService = inject(EventService);
+  private store: Store = inject(Store);
+  private eventService: EventService = inject(EventService);
   private stateSubscription !: Subscription;
 
   private formBuilder: FormBuilder = inject(FormBuilder);
@@ -31,7 +31,7 @@ export class AdminClientsComponent implements OnInit, OnDestroy {
   public ngOnInit(): void {
 
     this.stateSubscription = this.store.state$.subscribe(
-      (state : any) => {
+      (state: any) => {
         this.clientsPage = state.clientsState.clientsPage;
       }
     );
@@ -43,52 +43,47 @@ export class AdminClientsComponent implements OnInit, OnDestroy {
     this.getClients();
   }
 
-  public getClients() : void {
+  public getClients(): void {
     this.eventService.dispatchEvent({
-      eventType : EventType.GET_CLIENTS,
-      payload : {
-        status : this.status,
-        page : this.page,
-        size : this.size
-      }
+      eventType: EventType.GET_CLIENTS, payload: {status: this.status, page: this.page, size: this.size}
     });
   }
 
-  public handleChangeStatus() : void {
+  public handleChangeStatus(): void {
     this.status = this.filterForm.value.status;
     this.page = 0;
     this.getClients();
   }
 
-  public handleVerifyUser(client : Client) : void {
-    this.eventService.dispatchEvent({eventType : EventType.VERIFY_USER, payload : client});
+  public handleVerifyUser(client: Client): void {
+    this.eventService.dispatchEvent({eventType: EventType.VERIFY_USER, payload: client});
   }
 
-  public handleBanUser(client : Client) : void {
-    this.eventService.dispatchEvent({eventType : EventType.BAN_USER, payload : client});
+  public handleBanUser(client: Client): void {
+    this.eventService.dispatchEvent({eventType: EventType.BAN_USER, payload: client});
   }
 
-  public handlePermitUser(client : Client) : void {
-    this.eventService.dispatchEvent({eventType : EventType.PERMIT_USER, payload : client});
+  public handlePermitUser(client: Client): void {
+    this.eventService.dispatchEvent({eventType: EventType.PERMIT_USER, payload: client});
   }
 
-  public handleChangePage(page : number) : void {
+  public handleChangePage(page: number): void {
     this.page = page;
     this.getClients();
   }
 
-  public handlePreviousPage() : void {
+  public handlePreviousPage(): void {
     this.page--;
     this.getClients();
   }
 
-  public handleNextPage() : void{
+  public handleNextPage(): void {
     this.page++;
     this.getClients();
   }
 
-  public ngOnDestroy() : void {
-    if(this.stateSubscription)
+  public ngOnDestroy(): void {
+    if (this.stateSubscription)
       this.stateSubscription.unsubscribe();
   }
 

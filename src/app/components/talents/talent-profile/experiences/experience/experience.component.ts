@@ -16,13 +16,12 @@ export class ExperienceComponent {
   public experience !: Experience;
 
   public handleOpenEditExperience(experience : Experience) : void{
-    console.log("executed");
-    this.eventService.publishEvent({eventType : EventType.OPEN_EDIT_EXPERIENCE , payload : experience});
+    this.eventService.dispatchEvent({eventType : EventType.OPEN_EDIT_EXPERIENCE , payload : experience});
   }
 
   public handleDeleteExperience(id : number) : void{
-    let confirmation = confirm("Vous etes sur ?");
+    let confirmation = confirm("Are you sure ?");
     if(confirmation)
-      this.eventService.publishEvent({eventType : EventType.DELETE_EXPERIENCE, payload : id});
+      this.eventService.dispatchEvent({eventType : EventType.DELETE_EXPERIENCE, payload : id});
   }
 }

@@ -54,13 +54,7 @@ export class JobsComponent implements OnInit, OnDestroy {
 
   public searchJobs(): void {
     this.eventService.dispatchEvent({
-      eventType : EventType.SEARCH_JOBS,
-      payload : {
-        keyword : this.keyword,
-        page : this.page,
-        size : this.size
-      }
-    });
+      eventType : EventType.SEARCH_JOBS, payload : {keyword : this.keyword, page : this.page, size : this.size}});
   }
 
   public handleSearchJobs(): void {

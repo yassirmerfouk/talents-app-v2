@@ -37,9 +37,6 @@ export class AddJobComponent implements OnInit{
   public handleAddJob() : void {
     let jobRequest : JobRequest = this.jobForm.value;
     jobRequest.skills = [];
-    this.eventService.publishEvent({
-      eventType : EventType.ADD_JOB,
-      payload : jobRequest
-    })
+    this.eventService.dispatchEvent({eventType : EventType.ADD_JOB, payload : jobRequest});
   }
 }

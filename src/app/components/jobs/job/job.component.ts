@@ -62,24 +62,12 @@ export class JobComponent implements OnInit, OnDestroy {
 
   public getJobApplications(): void {
     if (this.authStateService.hasAuthority('ADMIN'))
-      this.eventService.dispatchEvent({
-        eventType: EventType.GET_JOB_APPLICATIONS,
-        payload: {
-          id : this.id,
-          page: this.page,
-          size: this.size
-        }
-      });
+      this.eventService.dispatchEvent({eventType: EventType.GET_JOB_APPLICATIONS, payload: {id : this.id, page: this.page, size: this.size}});
   }
 
   public getSelectedJobApplications(): void {
-    if (
-      this.authStateService.hasAuthority('CLIENT')
-    )
-      this.eventService.dispatchEvent({
-        eventType : EventType.GET_JOB_SELECTED_APPLICATIONS,
-        payload : this.id
-      })
+    if (this.authStateService.hasAuthority('CLIENT'))
+      this.eventService.dispatchEvent({eventType : EventType.GET_JOB_SELECTED_APPLICATIONS, payload : this.id});
   }
 
   public handleOnChangeSelection(application: Application): void {

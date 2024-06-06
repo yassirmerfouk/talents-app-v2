@@ -32,7 +32,6 @@ import { AddCertificationComponent } from './components/talents/talent-profile/c
 import { EditCertificationComponent } from './components/talents/talent-profile/certifications/edit-certification/edit-certification.component';
 import { ClientProfileComponent } from './components/clients/client-profile/client-profile.component';
 import { MyJobsComponent } from './components/clients/my-jobs/my-jobs.component';
-import { MyJobsListComponent } from './components/clients/my-jobs/my-jobs-list/my-jobs-list.component';
 import { AddJobComponent } from './components/clients/my-jobs/add-job/add-job.component';
 import { EditJobComponent } from './components/clients/my-jobs/edit-job/edit-job.component';
 import { AdminClientsComponent } from './components/clients/admin-clients/admin-clients.component';
@@ -80,7 +79,6 @@ import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
     EditCertificationComponent,
     ClientProfileComponent,
     MyJobsComponent,
-    MyJobsListComponent,
     AddJobComponent,
     EditJobComponent,
     AdminClientsComponent,

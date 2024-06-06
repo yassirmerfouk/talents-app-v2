@@ -1,40 +1,48 @@
-import {Component, inject, OnInit} from '@angular/core';
+import {Component, inject, OnDestroy, OnInit} from '@angular/core';
 import {TalentService} from "../../../services/talent.service";
 import {ActivatedRoute} from "@angular/router";
 import {Talent} from "../../../models/talent.model";
-import {HttpErrorResponse} from "@angular/common/http";
+import {Store} from "../../../state/store.service";
+import {EventService} from "../../../services/event.service";
+import {Subscription} from "rxjs";
+import {EventType} from "../../../state/event-type.enum";
 
 @Component({
   selector: 'app-talent',
   templateUrl: './talent.component.html',
   styleUrl: './talent.component.css'
 })
-export class TalentComponent implements OnInit {
+export class TalentComponent implements OnInit, OnDestroy {
 
-  private talentService: TalentService = inject(TalentService);
+  private store: Store = inject(Store);
+  private eventService: EventService = inject(EventService);
+  private stateSubscription !: Subscription;
+
   private activatedRoute: ActivatedRoute = inject(ActivatedRoute);
 
   private id !: number;
   public talent !: Talent;
 
   public ngOnInit(): void {
-    this.activatedRoute.params.subscribe(
-      (params: any) => this.id = params['id']
+
+    this.stateSubscription = this.store.state$.subscribe(
+      (state : any) => {
+        this.talent = state.talentState.talent;
+      }
     );
-    if (this.id)
-      this.talentService.getTalent(this.id).subscribe({
-        next: (talent: Talent) => {
-          this.talent = talent;
-          this.reverseTalent();
-        },
-        error: (error: HttpErrorResponse) => console.log(error)
-      });
+
+    this.activatedRoute.params.subscribe(
+      (params: any) => {
+        this.id = params['id'];
+        if(this.id)
+          this.eventService.dispatchEvent({eventType : EventType.GET_TALENT, payload : this.id});
+      }
+    );
   }
 
-  public reverseTalent(): void {
-    this.talent.experiences = this.talent.experiences.reverse();
-    this.talent.educations = this.talent.educations.reverse();
-    this.talent.projects = this.talent.projects.reverse();
+  public ngOnDestroy() {
+    if(this.stateSubscription)
+      this.stateSubscription.unsubscribe();
   }
 
 }

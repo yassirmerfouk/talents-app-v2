@@ -1,11 +1,10 @@
 import {Component, inject, OnDestroy, OnInit} from '@angular/core';
-import {JobService} from "../../../services/job.service";
-import {Job, JobRequest} from "../../../models/job.model";
+import {Job} from "../../../models/job.model";
 import {EventService} from "../../../services/event.service";
 import {EventType} from "../../../state/event-type.enum";
-import {ActionEvent} from "../../../state/action-event.event";
 import {Store} from "../../../state/store.service";
 import {Subscription} from "rxjs";
+import {Page} from "../../../models/page.model";
 
 @Component({
   selector: 'app-my-jobs',
@@ -25,10 +24,16 @@ export class MyJobsComponent implements OnInit, OnDestroy {
 
   public selectedJob !: Job;
 
+  public jobsPage !: Page<Job>;
+  private page: number = 0;
+  private size: number = 10;
+
+
   public ngOnInit(): void {
 
     this.stateSubscription = this.store.state$.subscribe(
       (state: any) => {
+        this.jobsPage = state.jobsState.jobsPage;
         this.openAddJob = state.jobsState.openAddJob;
         this.openEditJob = state.jobsState.openEditJob;
         this.displayJobs = state.jobsState.displayJobs;
@@ -36,35 +41,38 @@ export class MyJobsComponent implements OnInit, OnDestroy {
       }
     );
 
+    this.getMyJobs();
+
   }
 
-  public addJob(jobRequest: JobRequest): void {
-    /*this.jobService.addJob(jobRequest).subscribe({
-      next: (job: Job) => {
-        this.jobsPage.content.push(job);
-      },
-      error: (error: HttpErrorResponse) => console.log(error)
-    })*/
+  public getMyJobs(): void {
+    this.eventService.dispatchEvent({eventType: EventType.GET_MY_JOBS, payload: {page: this.page, size: this.size}});
   }
 
-  public updateJob(jobRequest: JobRequest): void {
-    /*this.jobService.updateJob(jobRequest).subscribe({
-      next: (job: Job) => {
-        this.jobsPage.content = this.jobsPage.content.map((jb: Job) => {
-          if (jb.id == jobRequest.id) jb = job;
-          return jb;
-        });
-      },
-      error: (error: HttpErrorResponse) => console.log(error)
-    });*/
+  public handleOpenAddJob() : void {
+    this.eventService.dispatchEvent({eventType : EventType.OPEN_ADD_JOB});
   }
 
-  public deleteJob(id: number): void {
-    /*this.jobService.deleteJob(id).subscribe({
-      next: () =>
-        this.jobsPage.content = this.jobsPage.content.filter((job: Job) => job.id != id),
-      error: (error: HttpErrorResponse) => console.log(error)
-    });*/
+  public handleOpenEditJob(job : Job) : void{
+    this.eventService.dispatchEvent({eventType : EventType.OPEN_EDIT_JOB, payload : job});
+  }
+
+  public handleDeleteJob(id : number) : void {
+    this.eventService.dispatchEvent({eventType : EventType.DELETE_JOB, payload : id});
+  }
+
+
+  public handleChangePage(page : number) : void {
+    this.page = page;
+    this.getMyJobs();
+  }
+
+  public handlePreviousPage() : void {
+
+  }
+
+  public handleNextPage() : void{
+
   }
 
   public ngOnDestroy(): void {
