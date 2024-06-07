@@ -31,7 +31,7 @@ export class LanguagesComponent implements OnInit, OnDestroy{
       (state : any) => {
         this.openAddLanguage = state.languagesState?.openAddLanguage;
         this.openEditLanguage = state.languagesState?.openEditLanguage;
-        this.selectedLanguage = state.languages?.selectedLanguage;
+        this.selectedLanguage = state.languagesState?.selectedLanguage;
       }
     );
   }

@@ -27,7 +27,6 @@ export class ProjectsComponent implements OnInit, OnDestroy{
   public ngOnInit() : void {
     this.stateSubscription = this.store.state$.subscribe(
       (state : any) => {
-        console.log(state.projectsState);
         this.openAddProject = state.projectsState?.openAddProject;
         this.openEditProject = state.projectsState?.openEditProject;
         this.selectedProject = state.projectsState?.selectedProject;

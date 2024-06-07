@@ -1,19 +1,9 @@
 import {Component, inject, OnDestroy, OnInit} from '@angular/core';
-import {TalentService} from "../../../services/talent.service";
 import {HttpErrorResponse} from "@angular/common/http";
 import {FormBuilder, FormGroup} from "@angular/forms";
 import {Talent, TalentRequest} from "../../../models/talent.model";
 import {EventService} from "../../../services/event.service";
-import {ActionEvent} from "../../../state/action-event.event";
 import {EventType} from "../../../state/event-type.enum";
-import {ExperienceService} from "../../../services/experience.service";
-import {Experience} from "../../../models/experience.model";
-import {Education} from "../../../models/education.model";
-import {EducationService} from "../../../services/education.service";
-import {Project} from "../../../models/project.model";
-import {ProjectService} from "../../../services/project.service";
-import {LanguageService} from "../../../services/language.service";
-import {Language} from "../../../models/language.model";
 import {CertificationService} from "../../../services/certification.service";
 import {Certification} from "../../../models/certification.model";
 import {UserService} from "../../../services/user.service";
@@ -32,7 +22,6 @@ export class TalentProfileComponent implements OnInit, OnDestroy {
   private stateSubscription !: Subscription;
 
   private userService: UserService = inject(UserService);
-  private languageService: LanguageService = inject(LanguageService);
   private certificationService: CertificationService = inject(CertificationService);
 
   private formBuilder: FormBuilder = inject(FormBuilder);
@@ -93,42 +82,6 @@ export class TalentProfileComponent implements OnInit, OnDestroy {
       next: (image: any) => {
         this.talent.image = image;
       },
-      error: (error: HttpErrorResponse) => {
-        console.log(error);
-      }
-    });
-  }
-
-  public addLanguage(language: Language): void {
-    this.languageService.addLanguage(language).subscribe({
-      next: (language: Language) => {
-        this.talent.languages.push(language);
-        this.eventService.publishEvent({eventType: EventType.CLOSE_ADD_LANGUAGE});
-      },
-      error: (error: HttpErrorResponse) => {
-        console.log(error);
-      }
-    });
-  }
-
-  public updateLanguage(language: Language): void {
-    this.languageService.updateLanguage(language).subscribe({
-      next: (language: Language) => {
-        this.talent.languages = this.talent.languages.map((lang: Language) => {
-          if (lang.id == language.id) lang = language;
-          return lang;
-        });
-        this.eventService.publishEvent({eventType: EventType.CLOSE_EDIT_LANGUAGE});
-      },
-      error: (error: HttpErrorResponse) => {
-        console.log(error);
-      }
-    });
-  }
-
-  public deleteLanguage(id: number): void {
-    this.languageService.deleteLanguage(id).subscribe({
-      next: () => this.talent.languages = this.talent.languages.filter((language: Language) => language.id != id),
       error: (error: HttpErrorResponse) => {
         console.log(error);
       }

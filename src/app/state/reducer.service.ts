@@ -583,8 +583,7 @@ export class Reducer {
   private updateImage(image: any): void {
     this.userService.updateImage(image).subscribe({
       next: (image: any) => {
-        let clientState = {...this.store.state.clientState, ...{image: image}}
-        this.store.setState({clientState: clientState});
+        this.store.setState({profileImage: image});
       },
       error: (error: HttpErrorResponse) => {
         console.log(error);

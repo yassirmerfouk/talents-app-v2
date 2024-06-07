@@ -16,16 +16,10 @@ export class LanguageComponent {
   public language !: Language;
 
   public handleOpenEditLanguage(language : Language) : void {
-    this.eventService.publishEvent({
-      eventType : EventType.OPEN_EDIT_LANGUAGE,
-      payload : language
-    });
+    this.eventService.dispatchEvent({eventType : EventType.OPEN_EDIT_LANGUAGE, payload : language});
   }
 
   public handleDeleteLanguage(id : number) : void {
-    this.eventService.publishEvent({
-      eventType : EventType.DELETE_LANGUAGE,
-      payload : id
-    });
+    this.eventService.dispatchEvent({eventType : EventType.DELETE_LANGUAGE, payload : id});
   }
 }

@@ -31,15 +31,10 @@ export class EditLanguageComponent {
 
   public handleUpdateLanguage() : void {
     let language : Language = this.languageForm.value;
-    this.eventService.publishEvent({
-      eventType : EventType.UPDATE_LANGUAGE,
-      payload : language
-    });
+    this.eventService.dispatchEvent({eventType : EventType.UPDATE_LANGUAGE, payload : language});
   }
 
   public handleCloseEditLanguage() : void {
-    this.eventService.publishEvent({
-      eventType : EventType.CLOSE_EDIT_LANGUAGE
-    });
+    this.eventService.dispatchEvent({eventType : EventType.CLOSE_EDIT_LANGUAGE});
   }
 }

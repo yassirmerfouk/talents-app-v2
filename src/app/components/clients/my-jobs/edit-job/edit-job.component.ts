@@ -31,14 +31,18 @@ export class EditJobComponent implements OnInit{
         yearsOfExperiences : this.formBuilder.control(this.job.yearsOfExperiences),
         numberOfTalents : this.formBuilder.control(this.job.numberOfTalents),
         type : this.formBuilder.control(this.job.type),
-        description : this.formBuilder.control(this.job.description)
+        description : this.formBuilder.control(this.job.description),
+        skills : this.formBuilder.control(this.job.skills.join(" "))
       });
     }
   }
 
   public handleUpdateJob() : void {
     let jobRequest : JobRequest = this.jobForm.value;
-    jobRequest.skills = [];
+    if(this.jobForm.value.skills)
+      jobRequest.skills = this.jobForm.value.skills.split(" ");
+    else
+      jobRequest.skills = [];
     this.eventService.dispatchEvent({eventType : EventType.UPDATE_JOB, payload : jobRequest});
   }
 

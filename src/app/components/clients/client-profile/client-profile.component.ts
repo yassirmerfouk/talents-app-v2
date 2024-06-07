@@ -31,7 +31,7 @@ export class ClientProfileComponent implements OnInit, OnDestroy {
     this.stateSubscription = this.store.state$.subscribe(
       (state: any) => {
         this.client = state.clientState.client;
-        let image = state.clientState.image;
+        let image = state.profileImage;
         if (this.client) {
           this.clientForm = this.formBuilder.group({
             lastName: this.formBuilder.control(this.client.lastName),

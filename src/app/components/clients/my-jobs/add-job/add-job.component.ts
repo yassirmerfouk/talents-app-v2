@@ -26,7 +26,8 @@ export class AddJobComponent implements OnInit{
       yearsOfExperiences : this.formBuilder.control(""),
       numberOfTalents : this.formBuilder.control(""),
       type : this.formBuilder.control(""),
-      description : this.formBuilder.control(null)
+      description : this.formBuilder.control(null),
+      skills : this.formBuilder.control(null)
     });
   }
 
@@ -36,6 +37,9 @@ export class AddJobComponent implements OnInit{
 
   public handleAddJob() : void {
     let jobRequest : JobRequest = this.jobForm.value;
+    if(this.jobForm.value.skills)
+      jobRequest.skills = this.jobForm.value.skills.split(" ");
+    else
     jobRequest.skills = [];
     this.eventService.dispatchEvent({eventType : EventType.ADD_JOB, payload : jobRequest});
   }

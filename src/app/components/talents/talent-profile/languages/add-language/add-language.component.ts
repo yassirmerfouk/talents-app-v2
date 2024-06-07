@@ -25,15 +25,10 @@ export class AddLanguageComponent implements OnInit{
 
   public handleAddLanguage() : void {
     let language : Language = this.languageForm.value;
-    this.eventService.publishEvent({
-      eventType : EventType.ADD_LANGUAGE,
-      payload : language
-    });
+    this.eventService.dispatchEvent({eventType : EventType.ADD_LANGUAGE, payload : language});
   }
 
   public handleCloseAddLanguage() : void {
-    this.eventService.publishEvent({
-      eventType : EventType.CLOSE_ADD_LANGUAGE
-    });
+    this.eventService.dispatchEvent({eventType : EventType.CLOSE_ADD_LANGUAGE});
   }
 }
