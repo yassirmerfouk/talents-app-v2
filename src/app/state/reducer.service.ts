@@ -27,6 +27,8 @@ import {Project} from "../models/project.model";
 import {ProjectService} from "../services/project.service";
 import {Language} from "../models/language.model";
 import {LanguageService} from "../services/language.service";
+import {Certification} from "../models/certification.model";
+import {CertificationService} from "../services/certification.service";
 
 @Injectable({
   providedIn: 'root'
@@ -48,6 +50,7 @@ export class Reducer {
   private educationService: EducationService = inject(EducationService);
   private projectService: ProjectService = inject(ProjectService);
   private languageService: LanguageService = inject(LanguageService);
+  private certificationService: CertificationService = inject(CertificationService);
 
   private router: Router = inject(Router);
 
@@ -253,6 +256,28 @@ export class Reducer {
             break;
           case EventType.CLOSE_EDIT_LANGUAGE :
             this.closeEditLanguage();
+            break;
+
+          case EventType.ADD_CERTIFICATION :
+            this.addCertification($event.payload);
+            break;
+          case EventType.UPDATE_CERTIFICATION :
+            this.updateCertification($event.payload);
+            break;
+          case EventType.DELETE_CERTIFICATION :
+            this.deleteCertification($event.payload);
+            break;
+          case EventType.OPEN_ADD_CERTIFICATION :
+            this.openAddCertification();
+            break;
+          case EventType.CLOSE_ADD_CERTIFICATION :
+            this.closeAddCertification();
+            break;
+          case EventType.OPEN_EDIT_CERTIFICATION :
+            this.openEditCertification($event.payload);
+            break;
+          case EventType.CLOSE_EDIT_CERTIFICATION :
+            this.closeEditCertification();
             break;
         }
       }
@@ -1018,5 +1043,74 @@ export class Reducer {
 
   private closeEditLanguage(): void {
     this.store.setState({languagesState: {openAddLanguage: false, openEditLanguage: false}});
+  }
+
+  public addCertification(certification: Certification): void {
+    this.certificationService.addCertification(certification).subscribe({
+      next: (certification: Certification) => {
+        let talent = this.store.state.talentState.talent;
+        talent.certifications.push(certification);
+        let talentState = {...this.store.state.talentState, ...{talent: talent}};
+        this.store.setState(talentState);
+        this.dispatcherSubject.next({eventType: EventType.CLOSE_ADD_CERTIFICATION});
+      },
+      error: (error: HttpErrorResponse) => {
+        console.log(error);
+      }
+    });
+  }
+
+  public updateCertification(certification: Certification): void {
+    this.certificationService.updateCertification(certification).subscribe({
+      next: (certification: Certification) => {
+        let talent = this.store.state.talentState.talent;
+        talent.certifications = talent.certifications.map((cert: Certification) => {
+          if (cert.id == certification.id) cert = certification;
+          return cert;
+        });
+        let talentState = {...this.store.state.talentState, ...{talent: talent}};
+        this.store.setState(talentState);
+        this.dispatcherSubject.next({eventType: EventType.CLOSE_EDIT_CERTIFICATION});
+      },
+      error: (error: HttpErrorResponse) => {
+        console.log(error);
+      }
+    });
+  }
+
+  public deleteCertification(id: number): void {
+    this.certificationService.deleteCertification(id).subscribe({
+      next: () => {
+        let talent = this.store.state.talentState.talent;
+        talent.certifications = talent.certifications.filter((certification: Certification) => certification.id != id)
+        let talentState = {...this.store.state.talentState, ...{talent: talent}};
+        this.store.setState(talentState);
+      },
+      error: (error: HttpErrorResponse) => {
+        console.log(error);
+      }
+    });
+  }
+
+  private openAddCertification(): void {
+    this.store.setState({certificationsState: {openAddCertification: true, openEditCertification: false}});
+  }
+
+  private closeAddCertification(): void {
+    this.store.setState({certificationsState: {openAddCertification: false, openEditCertification: false}});
+  }
+
+  private openEditCertification(certification: Certification): void {
+    this.store.setState({
+      certificationsState: {
+        openAddCertification: false,
+        openEditCertification: true,
+        selectedCertification: certification
+      }
+    });
+  }
+
+  private closeEditCertification(): void {
+    this.store.setState({certificationsState: {openAddCertification: false, openEditCertification: false}});
   }
 }

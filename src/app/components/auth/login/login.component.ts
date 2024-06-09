@@ -1,5 +1,5 @@
 import {Component, inject, OnDestroy, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup} from "@angular/forms";
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {AuthenticationRequest} from "../../../models/authentication.model";
 import {EventService} from "../../../services/event.service";
 import {EventType} from "../../../state/event-type.enum";
@@ -31,8 +31,8 @@ export class LoginComponent implements OnInit, OnDestroy{
   public ngOnInit() : void {
 
     this.login = this.formBuilder.group({
-      email : this.formBuilder.control(null),
-      password : this.formBuilder.control(null)
+      email : this.formBuilder.control(null, [Validators.required, Validators.email]),
+      password : this.formBuilder.control(null, [Validators.required, Validators.minLength(8)])
     });
 
     this.stateSubscription = this.store.state$.subscribe(

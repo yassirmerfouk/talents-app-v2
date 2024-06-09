@@ -26,9 +26,9 @@ export class ConfirmationComponent implements OnInit, OnDestroy{
   public ngOnInit() : void {
     this.stateSubscription = this.store.state$.subscribe(
       (state : any) => {
-        this.error = state.accountConfirmationState.error;
-        this.errors = state.accountConfirmationState.errors ? new Map(Object.entries(state.accountConfirmationState.errors)) : new Map;
-        this.successMessage = state.accountConfirmationState.successMessage;
+        this.error = state.accountConfirmationState?.error;
+        this.errors = state.accountConfirmationState?.errors ? new Map(Object.entries(state.accountConfirmationState.errors)) : new Map;
+        this.successMessage = state.accountConfirmationState?.successMessage;
       }
     );
   }

@@ -20,6 +20,7 @@ export class EditCertificationComponent {
   public certification !: Certification;
 
   public ngOnInit() : void {
+
     if(this.certification){
       this.certificationForm = this.formBuilder.group({
         id : this.formBuilder.control(this.certification.id),
@@ -29,19 +30,15 @@ export class EditCertificationComponent {
         resource : this.formBuilder.control(this.certification.resource),
       });
     }
+
   }
 
   public handleUpdateCertification() : void {
     let certification : Certification = this.certificationForm.value;
-    this.eventService.publishEvent({
-      eventType : EventType.UPDATE_CERTIFICATION,
-      payload : certification
-    });
+    this.eventService.dispatchEvent({eventType : EventType.UPDATE_CERTIFICATION, payload : certification});
   }
 
   public handleCloseEditCertification() : void {
-    this.eventService.publishEvent({
-      eventType : EventType.CLOSE_EDIT_CERTIFICATION
-    });
+    this.eventService.dispatchEvent({eventType : EventType.CLOSE_EDIT_CERTIFICATION});
   }
 }

@@ -1,17 +1,21 @@
-import {Component, inject, Input, OnInit} from '@angular/core';
+import {Component, inject, Input, OnDestroy, OnInit} from '@angular/core';
 import {Certification} from "../../../../models/certification.model";
 import {EventService} from "../../../../services/event.service";
 import {EventType} from "../../../../state/event-type.enum";
 import {ActionEvent} from "../../../../state/action-event.event";
+import {Store} from "../../../../state/store.service";
+import {Subscription} from "rxjs";
 
 @Component({
   selector: 'app-certifications',
   templateUrl: './certifications.component.html',
   styleUrl: './certifications.component.css'
 })
-export class CertificationsComponent implements OnInit{
+export class CertificationsComponent implements OnInit, OnDestroy{
 
+  private store : Store = inject(Store);
   private eventService : EventService = inject(EventService);
+  private stateSubscription !: Subscription;
 
   @Input()
   public certifications !: Array<Certification>;
@@ -22,32 +26,22 @@ export class CertificationsComponent implements OnInit{
   public selectedCertification !: Certification;
 
   public ngOnInit() : void {
-    this.eventService.event$.subscribe(
-      ($event : ActionEvent) => this.handleEvent($event)
-    )
-  }
 
-  public handleEvent($event : ActionEvent) : void{
-    switch ($event.eventType){
-      case EventType.OPEN_ADD_CERTIFICATION :
-        this.openAddCertification = true;
-        break;
-      case EventType.CLOSE_ADD_CERTIFICATION :
-        this.openAddCertification = false;
-        break;
-      case EventType.OPEN_EDIT_CERTIFICATION :
-        this.openEditCertification = true;
-        this.selectedCertification = $event.payload;
-        break;
-      case EventType.CLOSE_EDIT_CERTIFICATION :
-        this.openEditCertification = false;
-        break;
-    }
-  }
+    this.stateSubscription = this.store.state$.subscribe(
+      (state : any) => {
+        this.openAddCertification = state.certificationsState?.openAddCertification;
+        this.openEditCertification = state.certificationsState?.openEditCertification;
+        this.selectedCertification = state.certificationsState?.selectedCertification;
+      }
+    );
 
+  }
   public handleOpenAddCertification() : void {
-    this.eventService.publishEvent({
-      eventType : EventType.OPEN_ADD_CERTIFICATION
-    });
+    this.eventService.dispatchEvent({eventType : EventType.OPEN_ADD_CERTIFICATION});
+  }
+
+  public ngOnDestroy() {
+    if(this.stateSubscription)
+      this.stateSubscription.unsubscribe();
   }
 }

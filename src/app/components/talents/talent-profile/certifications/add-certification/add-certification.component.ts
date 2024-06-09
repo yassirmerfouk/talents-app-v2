@@ -17,25 +17,22 @@ export class AddCertificationComponent implements OnInit{
   public certificationForm !: FormGroup;
 
   public ngOnInit() : void {
+
     this.certificationForm = this.formBuilder.group({
       title : this.formBuilder.control(null),
       issuedAt : this.formBuilder.control(null),
       description : this.formBuilder.control(null),
       resource : this.formBuilder.control(null),
     });
+
   }
 
   public handleAddCertification() : void {
     let certification : Certification = this.certificationForm.value;
-    this.eventService.publishEvent({
-      eventType : EventType.ADD_CERTIFICATION,
-      payload : certification
-    });
+    this.eventService.dispatchEvent({eventType : EventType.ADD_CERTIFICATION, payload : certification});
   }
 
   public handleCloseAddCertification() : void {
-    this.eventService.publishEvent({
-      eventType : EventType.CLOSE_ADD_CERTIFICATION
-    });
+    this.eventService.dispatchEvent({eventType : EventType.CLOSE_ADD_CERTIFICATION});
   }
 }

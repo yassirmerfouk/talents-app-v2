@@ -16,17 +16,11 @@ export class CertificationComponent {
   public certification !: Certification;
 
   public handleOpenEditCertification(certification : Certification) : void {
-    this.eventService.publishEvent({
-      eventType : EventType.OPEN_EDIT_CERTIFICATION,
-      payload : certification
-    });
+    this.eventService.dispatchEvent({eventType : EventType.OPEN_EDIT_CERTIFICATION, payload : certification});
   }
 
   public handleDeleteCertification(id : number) : void {
-    this.eventService.publishEvent({
-      eventType : EventType.DELETE_CERTIFICATION,
-      payload : id
-    });
+    this.eventService.dispatchEvent({eventType : EventType.DELETE_CERTIFICATION, payload : id});
   }
 
 
