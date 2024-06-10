@@ -61,6 +61,10 @@ export class MyJobsComponent implements OnInit, OnDestroy {
     this.eventService.dispatchEvent({eventType : EventType.DELETE_JOB, payload : id});
   }
 
+  public handleStartProcess(job : Job) : void {
+    this.eventService.dispatchEvent({eventType : EventType.ASK_TO_START_PROCESS, payload : job});
+  }
+
 
   public handleChangePage(page : number) : void {
     this.page = page;

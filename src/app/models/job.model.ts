@@ -31,6 +31,7 @@ export interface Job {
   skills : Array<string>,
 
   applied : boolean,
+  applicationsNumber : number,
 
   client : Client
 

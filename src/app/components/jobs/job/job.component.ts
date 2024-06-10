@@ -21,7 +21,7 @@ export class JobComponent implements OnInit, OnDestroy {
   private stateSubscription !: Subscription;
 
   private activatedRoute: ActivatedRoute = inject(ActivatedRoute);
-  private authStateService: AuthStateService = inject(AuthStateService);
+  public authStateService: AuthStateService = inject(AuthStateService);
 
 
   private id !: number;
@@ -68,6 +68,14 @@ export class JobComponent implements OnInit, OnDestroy {
   public getSelectedJobApplications(): void {
     if (this.authStateService.hasAuthority('CLIENT'))
       this.eventService.dispatchEvent({eventType : EventType.GET_JOB_SELECTED_APPLICATIONS, payload : this.id});
+  }
+
+  public handleAskStartProcess(job : Job) : void {
+    this.eventService.dispatchEvent({eventType : EventType.ASK_TO_START_PROCESS, payload : job});
+  }
+
+  public handleStartProcess(job : Job) : void {
+    this.eventService.dispatchEvent({eventType : EventType.START_PROCESS, payload : job});
   }
 
   public handleOnChangeSelection(application: Application): void {

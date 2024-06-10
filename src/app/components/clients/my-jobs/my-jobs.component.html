@@ -58,6 +58,12 @@
                     Show </a
                   >
                   <a *ngIf="job.status == 'OPEN'" class="dropdown-item d-flex align-items-center"
+                     (click)="handleStartProcess(job)"
+                  >
+                    <i class="bi bi-arrow-right-circle-fill text-success me-2 custom-icon-sm"></i>
+                    Start process </a
+                  >
+                  <a *ngIf="job.status == 'OPEN'" class="dropdown-item d-flex align-items-center"
                      (click)="handleOpenEditJob(job)"
                   >
                     <i class="bi bi-pencil-fill text-success me-2 custom-icon-sm"></i>

@@ -279,6 +279,12 @@ export class Reducer {
           case EventType.CLOSE_EDIT_CERTIFICATION :
             this.closeEditCertification();
             break;
+          case EventType.ASK_TO_START_PROCESS :
+            this.askToStartProcess($event.payload);
+            break;
+          case EventType.START_PROCESS :
+            this.startProcess($event.payload);
+            break;
         }
       }
     );
@@ -1112,5 +1118,27 @@ export class Reducer {
 
   private closeEditCertification(): void {
     this.store.setState({certificationsState: {openAddCertification: false, openEditCertification: false}});
+  }
+
+  private askToStartProcess(job: Job): void {
+    this.jobService.askToStartProcess(job.id).subscribe({
+      next: () => {
+        job.status = 'WAITING';
+      },
+      error: (error: HttpErrorResponse) => {
+        console.log(error);
+      }
+    });
+  }
+
+  private startProcess(job: Job): void {
+    this.jobService.startProcess(job.id).subscribe({
+      next: () => {
+        job.status = 'IN_PROCESS'
+      },
+      error: (error: HttpErrorResponse) => {
+        console.log(error);
+      }
+    });
   }
 }
