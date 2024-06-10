@@ -78,6 +78,10 @@ export class JobComponent implements OnInit, OnDestroy {
     this.eventService.dispatchEvent({eventType : EventType.START_PROCESS, payload : job});
   }
 
+  public handleStartSelection(job : Job) : void {
+    this.eventService.dispatchEvent({eventType : EventType.START_SELECTION, payload : job});
+  }
+
   public handleOnChangeSelection(application: Application): void {
     this.eventService.dispatchEvent({eventType : EventType.SELECT_TALENT, payload : application});
   }

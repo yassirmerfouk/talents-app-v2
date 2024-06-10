@@ -71,4 +71,8 @@ export class JobService{
     return this.httpClient.post(`${this.api}/${jobId}/process/start`, {});
   }
 
+  public startSelection(jobId : number) : Observable<any>{
+    return this.httpClient.post(`${this.api}/${jobId}/process/selection`, {});
+  }
+
 }

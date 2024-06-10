@@ -285,6 +285,9 @@ export class Reducer {
           case EventType.START_PROCESS :
             this.startProcess($event.payload);
             break;
+          case EventType.START_SELECTION :
+            this.startSelection($event.payload);
+            break;
         }
       }
     );
@@ -1135,6 +1138,17 @@ export class Reducer {
     this.jobService.startProcess(job.id).subscribe({
       next: () => {
         job.status = 'IN_PROCESS'
+      },
+      error: (error: HttpErrorResponse) => {
+        console.log(error);
+      }
+    });
+  }
+
+  private startSelection(job: Job): void {
+    this.jobService.startSelection(job.id).subscribe({
+      next: () => {
+        job.status = 'IN_SELECTION'
       },
       error: (error: HttpErrorResponse) => {
         console.log(error);
