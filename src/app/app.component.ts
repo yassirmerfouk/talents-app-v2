@@ -31,12 +31,8 @@ export class AppComponent implements OnInit {
 
   public ngOnInit(): void {
     let accessToken = this.authStateService.getTokenFromLocalStorage();
-    if (accessToken) {
+    if (accessToken)
       this.authStateService.loadUser(accessToken);
-      console.log("authenticated...");
-    } else {
-      console.log("not authenticated...");
-    }
 
     this.body = this.renderer.selectRootElement('body', true);
 

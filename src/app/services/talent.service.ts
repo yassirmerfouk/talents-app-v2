@@ -29,4 +29,8 @@ export class TalentService{
   public getTalent(id : number) : Observable<Talent>{
     return this.httpClient.get<Talent>(`${this.api}/${id}`);
   }
+
+  public updateSkills(skills : Array<string>) : Observable<Array<string>>{
+    return this.httpClient.patch<Array<string>>(`${this.api}/skills`, {skills : skills});
+  }
 }

@@ -19,13 +19,6 @@ export interface TalentRequest{
 
 export interface Talent extends User{
 
- /* id: number,
-  email: string,
-  firstName: string,
-  lastName: string,*/
-/*  phone: string,
-  image: string,*/
-/*  status: string,*/
   title: string,
   summary: string,
   dateOfBirth: string,
@@ -40,7 +33,9 @@ export interface Talent extends User{
 
   certifications : Array<Certification>,
 
-  languages : Array<Language>
+  languages : Array<Language>,
+
+  skills : Array<string>
 
 }
 

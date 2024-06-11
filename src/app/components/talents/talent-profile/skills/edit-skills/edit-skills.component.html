@@ -1,0 +1,25 @@
+<div class="modal fade show" style="display: block;">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h6 class="h6 modal-title">Update your skills</h6>
+        <button (click)="handleCloseUpdateSkills()" type="button" class="btn-close"></button>
+      </div>
+      <form [formGroup]="skillsForm" (ngSubmit)="handleUpdateSkills()">
+        <div class="modal-body">
+          <div class="mb-3">
+            <label class="form-label">Skills</label>
+            <textarea formControlName="skills" class="form-control" rows="3"
+                      placeholder="Job skills, ex : JAVA ANGULAR REACTJS"
+            ></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary btn-sm">Close</button>
+          <button type="submit" class="btn btn-primary btn-sm">Update</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+

@@ -288,6 +288,15 @@ export class Reducer {
           case EventType.START_SELECTION :
             this.startSelection($event.payload);
             break;
+          case EventType.OPEN_EDIT_SKILLS :
+            this.openEditSkills();
+            break;
+          case EventType.CLOSE_EDIT_SKILLS :
+            this.closeEditSkills();
+            break;
+          case EventType.UPDATE_SKILLS :
+            this.updateSkills($event.payload);
+            break;
         }
       }
     );
@@ -1151,6 +1160,29 @@ export class Reducer {
         job.status = 'IN_SELECTION'
       },
       error: (error: HttpErrorResponse) => {
+        console.log(error);
+      }
+    });
+  }
+
+  private openEditSkills() : void {
+    this.store.setState({skillsState : {openEditSkills : true}});
+  }
+
+  private closeEditSkills() : void {
+    this.store.setState({skillsState : {openEditSkills : false }});
+  }
+
+  private updateSkills(skills : Array<string>) : void {
+    this.talentService.updateSkills(skills).subscribe({
+      next : (skills : Array<string>) => {
+        let talent = this.store.state.talentState.talent;
+        talent.skills = skills;
+        let talentState = {...this.store.state.talentState, ...{talent: talent}};
+        this.store.setState(talentState);
+        this.dispatcherSubject.next({eventType: EventType.CLOSE_EDIT_SKILLS});
+      },
+      error : (error : HttpErrorResponse) => {
         console.log(error);
       }
     });

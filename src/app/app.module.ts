@@ -49,6 +49,8 @@ import { JobModalComponent } from './components/jobs/job-modal/job-modal.compone
 import { TalentsComponent } from './components/talents/talents/talents.component';
 import {NgToastModule} from "ng-angular-popup";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
+import { SkillsComponent } from './components/talents/talent-profile/skills/skills.component';
+import { EditSkillsComponent } from './components/talents/talent-profile/skills/edit-skills/edit-skills.component';
 
 @NgModule({
   declarations: [
@@ -93,6 +95,8 @@ import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
     JobComponent,
     JobModalComponent,
     TalentsComponent,
+    SkillsComponent,
+    EditSkillsComponent,
   ],
   imports: [
     BrowserModule,
