@@ -71,6 +71,12 @@
                   <i class="bi bi-check-square-fill text-success me-1 custom-icon-sm"></i>
                   Verify </a
                 >
+                <a *ngIf="talent.status == 'WAITING'" class="dropdown-item d-flex align-items-center"
+                   (click)="handleOpenProgramMeet(talent)"
+                >
+                  <i class="bi bi-calendar-minus-fill text-warning me-1 custom-icon-sm"></i>
+                  Program meet </a
+                >
                 <a *ngIf="talent.status != 'BANNED'" class="dropdown-item d-flex align-items-center"
                    (click)="handleBanUser(talent)"
                 >
@@ -107,3 +113,5 @@
     </div>
   </div>
 </div>
+
+<app-add-meet *ngIf="openProgramMeet" [user]="selectedUser" [type]="'VERIFICATION'"></app-add-meet>

@@ -51,6 +51,7 @@ import {NgToastModule} from "ng-angular-popup";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import { SkillsComponent } from './components/talents/talent-profile/skills/skills.component';
 import { EditSkillsComponent } from './components/talents/talent-profile/skills/edit-skills/edit-skills.component';
+import { AddMeetComponent } from './components/meets/add-meet/add-meet.component';
 
 @NgModule({
   declarations: [
@@ -97,6 +98,7 @@ import { EditSkillsComponent } from './components/talents/talent-profile/skills/
     TalentsComponent,
     SkillsComponent,
     EditSkillsComponent,
+    AddMeetComponent,
   ],
   imports: [
     BrowserModule,

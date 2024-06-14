@@ -297,6 +297,12 @@ export class Reducer {
           case EventType.UPDATE_SKILLS :
             this.updateSkills($event.payload);
             break;
+          case EventType.OPEN_ADD_MEET :
+            this.openProgramMeet($event.payload);
+            break;
+          case EventType.CLOSE_ADD_MEET :
+            this.closeProgramMeet();
+            break;
         }
       }
     );
@@ -1186,5 +1192,13 @@ export class Reducer {
         console.log(error);
       }
     });
+  }
+
+  public openProgramMeet(user : User) : void{
+    this.store.setState({meetState : {openProgramMeet : true, selectedUser : user}});
+  }
+
+  public closeProgramMeet() : void {
+    this.store.setState({meetState : {openProgramMeet: false, selectedUser: null}});
   }
 }

@@ -6,6 +6,7 @@ import {Store} from "../../../state/store.service";
 import {EventService} from "../../../services/event.service";
 import {Subscription} from "rxjs";
 import {EventType} from "../../../state/event-type.enum";
+import {User} from "../../../models/user.model";
 
 @Component({
   selector: 'app-admin-clients',
@@ -28,11 +29,16 @@ export class AdminClientsComponent implements OnInit, OnDestroy {
 
   public filterForm !: FormGroup;
 
+  public openProgramMeet : boolean = false;
+  public selectedUser : User | null = null;
+
   public ngOnInit(): void {
 
     this.stateSubscription = this.store.state$.subscribe(
       (state: any) => {
-        this.clientsPage = state.clientsState.clientsPage;
+        this.clientsPage = state.clientsState?.clientsPage;
+        this.openProgramMeet = state.meetState?.openProgramMeet;
+        this.selectedUser = state.meetState?.selectedUser;
       }
     );
 
@@ -65,6 +71,10 @@ export class AdminClientsComponent implements OnInit, OnDestroy {
 
   public handlePermitUser(client: Client): void {
     this.eventService.dispatchEvent({eventType: EventType.PERMIT_USER, payload: client});
+  }
+
+  public handleOpenProgramMeet(user : User) : void {
+    this.eventService.dispatchEvent({eventType : EventType.OPEN_ADD_MEET, payload : user});
   }
 
   public handleChangePage(page: number): void {

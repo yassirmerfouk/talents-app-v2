@@ -1,14 +1,13 @@
 import {Component, inject, OnDestroy, OnInit} from '@angular/core';
-import {TalentService} from "../../../services/talent.service";
 import {Page} from "../../../models/page.model";
 import {Talent} from "../../../models/talent.model";
 import {FormBuilder, FormGroup} from "@angular/forms";
-import {UserService} from "../../../services/user.service";
 import {Router} from "@angular/router";
 import {Store} from "../../../state/store.service";
 import {EventService} from "../../../services/event.service";
 import {Subscription} from "rxjs";
 import {EventType} from "../../../state/event-type.enum";
+import {User} from "../../../models/user.model";
 
 @Component({
   selector: 'app-admin-talents',
@@ -32,6 +31,9 @@ export class AdminTalentsComponent implements OnInit, OnDestroy{
 
   public filterForm !: FormGroup;
 
+  public openProgramMeet : boolean = false;
+  public selectedUser : User | null = null;
+
   public ngOnInit() : void {
 
     this.filterForm = this.formBuilder.group({
@@ -40,7 +42,9 @@ export class AdminTalentsComponent implements OnInit, OnDestroy{
 
     this.stateSubscription = this.store.state$.subscribe(
       (state : any) => {
-        this.talentsPage = state.talentsState.talentsPage;
+        this.talentsPage = state.talentsState?.talentsPage;
+        this.openProgramMeet = state.meetState?.openProgramMeet;
+        this.selectedUser = state.meetState?.selectedUser;
       }
     );
 
@@ -71,6 +75,10 @@ export class AdminTalentsComponent implements OnInit, OnDestroy{
 
   public handlePermitUser(talent : Talent) : void {
     this.eventService.dispatchEvent({eventType : EventType.PERMIT_USER, payload : talent});
+  }
+
+  public handleOpenProgramMeet(user : User) : void {
+    this.eventService.dispatchEvent({eventType : EventType.OPEN_ADD_MEET, payload : user});
   }
 
   public handleChangePage(page : number) : void {
