@@ -52,6 +52,8 @@ import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import { SkillsComponent } from './components/talents/talent-profile/skills/skills.component';
 import { EditSkillsComponent } from './components/talents/talent-profile/skills/edit-skills/edit-skills.component';
 import { AddMeetComponent } from './components/meets/add-meet/add-meet.component';
+import { MeetsComponent } from './components/meets/meets/meets.component';
+import { MeetComponent } from './components/meets/meets/meet/meet.component';
 
 @NgModule({
   declarations: [
@@ -99,6 +101,8 @@ import { AddMeetComponent } from './components/meets/add-meet/add-meet.component
     SkillsComponent,
     EditSkillsComponent,
     AddMeetComponent,
+    MeetsComponent,
+    MeetComponent,
   ],
   imports: [
     BrowserModule,

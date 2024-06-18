@@ -2,7 +2,7 @@ import {Component, inject, Input, OnInit} from '@angular/core';
 import {User} from "../../../models/user.model";
 import {EventService} from "../../../services/event.service";
 import {EventType} from "../../../state/event-type.enum";
-import {FormBuilder, FormGroup} from "@angular/forms";
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {Meet} from "../../../models/meet.model";
 
 @Component({
@@ -30,7 +30,7 @@ export class AddMeetComponent implements OnInit {
     "\n" +
     "As part of our commitment to maintaining a trusted and secure platform, we need to conduct a verification meeting to confirm the details of your profile. This process helps us ensure the accuracy of the information provided and enhance the credibility of our freelancer community.\n" +
     "\n" +
-    "Please join the meeting using the following Google Meet link.\n\n" +
+    "Please join the meeting using the following Google Meet link [link will be generated].\n\n" +
     "Thank you for your cooperation. We look forward to verifying your profile and continuing to support your success on our platform.\n" +
     "\n" + "Best regards,\n\n" +
     "Pulse digital company";
@@ -38,10 +38,11 @@ export class AddMeetComponent implements OnInit {
   public ngOnInit(): void {
     if (this.user) {
       this.meetForm = this.formBuilder.group({
-        title: this.formBuilder.control((this.type == "VERIFICATION" ? `Verification meet` : 'Interview meet')),
-        date: this.formBuilder.control(null),
-        meetType: this.formBuilder.control(this.type),
-        contactType: this.formBuilder.control(""),
+        title: this.formBuilder.control((this.type == "VERIFICATION" ? `Verification meet` : 'Interview meet') + ' with ' + this.user.firstName + ' ' + this.user.lastName, [Validators.required]),
+        date: this.formBuilder.control(null, [Validators.required]),
+        meetType: this.formBuilder.control(this.type, [Validators.required]),
+        contactType: this.formBuilder.control("", [Validators.required]),
+        resource : this.formBuilder.control(null),
         body: this.formBuilder.control(this.body.replace("[Freelancer’s Name]", this.user.firstName + " " + this.user.lastName))
       });
     }
@@ -52,7 +53,17 @@ export class AddMeetComponent implements OnInit {
   }
 
   public handleProgramMeet() : void {
-    let meet : Meet = this.meetForm.value;
-    console.log(meet);
+    if(this.meetForm.invalid)
+      alert("Please verify your fields!");
+    else{
+      let meet : Meet = this.meetForm.value;
+      meet.receiverId = this.user?.id;
+      this.eventService.dispatchEvent({eventType : EventType.PROGRAM_MEET, payload : meet});
+    }
+  }
+
+  public handleOnChangeLink() : void {
+    let link = this.meetForm.value.resource;
+    this.meetForm.get('body')?.setValue(this.meetForm.value.body.replace('[link will be generated]', link));
   }
 }

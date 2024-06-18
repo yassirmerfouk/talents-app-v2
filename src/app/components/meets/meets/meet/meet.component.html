@@ -1,0 +1,15 @@
+<div *ngIf="meet" class="modal fade show" style="display: block;">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h6 class="h6 modal-title">{{meet.title}}</h6>
+        <button (click)="handleCloseShowMeet()" type="button" class="btn-close"></button>
+      </div>
+      <div class="modal-body">
+        <p class="custom-p" [innerHTML]="meet.body"></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+

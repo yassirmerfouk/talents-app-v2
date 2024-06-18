@@ -24,6 +24,7 @@ import {ClientComponent} from "./components/clients/client/client.component";
 import {JobsComponent} from "./components/jobs/jobs/jobs.component";
 import {JobComponent} from "./components/jobs/job/job.component";
 import {TalentsComponent} from "./components/talents/talents/talents.component";
+import {MeetsComponent} from "./components/meets/meets/meets.component";
 
 const routes: Routes = [
   {
@@ -81,6 +82,13 @@ const routes: Routes = [
   },
 
   {
+    path : 'admin/meets',
+    component : MeetsComponent,
+    canActivate : [authenticationGuard, authorizationGuard],
+    data : {role : 'ADMIN'}
+  },
+
+  {
     path: 'talent/:id', component: TalentComponent, canActivate: [authenticationGuard]
   },
 
@@ -98,6 +106,10 @@ const routes: Routes = [
 
   {
     path : 'talents', component : TalentsComponent, canActivate : [authenticationGuard]
+  },
+
+  {
+    path : 'meets', component : MeetsComponent, canActivate : [authenticationGuard]
   }
 ];
 

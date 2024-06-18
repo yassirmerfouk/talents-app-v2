@@ -50,6 +50,7 @@ export class AuthStateService {
     }
   }
 
+
   public storeTokenInLocalStorage(accessToken : string) : void{
     localStorage.setItem("accessToken", accessToken);
   }

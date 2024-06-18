@@ -67,7 +67,7 @@
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link">
+          <a [routerLink]="authStateService.hasAuthority('ADMIN') ? '/admin/meets' : '/meets'" class="nav-link">
             <span class="sidebar-icon">
           <i class="bi bi-person-workspace custom-side-icon me-1"></i>
         </span>

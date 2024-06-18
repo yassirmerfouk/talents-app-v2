@@ -29,6 +29,8 @@ import {Language} from "../models/language.model";
 import {LanguageService} from "../services/language.service";
 import {Certification} from "../models/certification.model";
 import {CertificationService} from "../services/certification.service";
+import {Meet} from "../models/meet.model";
+import {MeetService} from "../services/meet.service";
 
 @Injectable({
   providedIn: 'root'
@@ -51,6 +53,7 @@ export class Reducer {
   private projectService: ProjectService = inject(ProjectService);
   private languageService: LanguageService = inject(LanguageService);
   private certificationService: CertificationService = inject(CertificationService);
+  private meetService: MeetService = inject(MeetService);
 
   private router: Router = inject(Router);
 
@@ -302,6 +305,27 @@ export class Reducer {
             break;
           case EventType.CLOSE_ADD_MEET :
             this.closeProgramMeet();
+            break;
+          case EventType.PROGRAM_MEET :
+            this.programMeet($event.payload);
+            break;
+          case EventType.GET_MEETS :
+            this.getMeets($event.payload);
+            break;
+          case EventType.ACCEPT_MEET :
+            this.acceptMeet($event.payload);
+            break;
+          case EventType.REFUSE_MEET :
+            this.refuseMeet($event.payload);
+            break;
+          case EventType.CLOSE_MEET :
+            this.closeMeet($event.payload);
+            break;
+          case EventType.OPEN_SHOW_MEET :
+            this.openShowMeet($event.payload);
+            break;
+          case EventType.CLOSE_SHOW_MEET :
+            this.closeShowMeet();
             break;
         }
       }
@@ -1171,34 +1195,101 @@ export class Reducer {
     });
   }
 
-  private openEditSkills() : void {
-    this.store.setState({skillsState : {openEditSkills : true}});
+  private openEditSkills(): void {
+    this.store.setState({skillsState: {openEditSkills: true}});
   }
 
-  private closeEditSkills() : void {
-    this.store.setState({skillsState : {openEditSkills : false }});
+  private closeEditSkills(): void {
+    this.store.setState({skillsState: {openEditSkills: false}});
   }
 
-  private updateSkills(skills : Array<string>) : void {
+  private updateSkills(skills: Array<string>): void {
     this.talentService.updateSkills(skills).subscribe({
-      next : (skills : Array<string>) => {
+      next: (skills: Array<string>) => {
         let talent = this.store.state.talentState.talent;
         talent.skills = skills;
         let talentState = {...this.store.state.talentState, ...{talent: talent}};
         this.store.setState(talentState);
         this.dispatcherSubject.next({eventType: EventType.CLOSE_EDIT_SKILLS});
       },
-      error : (error : HttpErrorResponse) => {
+      error: (error: HttpErrorResponse) => {
         console.log(error);
       }
     });
   }
 
-  public openProgramMeet(user : User) : void{
-    this.store.setState({meetState : {openProgramMeet : true, selectedUser : user}});
+  public openProgramMeet(user: User): void {
+    this.store.setState({meetState: {openProgramMeet: true, selectedUser: user}});
   }
 
-  public closeProgramMeet() : void {
-    this.store.setState({meetState : {openProgramMeet: false, selectedUser: null}});
+  public closeProgramMeet(): void {
+    this.store.setState({meetState: {openProgramMeet: false, selectedUser: null}});
+  }
+
+  public programMeet(meet: Meet): void {
+    this.meetService.addMeet(meet).subscribe({
+      next: (meet: Meet) => {
+        console.log(meet);
+      },
+      error: (error: HttpErrorResponse) => {
+        console.log(error);
+      }
+    });
+  }
+
+  public getMeets(payload: any): void {
+    this.meetService.getMeets(payload.date, payload.page, payload.size).subscribe({
+      next: (meetsPage: Page<Meet>) => {
+        this.store.setState({meetsState: {meetsPage: meetsPage}});
+      },
+      error: (error: HttpErrorResponse) => {
+        console.log(error);
+      }
+    });
+  }
+
+  public acceptMeet(meet: Meet): void {
+    this.meetService.acceptMeet(meet.id).subscribe({
+      next: () => {
+        meet.status = 'ACCEPTED';
+      },
+      error: (error: HttpErrorResponse) => {
+        console.log(error);
+      }
+    });
+  }
+
+  public refuseMeet(meet: Meet): void {
+    this.meetService.refuseMeet(meet.id).subscribe({
+      next: () => {
+        meet.status = 'REFUSED';
+      },
+      error: (error: HttpErrorResponse) => {
+        console.log(error);
+      }
+    });
+  }
+
+  public closeMeet(meet: Meet): void {
+    this.meetService.closeMeet(meet.id).subscribe({
+      next: () => {
+        meet.status = 'CLOSED';
+      },
+      error: (error: HttpErrorResponse) => {
+        console.log(error);
+      }
+    });
+  }
+
+  public openShowMeet(meet : Meet) : void {
+    let meetsState = this.store.state.meetsState;
+    meetsState = {...meetsState, ...{openMeet : true, selectedMeet : meet}}
+    this.store.setState({meetsState : meetsState});
+  }
+
+  public closeShowMeet() : void {
+    let meetsState = this.store.state.meetsState;
+    meetsState = {...meetsState, ...{openMeet : false, selectedMeet : null}}
+    this.store.setState({meetsState : meetsState});
   }
 }
