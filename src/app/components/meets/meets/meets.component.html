@@ -8,7 +8,12 @@
     </form>
   </div>
 </div>
-<div class="task-wrapper border bg-white shadow border-0 rounded mt-3">
+<div *ngIf="meetsPage?.totalElements == 0" class="container mt-5">
+  <div class="alert alert-primary" role="alert">
+    There are no meetings scheduled. If you need to arrange a meeting, visit the scheduling page.
+  </div>
+</div>
+<div *ngIf="meetsPage?.content" class="task-wrapper border bg-white shadow border-0 rounded mt-3">
   <div *ngFor="let meet of meetsPage?.content" class="card hover-state border-bottom rounded-0 py-3">
     <div class="card-body d-sm-flex align-items-center flex-wrap flex-lg-nowrap py-0">
       <div class="col-1 text-left text-sm-center mb-2 mb-sm-0">
@@ -19,7 +24,7 @@
       </div>
       <div class="col-11 col-lg-8 px-0 mb-4 mb-md-0">
         <div class="mb-2">
-          <h3 class="h5">{{meet.title}}</h3>
+          <h3 class="h5" [ngClass]="{'line-through' : meet.status == 'CLOSED'}">{{meet.title}}</h3>
           <div class="d-block d-sm-flex">
             <div>
               <h4 class="h6 fw-normal text-gray d-flex align-items-center mb-3 mb-sm-0">
@@ -43,8 +48,8 @@
             >{{meet.status}}</span></div>
           </div>
         </div>
-        <div><span class="fw-normal text-gray">
-          {{(meet.body.length > 175) ? (meet.body | slice:0:175) + '...' : meet.body}}
+        <div><span class="fw-normal text-gray" [ngClass]="{'line-through' : meet.status == 'CLOSED'}">
+          {{(meet.body.length > 175) ? (meet.body | slice:0:160) + '...' : meet.body}}
         </span></div>
       </div>
       <div

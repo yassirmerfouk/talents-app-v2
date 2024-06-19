@@ -14,9 +14,11 @@ export class MeetComponent implements OnInit{
 
   @Input()
   public meet !: Meet;
+  public body !: string;
 
   public ngOnInit() : void {
-    console.log(this.meet);
+    if(this.meet)
+        this.body = this.meet.body.replace(/\n/g, "<br>");
   }
 
   public handleCloseShowMeet() : void {

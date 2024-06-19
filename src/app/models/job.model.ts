@@ -7,9 +7,12 @@ export interface JobRequest{
   description : string,
   minSalary : number,
   maxSalary : string,
-  period : string,
+  currency : string,
   yearsOfExperiences : number,
   numberOfTalents : number,
+  contractType : string,
+  period : number,
+  periodUnit : string,
   type : string,
   skills : Array<string>
 
@@ -22,9 +25,12 @@ export interface Job {
   description : string,
   minSalary : number,
   maxSalary : string,
-  period : string,
+  currency : string,
   yearsOfExperiences : number,
   numberOfTalents : number,
+  contractType : string
+  period : number,
+  periodUnit : string,
   type : string,
   status : string,
   createdAt : string,

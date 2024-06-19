@@ -5,7 +5,6 @@ import {Talent, TalentRequest} from "../../../models/talent.model";
 import {EventService} from "../../../services/event.service";
 import {EventType} from "../../../state/event-type.enum";
 import {CertificationService} from "../../../services/certification.service";
-import {Certification} from "../../../models/certification.model";
 import {UserService} from "../../../services/user.service";
 import {Store} from "../../../state/store.service";
 import {Subscription} from "rxjs";
@@ -21,9 +20,6 @@ export class TalentProfileComponent implements OnInit, OnDestroy {
   private eventService: EventService = inject(EventService);
   private stateSubscription !: Subscription;
 
-  private userService: UserService = inject(UserService);
-  private certificationService: CertificationService = inject(CertificationService);
-
   private formBuilder: FormBuilder = inject(FormBuilder);
 
   public talent !: Talent;
@@ -36,7 +32,8 @@ export class TalentProfileComponent implements OnInit, OnDestroy {
 
     this.stateSubscription = this.store.state$.subscribe(
       (state: any) => {
-        this.talent = state.talentState.talent;
+        this.talent = state.talentState?.talent;
+        let image = state.profileImage;
         if (this.talent) {
           this.talentForm = this.formBuilder.group({
             lastName: this.formBuilder.control(this.talent.lastName),
@@ -53,6 +50,8 @@ export class TalentProfileComponent implements OnInit, OnDestroy {
             image: this.formBuilder.control(null)
           });
         }
+        if(image)
+          this.talent.image = image;
       }
     );
 
@@ -77,54 +76,8 @@ export class TalentProfileComponent implements OnInit, OnDestroy {
     this.eventService.dispatchEvent({eventType: EventType.ASK_VERIFICATION, payload: this.talent});
   }
 
-  private updateImage(): void {
-    this.userService.updateImage(this.image).subscribe({
-      next: (image: any) => {
-        this.talent.image = image;
-      },
-      error: (error: HttpErrorResponse) => {
-        console.log(error);
-      }
-    });
-  }
-
-  public addCertification(certification: Certification): void {
-    this.certificationService.addCertification(certification).subscribe({
-      next: (certification: Certification) => {
-        this.talent.certifications.push(certification);
-      },
-      error: (error: HttpErrorResponse) => {
-        console.log(error);
-      }
-    });
-  }
-
-  public updateCertification(certification: Certification): void {
-    this.certificationService.updateCertification(certification).subscribe({
-      next: (certification: Certification) => {
-        this.talent.certifications = this.talent.certifications.map((cert: Certification) => {
-          if (cert.id == certification.id) cert = certification;
-          return cert;
-        });
-      },
-      error: (error: HttpErrorResponse) => {
-        console.log(error);
-      }
-    });
-  }
-
-  public deleteCertification(id: number): void {
-    this.certificationService.deleteCertification(id).subscribe({
-      next: () => this.talent.certifications = this.talent.certifications.filter((certification: Certification) => certification.id != id),
-      error: (error: HttpErrorResponse) => {
-        console.log(error);
-      }
-    });
-  }
-
-
   public handleUpdateImage(): void {
-    this.eventService.publishEvent({eventType: EventType.UPDATE_IMAGE});
+    this.eventService.dispatchEvent({eventType: EventType.UPDATE_IMAGE, payload : this.image});
   }
 
 

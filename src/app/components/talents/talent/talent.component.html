@@ -47,6 +47,14 @@
             </li>
           </ul>
         </div>
+        <div class="card card-body border-0 shadow mb-4 mb-xl-0 mt-3">
+          <div class="d-flex justify-content-between">
+            <h2 class="h5 mb-4">Skills</h2>
+          </div>
+          <ul class="list-group list-group-flush" style="margin-top: -15px;">
+            <li *ngFor="let skill of talent.skills" class="list-group-item">{{skill}}</li>
+          </ul>
+        </div>
 
       </div>
 

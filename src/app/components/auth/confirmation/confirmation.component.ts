@@ -39,7 +39,7 @@ export class ConfirmationComponent implements OnInit, OnDestroy{
   }
 
   public handleConfirmAccount() : void {
-    this.eventService.publishEvent({eventType : EventType.CONFIRM_ACCOUNT, payload : this.code});
+    this.eventService.dispatchEvent({eventType : EventType.CONFIRM_ACCOUNT, payload : this.code});
   }
 
   public ngOnDestroy() {

@@ -21,16 +21,20 @@ export class EditJobComponent implements OnInit{
 
   public ngOnInit()  : void{
     if(this.job){
+      console.log(this.job);
       this.jobForm = this.formBuilder.group({
         id : this.formBuilder.control(this.job.id),
         title : this.formBuilder.control(this.job.title),
         sector : this.formBuilder.control(this.job.sector),
         minSalary : this.formBuilder.control(this.job.minSalary),
         maxSalary : this.formBuilder.control(this.job.maxSalary),
-        period : this.formBuilder.control(this.job.period),
+        currency : this.formBuilder.control(this.job.currency),
         yearsOfExperiences : this.formBuilder.control(this.job.yearsOfExperiences),
         numberOfTalents : this.formBuilder.control(this.job.numberOfTalents),
         type : this.formBuilder.control(this.job.type),
+        contractType : this.formBuilder.control(this.job.contractType),
+        period : this.formBuilder.control(this.job.period),
+        periodUnit : this.formBuilder.control(this.job.periodUnit),
         description : this.formBuilder.control(this.job.description),
         skills : this.formBuilder.control(this.job.skills.join(" "))
       });

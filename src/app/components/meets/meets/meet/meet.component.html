@@ -6,7 +6,8 @@
         <button (click)="handleCloseShowMeet()" type="button" class="btn-close"></button>
       </div>
       <div class="modal-body">
-        <p class="custom-p" [innerHTML]="meet.body"></p>
+        <p class="custom-p" [innerHTML]="body"></p>
+        <p class="custom-p text-end">{{meet.date | date : 'short'}}</p>
       </div>
     </div>
   </div>

@@ -17,8 +17,6 @@ export class AppComponent implements OnInit {
 
   public authStateService: AuthStateService = inject(AuthStateService);
 
-  private eventService: EventService = inject(EventService);
-
   private router: Router = inject(Router);
 
   private renderer: Renderer2 = inject(Renderer2);
@@ -32,7 +30,8 @@ export class AppComponent implements OnInit {
   public ngOnInit(): void {
     let accessToken = this.authStateService.getTokenFromLocalStorage();
     if (accessToken)
-      this.authStateService.loadUser(accessToken);
+      if(!this.authStateService.loadUser(accessToken))
+        this.authStateService.removeTokenFromLocalStorage();
 
     this.body = this.renderer.selectRootElement('body', true);
 

@@ -336,14 +336,15 @@ export class Reducer {
   public login(authenticationRequest: AuthenticationRequest): void {
     this.authService.login(authenticationRequest).subscribe({
       next: (response: AuthenticationResponse) => {
-        this.authStateService.loadUser(response.accessToken);
-        this.authStateService.storeTokenInLocalStorage(response.accessToken);
-        if (this.authStateService.hasAuthority('TALENT'))
-          this.router.navigateByUrl('/jobs');
-        if (this.authStateService.hasAuthority('CLIENT'))
-          this.router.navigateByUrl('/jobs');
-        if (this.authStateService.hasAuthority('ADMIN'))
-          this.router.navigateByUrl('/admin/jobs');
+        if(this.authStateService.loadUser(response.accessToken)){
+          this.authStateService.storeTokenInLocalStorage(response.accessToken);
+          if (this.authStateService.hasAuthority('TALENT'))
+            this.router.navigateByUrl('/jobs');
+          if (this.authStateService.hasAuthority('CLIENT'))
+            this.router.navigateByUrl('/jobs');
+          if (this.authStateService.hasAuthority('ADMIN'))
+            this.router.navigateByUrl('/admin/jobs');
+        }
       },
       error: (error: HttpErrorResponse) => {
         this.store.setState({

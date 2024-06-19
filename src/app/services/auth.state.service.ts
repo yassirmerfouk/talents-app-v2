@@ -19,21 +19,25 @@ export class AuthStateService {
     expireAt: undefined
   }
 
-  public loadUser(accessToken: string): void {
+  public loadUser(accessToken: string): boolean {
     let decodedJwt: any = jwtDecode(accessToken);
     let expireAt: Date = new Date(0);
     expireAt.setUTCSeconds(decodedJwt.exp);
-    this.authState = {
-      isAuthenticated: true,
-      id: decodedJwt.id,
-      firstName : decodedJwt.firstName,
-      lastName : decodedJwt.lastName,
-      email: decodedJwt.sub,
-      image : decodedJwt.image,
-      authorities: decodedJwt.authorities,
-      accessToken: accessToken,
-      expireAt: expireAt
+    if(expireAt > new Date){
+      this.authState = {
+        isAuthenticated: true,
+        id: decodedJwt.id,
+        firstName : decodedJwt.firstName,
+        lastName : decodedJwt.lastName,
+        email: decodedJwt.sub,
+        image : decodedJwt.image,
+        authorities: decodedJwt.authorities,
+        accessToken: accessToken,
+        expireAt: expireAt
+      }
+      return true;
     }
+    return false;
   }
 
   public unloadUser() : void {

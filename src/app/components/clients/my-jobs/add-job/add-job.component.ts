@@ -22,12 +22,15 @@ export class AddJobComponent implements OnInit{
       sector : this.formBuilder.control(null),
       minSalary : this.formBuilder.control(""),
       maxSalary : this.formBuilder.control(""),
-      period : this.formBuilder.control(""),
+      currency : this.formBuilder.control(""),
       yearsOfExperiences : this.formBuilder.control(""),
       numberOfTalents : this.formBuilder.control(""),
       type : this.formBuilder.control(""),
+      contractType : this.formBuilder.control(""),
+      period : this.formBuilder.control(""),
+      periodUnit : this.formBuilder.control(""),
       description : this.formBuilder.control(null),
-      skills : this.formBuilder.control(null)
+      skills : this.formBuilder.control("")
     });
   }
 
@@ -37,8 +40,9 @@ export class AddJobComponent implements OnInit{
 
   public handleAddJob() : void {
     let jobRequest : JobRequest = this.jobForm.value;
-    if(this.jobForm.value.skills)
-      jobRequest.skills = this.jobForm.value.skills.split(" ");
+    let skills : string = this.jobForm.value.skills;
+    if(skills)
+      jobRequest.skills = skills.split(" ");
     else
     jobRequest.skills = [];
     this.eventService.dispatchEvent({eventType : EventType.ADD_JOB, payload : jobRequest});

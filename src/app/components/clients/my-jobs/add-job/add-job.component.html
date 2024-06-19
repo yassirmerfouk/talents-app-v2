@@ -18,36 +18,63 @@
             </div>
           </div>
           <div class="row">
-            <div class="col-md-6 mb-3">
+            <div class="col-md-5 mb-3">
               <label class="form-label">Min salary</label>
               <input formControlName="minSalary" type="number" class="form-control" placeholder="Min salary">
             </div>
-            <div class="col-md-6 mb-3">
+            <div class="col-md-5 mb-3">
               <label class="form-label">Max salary</label>
               <input formControlName="maxSalary" type="number" class="form-control" placeholder="Max salary">
             </div>
+            <div class="col-md-2 mb-3">
+              <label class="form-label">Currency</label>
+              <select formControlName="currency" class="form-select">
+                <option value="">Select...</option>
+                <option value="MAD">MAD</option>
+                <option value="EUR">EUR</option>
+                <option value="USD">USD</option>
+              </select>
+            </div>
           </div>
           <div class="row">
-            <div class="col-md-6 mb-3">
-              <label class="form-label">Period</label>
-              <input formControlName="period" type="number" class="form-control" placeholder="Job period">
-            </div>
             <div class="col-md-6 mb-3">
               <label class="form-label">Experience</label>
               <input formControlName="yearsOfExperiences" type="number" class="form-control" placeholder="Years of experiences">
             </div>
-          </div>
-          <div class="row">
             <div class="col-md-6 mb-3">
               <label class="form-label">Number of talents</label>
               <input formControlName="numberOfTalents" type="number" class="form-control" placeholder="Number of talents">
             </div>
+          </div>
+          <div class="row">
             <div class="col-md-6 mb-3">
               <label class="form-label">Type</label>
               <select formControlName="type" class="form-select">
                 <option value="">Select...</option>
                 <option value="FULL_TIME">FULL TIME</option>
                 <option value="PART_TIME">PART TIME</option>
+              </select>
+            </div>
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Contract type</label>
+              <select formControlName="contractType" class="form-select">
+                <option value="">Select...</option>
+                <option value="FIXED_DATE">FIXED DATE</option>
+                <option value="OPEN_ENDED">OPEN ENDED</option>
+              </select>
+            </div>
+          </div>
+          <div *ngIf="jobForm.value.contractType == 'FIXED_DATE'" class="row">
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Period</label>
+              <input formControlName="period" type="number" class="form-control" placeholder="Period">
+            </div>
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Period unit</label>
+              <select formControlName="periodUnit" class="form-select">
+                <option value="">Select...</option>
+                <option value="DAYS">DAYS</option>
+                <option value="MONTHS">MONTHS</option>
               </select>
             </div>
           </div>

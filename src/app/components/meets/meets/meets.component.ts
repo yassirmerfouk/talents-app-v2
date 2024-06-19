@@ -42,13 +42,12 @@ export class MeetsComponent implements OnInit, OnDestroy{
         this.meetsPage = state.meetsState?.meetsPage;
         this.openMeet = state.meetsState?.openMeet;
         this.selectedMeet = state.meetsState?.selectedMeet;
-        if(this.selectedMeet)
-          this.selectedMeet.body = this.selectedMeet.body.replace(/\n/g, "<br>");
       }
     );
 
     this.filterForm = this.formBuilder.group({
-      date : this.formBuilder.control(format(new Date(), 'yyyy-MM-dd'))
+      /*date : this.formBuilder.control(format(new Date(), 'yyyy-MM-dd'))*/
+      date : this.formBuilder.control(null)
     });
 
     this.getMeets();
