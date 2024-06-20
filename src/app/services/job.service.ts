@@ -59,6 +59,10 @@ export class JobService{
     return this.httpClient.get<Array<Application>>(`${this.api}/${jobId}/applications/selected`);
   }
 
+  public getApprovedJobApplications(jobId : number) : Observable<Array<Application>>{
+    return this.httpClient.get<Array<Application>>(`${this.api}/${jobId}/applications/approved`);
+  }
+
   public approveTalent(jobId : number, talentId : number) : Observable<any>{
     return this.httpClient.post<any>(`${this.api}/${jobId}/approve/${talentId}`, {});
   }

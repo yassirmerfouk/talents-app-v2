@@ -95,6 +95,9 @@ export class Reducer {
           case EventType.GET_JOB_SELECTED_APPLICATIONS :
             this.getSelectedJobApplications($event.payload);
             break;
+          case EventType.GET_JOB_APPROVED_APPLICATIONS :
+            this.getApprovedJobApplications($event.payload);
+            break;
           case EventType.SELECT_TALENT :
             this.selectTalentForJob($event.payload);
             break;
@@ -526,6 +529,20 @@ export class Reducer {
         this.store.setState({
           jobsState: {error: error.error.message}
         });
+      }
+    });
+  }
+
+  public getApprovedJobApplications(id : number) : void{
+    this.jobService.getSelectedJobApplication(id).subscribe({
+      next : (approvedApplications : Array<Application>) => {
+        let jobsState = {...this.store.state.jobsState, ...{approvedApplications : approvedApplications}};
+        this.store.setState({
+          jobsState : jobsState
+        });
+      },
+      error : (error : HttpErrorResponse) => {
+        console.log(error);
       }
     });
   }

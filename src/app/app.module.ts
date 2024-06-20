@@ -54,6 +54,7 @@ import { EditSkillsComponent } from './components/talents/talent-profile/skills/
 import { AddMeetComponent } from './components/meets/add-meet/add-meet.component';
 import { MeetsComponent } from './components/meets/meets/meets.component';
 import { MeetComponent } from './components/meets/meets/meet/meet.component';
+import { JobApplicationsComponent } from './components/jobs/job/job-applications/job-applications.component';
 
 @NgModule({
   declarations: [
@@ -103,6 +104,7 @@ import { MeetComponent } from './components/meets/meets/meet/meet.component';
     AddMeetComponent,
     MeetsComponent,
     MeetComponent,
+    JobApplicationsComponent,
   ],
   imports: [
     BrowserModule,

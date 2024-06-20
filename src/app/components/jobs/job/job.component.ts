@@ -8,6 +8,7 @@ import {Store} from "../../../state/store.service";
 import {EventService} from "../../../services/event.service";
 import {EventType} from "../../../state/event-type.enum";
 import {Subscription} from "rxjs";
+import {User} from "../../../models/user.model";
 
 @Component({
   selector: 'app-job',
@@ -33,6 +34,11 @@ export class JobComponent implements OnInit, OnDestroy {
 
   public selectedApplications !: Array<Application>;
 
+  public approvedApplications !: Array<Application>;
+
+  public openProgramMeet : boolean = false;
+  public selectedUser !: User;
+
   public ngOnInit() {
 
   this.stateSubscription = this.store.state$.subscribe(
@@ -40,6 +46,10 @@ export class JobComponent implements OnInit, OnDestroy {
         this.job = state.jobsState.job;
         this.applicationsPage = state.jobsState.applicationsPage;
         this.selectedApplications = state.jobsState.selectedApplications;
+        this.approvedApplications = state.jobsState.approvedApplications;
+
+        this.openProgramMeet = state.meetState?.openProgramMeet;
+        this.selectedUser = state.meetState?.selectedUser;
       }
     );
 
@@ -48,8 +58,11 @@ export class JobComponent implements OnInit, OnDestroy {
         this.id = params['id'];
         if (this.id){
           this.getJob();
-          this.getJobApplications();
-          this.getSelectedJobApplications();
+         setTimeout(() => {
+           this.getJobApplications();
+           this.getSelectedJobApplications();
+           this.getApprovedJobApplications();
+         }, 200);
         }
       }
     );
@@ -70,6 +83,11 @@ export class JobComponent implements OnInit, OnDestroy {
       this.eventService.dispatchEvent({eventType : EventType.GET_JOB_SELECTED_APPLICATIONS, payload : this.id});
   }
 
+  public getApprovedJobApplications() : void {
+    if(this.authStateService.hasAuthority('ADMIN'))
+      this.eventService.dispatchEvent({eventType : EventType.GET_JOB_APPROVED_APPLICATIONS, payload : this.id});
+  }
+
   public handleAskStartProcess(job : Job) : void {
     this.eventService.dispatchEvent({eventType : EventType.ASK_TO_START_PROCESS, payload : job});
   }
@@ -88,6 +106,10 @@ export class JobComponent implements OnInit, OnDestroy {
 
   public handleOnChangeApprove(application: Application): void {
     this.eventService.dispatchEvent({eventType : EventType.APPROVE_TALENT, payload : application});
+  }
+
+  public handleOpenProgramMeet(user : User) : void {
+    this.eventService.dispatchEvent({eventType : EventType.OPEN_ADD_MEET, payload : user});
   }
 
   public handleChangePage(page: number): void {

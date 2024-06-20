@@ -28,7 +28,7 @@
               </div>
               <div>
                 <p class="pe-4 custom-p">Number of talents : {{job.numberOfTalents}}</p>
-                <p class="pe-4 custom-p">Salary : {{job.minSalary}} - {{job.maxSalary}}</p>
+                <p class="pe-4 custom-p">Salary : {{job.minSalary}} - {{job.maxSalary}} {{job.currency}}</p>
                 <p class="pe-4 custom-p">Client : <a [routerLink]="'/client/' + job.client.id"
                                                      class="text-info"><u>{{job.client.firstName + ' ' + job.client.lastName}}</u></a>
                 </p>
@@ -60,7 +60,12 @@
         <h2 class="fs-5 fw-bold mb-0">Job applications</h2>
       </div>
       <div class="card-body py-0">
-        <ul *ngIf="applicationsPage" class="list-group list-group-flush">
+        <div *ngIf="applicationsPage.totalElements == 0" class="container mt-3">
+          <div class="alert alert-primary" role="alert">
+            There are currently no job applications submitted. Please check back later for updates.
+          </div>
+        </div>
+        <ul *ngIf="applicationsPage.totalElements != 0" class="list-group list-group-flush">
           <li *ngFor="let application of applicationsPage.content"
               class="list-group-item bg-transparent border-bottom py-3 px-0">
             <div class="d-flex justify-content-around">
@@ -76,16 +81,15 @@
             </span>
                 </div>
               </div>
-              <div class="">
-                <!--                <div *ngIf="job.status == 'IN_PROCESS'" class="col"><span class="fs-6 fw-bolder text-dark"><div
-                                  class="form-check form-switch"><input
-                                  class="form-check-input" type="checkbox" [checked]="application.selected"
-                                  (change)="handleOnChangeSelection(application)"
-                                ></div></span></div>-->
+              <div class="d-flex justify-content-between">
+                <a (click)="handleOpenProgramMeet(application.talent)" class="me-1">
+                  <i class="bi bi-calendar-minus-fill text-warning me-1 custom-icon" style="font-size: 24px;"></i>
+                </a>
                 <div (click)="handleOnChangeSelection(application)" *ngIf="job.status == 'IN_PROCESS'">
                   <a *ngIf="!application.selected"><i class="bi bi-check-circle text-success me-2 custom-icon"></i></a>
                   <a *ngIf="application.selected"><i class="bi bi-x-circle text-danger me-2 custom-icon"></i></a>
                 </div>
+
               </div>
             </div>
           </li>
@@ -115,7 +119,12 @@
         <h2 class="fs-5 fw-bold mb-0">Selected talents</h2>
       </div>
       <div class="card-body py-0">
-        <ul *ngIf="selectedApplications" class="list-group list-group-flush">
+        <div *ngIf="selectedApplications.length == 0" class="container mt-3">
+          <div class="alert alert-primary" role="alert">
+            The list of approved talents is currently empty. This will be updated once the selection process is complete.
+          </div>
+        </div>
+        <ul *ngIf="selectedApplications.length != 0" class="list-group list-group-flush">
           <li *ngFor="let application of selectedApplications"
               class="list-group-item bg-transparent border-bottom py-3 px-0">
             <div class="d-flex justify-content-around">
@@ -144,3 +153,5 @@
     </div>
   </div>
 </div>
+
+<app-add-meet *ngIf="openProgramMeet" [type]="'INTERVIEW'" [user]="selectedUser"></app-add-meet>

@@ -19,7 +19,7 @@
                   <p class="small pe-4 mt-2">Years of experiences : {{job.yearsOfExperiences}} years</p>
                   <p class="small pe-4 mt-2">Number of talents : {{job.numberOfTalents}} talents</p>
                   <p class="small pe-4 mt-2">Salary : {{job.minSalary}} - {{job.maxSalary}} {{job.currency}}</p>
-                  <p class="small pe-4 mt-2">Contract : {{job.contractType}}</p>
+                  <p class="small pe-4 mt-2">Contract : {{job.contractType == 'FIXED_DATE' ? 'FIXED DATE' : 'OPEN ENDED'}}</p>
                   <p class="small pe-4 mt-2" *ngIf="job.contractType == 'FIXED_DATE'">Period : {{job.period}} {{job.periodUnit}}</p>
                   <p class="small pe-4">Client : <a [routerLink]="'/client/' + job.client.id" class="text-info"><u>{{job.client.firstName + ' ' + job.client.lastName}}</u></a></p>
                   <p class="small pe-4 mt-2">{{job.description}}</p>
