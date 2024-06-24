@@ -37,7 +37,7 @@ export class AppComponent implements OnInit {
 
     this.reducer.dispatcher$.subscribe(
       ($event: ActionEvent) => {
-        if ($event.eventType.startsWith('OPEN') && $event.eventType != EventType.OPEN_EDIT_JOB) {
+        if ($event.eventType.startsWith('OPEN')) {
           this.changeStyle = true;
           this.renderer.setStyle(this.body, 'overflow', 'hidden');
           this.renderer.setStyle(this.body, 'padding-right', '17px');

@@ -3,16 +3,16 @@
     <div class="card card-body border-0 shadow mt-3">
       <div class="d-flex justify-content-between">
         <a [routerLink]="'/job/' + job.id">
-          <h2 class="fs-5 fw-bold mb-0 custom-link">{{job.title}},
-
+          <h2 class="fs-5 fw-bold mb-0 custom-link">
+            {{job.title}},
             <span class="fw-normal small" style="font-size: 13px;"
                   [ngClass]="{
-                          'text-success' : job.status == 'OPEN',
-                          'text-warning' : job.status == 'WAITING',
-                          'text-info' : job.status == 'IN_PROCESS',
-                          }">
-                      {{job.status}}
-                    </span>
+                'text-success' : job.status == 'OPEN',
+                'text-warning' : job.status == 'WAITING',
+                'text-info' : job.status == 'IN_PROCESS',
+              }">
+              {{job.status}}
+            </span>
           </h2>
         </a>
       </div>
@@ -29,8 +29,10 @@
               <div>
                 <p class="pe-4 custom-p">Number of talents : {{job.numberOfTalents}}</p>
                 <p class="pe-4 custom-p">Salary : {{job.minSalary}} - {{job.maxSalary}} {{job.currency}}</p>
-                <p class="pe-4 custom-p">Client : <a [routerLink]="'/client/' + job.client.id"
-                                                     class="text-info"><u>{{job.client.firstName + ' ' + job.client.lastName}}</u></a>
+                <p class="pe-4 custom-p">
+                  Client : <a [routerLink]="'/client/' + job.client.id" class="text-info">
+                  <u>{{job.client.firstName + ' ' + job.client.lastName}}</u>
+                </a>
                 </p>
               </div>
             </div>
@@ -54,6 +56,7 @@
       </ul>
     </div>
   </div>
+
   <div *ngIf="applicationsPage" class="mb-4 mt-3">
     <div class="card border-0 shadow">
       <div class="card-header border-bottom">
@@ -70,26 +73,33 @@
               class="list-group-item bg-transparent border-bottom py-3 px-0">
             <div class="d-flex justify-content-around">
               <div class="row align-items-center" style="width: 95%">
-                <div class="col-auto"><a [routerLink]="'/talent/' + application.talent.id" class="avatar-md">
-                  <img [src]="application.talent.image ? application.talent.image : 'assets/img/no-image.jpg'"
-                       class="rounded" alt="Image placeholder"></a></div>
+                <div class="col-auto">
+                  <a [routerLink]="'/talent/' + application.talent.id" class="avatar-md">
+                    <img [src]="application.talent.image ? application.talent.image : 'assets/img/no-image.jpg'"
+                         class="rounded" alt="Image placeholder">
+                  </a>
+                </div>
                 <div class="col-auto px-0">
-                  <h4 class="fs-6 text-dark mb-0"><a
-                    [routerLink]="'/talent/' + application.talent.id">{{application.talent.firstName + ' ' + application.talent.lastName}}</a>
-                  </h4><span class="small">
-              {{application.talent.title}}
-            </span>
+                  <h4 class="fs-6 text-dark mb-0">
+                    <a [routerLink]="'/talent/' + application.talent.id">
+                      {{application.talent.firstName + ' ' + application.talent.lastName}}
+                    </a>
+                  </h4>
+                  <span class="small">{{application.talent.title}}</span>
                 </div>
               </div>
               <div class="d-flex justify-content-between">
-                <a (click)="handleOpenProgramMeet(application.talent)" class="me-1">
-                  <i class="bi bi-calendar-minus-fill text-warning me-1 custom-icon" style="font-size: 24px;"></i>
+                <a (click)="handleOpenProgramMeet(application)" class="me-1">
+                  <i class="bi bi-calendar-minus-fill text-primary me-1 custom-icon"  [ngClass]="{'disabled' : application.hasMeet}" style="font-size: 24px;"></i>
                 </a>
                 <div (click)="handleOnChangeSelection(application)" *ngIf="job.status == 'IN_PROCESS'">
-                  <a *ngIf="!application.selected"><i class="bi bi-check-circle text-success me-2 custom-icon"></i></a>
-                  <a *ngIf="application.selected"><i class="bi bi-x-circle text-danger me-2 custom-icon"></i></a>
+                  <a *ngIf="!application.selected">
+                    <i class="bi bi-check-circle text-primary me-2 custom-icon"></i>
+                  </a>
+                  <a *ngIf="application.selected">
+                    <i class="bi bi-x-circle text-primary me-2 custom-icon"></i>
+                  </a>
                 </div>
-
               </div>
             </div>
           </li>
@@ -99,15 +109,16 @@
     <div class="card-footer px-3 border-0 d-flex flex-column flex-lg-row align-items-center justify-content-end">
       <nav aria-label="Page navigation example">
         <ul class="pagination pagination-sm mb-0">
-          <li class="page-item" [ngClass]="{'disabled' : applicationsPage.page == 0}"><a (click)="handlePreviousPage()"
-                                                                                         class="page-link">Previous</a>
+          <li class="page-item" [ngClass]="{'disabled' : applicationsPage.page == 0}">
+            <a (click)="handlePreviousPage()" class="page-link">Previous</a>
           </li>
-          <li class="page-item" *ngFor="let item of [].constructor(applicationsPage.totalPages);let i = index"
+          <li class="page-item" *ngFor="let item of [].constructor(applicationsPage.totalPages); let i = index"
               [ngClass]="{'active' : applicationsPage.page == i}">
             <a (click)="handleChangePage(i)" class="page-link">{{i + 1}}</a>
           </li>
-          <li [ngClass]="{'disabled' : applicationsPage.page == applicationsPage.totalPages - 1}" class="page-item"><a
-            class="page-link" (click)="handleNextPage()">Next</a></li>
+          <li [ngClass]="{'disabled' : applicationsPage.page == applicationsPage.totalPages - 1}" class="page-item">
+            <a class="page-link" (click)="handleNextPage()">Next</a>
+          </li>
         </ul>
       </nav>
     </div>
@@ -129,21 +140,29 @@
               class="list-group-item bg-transparent border-bottom py-3 px-0">
             <div class="d-flex justify-content-around">
               <div class="row align-items-center" style="width: 98%">
-                <div class="col-auto"><a [routerLink]="'/talent/' + application.talent.id" class="avatar-md">
-                  <img [src]="application.talent.image ? application.talent.image : 'assets/img/no-image.jpg'"
-                       class="rounded" alt="Image placeholder"></a></div>
+                <div class="col-auto">
+                  <a [routerLink]="'/talent/' + application.talent.id" class="avatar-md">
+                    <img [src]="application.talent.image ? application.talent.image : 'assets/img/no-image.jpg'"
+                         class="rounded" alt="Image placeholder">
+                  </a>
+                </div>
                 <div class="col-auto px-0">
-                  <h4 class="fs-6 text-dark mb-0"><a
-                    [routerLink]="'/talent/' + application.talent.id">{{application.talent.firstName + ' ' + application.talent.lastName}}</a>
-                  </h4><span class="small">
-              {{application.talent.title}}
-            </span>
+                  <h4 class="fs-6 text-dark mb-0">
+                    <a [routerLink]="'/talent/' + application.talent.id">
+                      {{application.talent.firstName + ' ' + application.talent.lastName}}
+                    </a>
+                  </h4>
+                  <span class="small">{{application.talent.title}}</span>
                 </div>
               </div>
               <div>
                 <div (click)="handleOnChangeApprove(application)" *ngIf="job.status == 'IN_SELECTION'">
-                  <a *ngIf="!application.approved"><i class="bi bi-check-circle text-success me-2 custom-icon"></i></a>
-                  <a *ngIf="application.approved"><i class="bi bi-x-circle text-danger me-2 custom-icon"></i></a>
+                  <a *ngIf="!application.approved">
+                    <i class="bi bi-check-circle text-success me-2 custom-icon"></i>
+                  </a>
+                  <a *ngIf="application.approved">
+                    <i class="bi bi-x-circle text-danger me-2 custom-icon"></i>
+                  </a>
                 </div>
               </div>
             </div>
@@ -152,6 +171,6 @@
       </div>
     </div>
   </div>
+  <app-add-meet *ngIf="openProgramMeet" [type]="'INTERVIEW'" [user]="selectedUser" [job]="job"></app-add-meet>
 </div>
 
-<app-add-meet *ngIf="openProgramMeet" [type]="'INTERVIEW'" [user]="selectedUser"></app-add-meet>

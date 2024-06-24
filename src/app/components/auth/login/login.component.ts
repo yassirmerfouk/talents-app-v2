@@ -37,9 +37,9 @@ export class LoginComponent implements OnInit, OnDestroy{
 
     this.stateSubscription = this.store.state$.subscribe(
       (state : any) => {
-        this.error = state.loginState.error;
-        this.errors = state.loginState.errors ? new Map(Object.entries(state.loginState.errors)) : new Map;
-        this.successMessage = state.loginState.successMessage;
+        this.error = state.loginState?.error;
+        this.errors = state.loginState?.errors ? new Map(Object.entries(state.loginState.errors)) : new Map;
+        this.successMessage = state.loginState?.successMessage;
         if(this.error)
           this.toast.danger(this.error);
       }

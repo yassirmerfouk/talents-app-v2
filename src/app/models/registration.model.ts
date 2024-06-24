@@ -20,15 +20,9 @@ export interface ClientRegistration{
   sector : string,
   country : string,
   city : string,
-  type : String
+  type : String,
+  companyName : string | null,
+  website : string | null,
+  size : string | null
 }
 
-export interface PClientRegistration extends ClientRegistration{
-
-}
-
-export interface CClientRegistration extends ClientRegistration{
-  companyName : string,
-  website : string,
-  size : string
-}

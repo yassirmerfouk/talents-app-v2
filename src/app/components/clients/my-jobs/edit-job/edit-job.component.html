@@ -1,95 +1,99 @@
-<div class="d-flex justify-content-end container">
-  <a (click)="handleCloseEditJob()">
-    <i class="bi bi-x-lg custom-icon"></i>
-  </a>
-</div>
-<div *ngIf="job" class="row">
-  <div class="col-12 col-xl-12">
-    <div class="card card-body border-0 shadow mb-4">
+<div class="modal fade show" style="display: block;">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h6 class="h6 modal-title">Update your job</h6>
+        <button (click)="handleCloseEditJob()" type="button" class="btn-close"></button>
+      </div>
       <form [formGroup]="jobForm" (ngSubmit)="handleUpdateJob()">
-        <div class="row">
-          <div class="col-md-6 mb-3">
-            <label class="form-label">Tile</label>
-            <input formControlName="title" type="text" class="form-control">
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Title</label>
+              <input formControlName="title" type="text" class="form-control" placeholder="Title">
+            </div>
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Sector</label>
+              <input formControlName="sector" type="text" class="form-control" placeholder="Sector">
+            </div>
           </div>
-          <div class="col-md-6 mb-3">
-            <label class="form-label">Sector</label>
-            <input formControlName="sector" type="text" class="form-control">
+          <div class="row">
+            <div class="col-md-5 mb-3">
+              <label class="form-label">Min salary</label>
+              <input formControlName="minSalary" type="number" class="form-control" placeholder="Min salary">
+            </div>
+            <div class="col-md-5 mb-3">
+              <label class="form-label">Max salary</label>
+              <input formControlName="maxSalary" type="number" class="form-control" placeholder="Max salary">
+            </div>
+            <div class="col-md-2 mb-3">
+              <label class="form-label">Currency</label>
+              <select formControlName="currency" class="form-select">
+                <option value="">Select...</option>
+                <option value="MAD">MAD</option>
+                <option value="EUR">EUR</option>
+                <option value="USD">USD</option>
+              </select>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Experience</label>
+              <input formControlName="yearsOfExperiences" type="number" class="form-control" placeholder="Years of experiences">
+            </div>
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Number of talents</label>
+              <input formControlName="numberOfTalents" type="number" class="form-control" placeholder="Number of talents">
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Type</label>
+              <select formControlName="type" class="form-select">
+                <option value="">Select...</option>
+                <option value="FULL_TIME">FULL TIME</option>
+                <option value="PART_TIME">PART TIME</option>
+              </select>
+            </div>
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Contract type</label>
+              <select formControlName="contractType" class="form-select">
+                <option value="">Select...</option>
+                <option value="FIXED_DATE">FIXED DATE</option>
+                <option value="OPEN_ENDED">OPEN ENDED</option>
+              </select>
+            </div>
+          </div>
+          <div *ngIf="jobForm.value.contractType == 'FIXED_DATE'" class="row">
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Period</label>
+              <input formControlName="period" type="number" class="form-control" placeholder="Period">
+            </div>
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Period unit</label>
+              <select formControlName="periodUnit" class="form-select">
+                <option value="">Select...</option>
+                <option value="DAYS">DAYS</option>
+                <option value="MONTHS">MONTHS</option>
+              </select>
+            </div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Description</label>
+            <textarea formControlName="description" class="form-control" rows="8" placeholder="Job description"></textarea>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Skills</label>
+            <textarea formControlName="skills" class="form-control" rows="4" placeholder="Job skills, ex : JAVA ANGULAR REACTJS"></textarea>
           </div>
         </div>
-        <div class="row">
-          <div class="col-md-5 mb-3">
-            <label class="form-label">Min salary</label>
-            <input formControlName="minSalary" type="number" class="form-control" placeholder="Min salary">
-          </div>
-          <div class="col-md-5 mb-3">
-            <label class="form-label">Max salary</label>
-            <input formControlName="maxSalary" type="number" class="form-control" placeholder="Max salary">
-          </div>
-          <div class="col-md-2 mb-3">
-            <label class="form-label">Currency</label>
-            <select formControlName="currency" class="form-select">
-              <option value="">Select...</option>
-              <option value="MAD">MAD</option>
-              <option value="EUR">EUR</option>
-              <option value="USD">USD</option>
-            </select>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-md-6 mb-3">
-            <label class="form-label">Experience</label>
-            <input formControlName="yearsOfExperiences" type="number" class="form-control" placeholder="Years of experiences">
-          </div>
-          <div class="col-md-6 mb-3">
-            <label class="form-label">Number of talents</label>
-            <input formControlName="numberOfTalents" type="number" class="form-control" placeholder="Number of talents">
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-md-6 mb-3">
-            <label class="form-label">Type</label>
-            <select formControlName="type" class="form-select">
-              <option value="">Select...</option>
-              <option value="FULL_TIME">FULL TIME</option>
-              <option value="PART_TIME">PART TIME</option>
-            </select>
-          </div>
-          <div class="col-md-6 mb-3">
-            <label class="form-label">Contract type</label>
-            <select formControlName="contractType" class="form-select">
-              <option value="">Select...</option>
-              <option value="FIXED_DATE">FIXED DATE</option>
-              <option value="OPEN_ENDED">OPEN ENDED</option>
-            </select>
-          </div>
-        </div>
-        <div *ngIf="jobForm.value.contractType == 'FIXED_DATE'" class="row">
-          <div class="col-md-6 mb-3">
-            <label class="form-label">Period</label>
-            <input formControlName="period" type="number" class="form-control" placeholder="Period">
-          </div>
-          <div class="col-md-6 mb-3">
-            <label class="form-label">Period unit</label>
-            <select formControlName="periodUnit" class="form-select">
-              <option value="">Select...</option>
-              <option value="DAYS">DAYS</option>
-              <option value="MONTHS">MONTHS</option>
-            </select>
-          </div>
-        </div>
-        <div class="mb-3">
-          <label class="form-label">Description</label>
-          <textarea formControlName="description" class="form-control" rows="6"></textarea>
-        </div>
-        <div class="mb-3">
-          <label class="form-label">Skills</label>
-          <textarea formControlName="skills" class="form-control" rows="3"></textarea>
-        </div>
-        <div class="d-flex justify-content-end">
-          <button type="submit" class="btn btn-primary btn-sm">Update</button>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary btn-sm">Close</button>
+          <button type="submit" class="btn btn-primary btn-sm">Add</button>
         </div>
       </form>
     </div>
+
   </div>
 </div>
+

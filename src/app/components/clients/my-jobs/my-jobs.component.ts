@@ -20,7 +20,6 @@ export class MyJobsComponent implements OnInit, OnDestroy {
 
   public openAddJob: boolean = false;
   public openEditJob: boolean = false;
-  public displayJobs: boolean = true;
 
   public selectedJob !: Job;
 
@@ -36,7 +35,6 @@ export class MyJobsComponent implements OnInit, OnDestroy {
         this.jobsPage = state.jobsState.jobsPage;
         this.openAddJob = state.jobsState.openAddJob;
         this.openEditJob = state.jobsState.openEditJob;
-        this.displayJobs = state.jobsState.displayJobs;
         this.selectedJob = state.jobsState.selectedJob;
       }
     );

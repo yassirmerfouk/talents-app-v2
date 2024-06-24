@@ -45,7 +45,7 @@ export class ClientProfileComponent implements OnInit, OnDestroy {
             type: this.formBuilder.control(this.client.type),
             companyName: this.formBuilder.control(this.client.companyName),
             website: this.formBuilder.control(this.client.website),
-            size: this.formBuilder.control(this.client.size),
+            size: this.formBuilder.control(this.client.size ? this.client.size : ''),
           });
           this.imageForm = this.formBuilder.group({
             image: this.formBuilder.control(null)
@@ -69,6 +69,11 @@ export class ClientProfileComponent implements OnInit, OnDestroy {
 
   public handleUpdateProfile(): void {
     let clientRequest: ClientRequest = this.clientForm.value;
+    if(clientRequest.type == 'PERSONNEL'){
+      clientRequest.companyName = null;
+      clientRequest.website = null;
+      clientRequest.size = null;
+    }
     this.eventService.dispatchEvent({eventType: EventType.UPDATE_CLIENT_PROFILE, payload: clientRequest});
   }
 

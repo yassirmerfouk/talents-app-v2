@@ -13,4 +13,6 @@ export interface Meet{
   receiver : User,
 
   receiverId ?: number, // only to add the receiver to the path
+
+  jobId ?: number
 }

@@ -11,8 +11,8 @@ export interface JobRequest{
   yearsOfExperiences : number,
   numberOfTalents : number,
   contractType : string,
-  period : number,
-  periodUnit : string,
+  period : number | null,
+  periodUnit : string | null,
   type : string,
   skills : Array<string>
 

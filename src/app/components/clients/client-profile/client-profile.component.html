@@ -65,6 +65,7 @@
         <div *ngIf="clientForm.value.type == 'COMPANY'" class="mb-3">
           <label class="form-label">Company size</label>
           <select formControlName="size" class="form-select">
+            <option value="">Select</option>
             <option value="1 - 50">1 - 50</option>
             <option value="51 - 100">51 - 100</option>
           </select>

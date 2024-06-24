@@ -5,9 +5,10 @@
 </div>
 <div class="card border-0 shadow mb-4">
   <div class="card-body">
-    <div *ngIf="displayJobs">
+    <div>
       <div class="d-flex justify-content-end mb-2 container">
         <a (click)="handleOpenAddJob()"> <i class="bi bi-plus-circle fa-2x custom-icon"></i></a>
+<!--        <a class="btn btn-primary btn-sm" (click)="handleOpenAddJob()">Add new job</a>-->
       </div>
       <div *ngIf="jobsPage" class="table-responsive">
         <table class="table table-hover table-centered table-nowrap mb-0 rounded">

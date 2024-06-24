@@ -6,26 +6,18 @@ export interface ClientRequest{
   firstName : string,
   lastName : string,
   phone : string,
-  companyName : string,
+  companyName : string | null,
   sector : string,
   shortDescription : string,
   longDescription : string,
   city : string,
   country : string,
-  website : string,
-  size : string,
+  website : string | null,
+  size : string | null,
   type : string
 }
 
 export interface Client extends User{
-
-/*  id : number,
-  email : string,
-  firstName : string,
-  lastName : string,*/
-/*  phone : string,
-  image : string,*/
-/*  status : string,*/
   companyName : string,
   sector : string,
   shortDescription : string,

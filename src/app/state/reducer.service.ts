@@ -352,8 +352,8 @@ export class Reducer {
       error: (error: HttpErrorResponse) => {
         this.store.setState({
           loginState: {
-            error: error.error.message,
-            errors: error.error.errors
+            error: error.error?.message,
+            errors: error.error?.errors
           }
         });
       }
@@ -371,11 +371,10 @@ export class Reducer {
         });
       },
       error: (error: HttpErrorResponse) => {
-        console.log(error)
         this.store.setState({
           registerTalentState: {
-            error: error.error.message,
-            errors: error.error.errors
+            error: error.error?.message,
+            errors: error.error?.errors
           }
         });
       }
@@ -705,14 +704,14 @@ export class Reducer {
   }
 
   public openAddJob(): void {
-    let jobsState = {...this.store.state.jobsState, ...{openAddJob: true, openEditJob: false, displayJobs: true}};
+    let jobsState = {...this.store.state.jobsState, ...{openAddJob: true, openEditJob: false}};
     this.store.setState({
       jobsState: jobsState
     });
   }
 
   public closeAddJob(): void {
-    let jobsState = {...this.store.state.jobsState, ...{openAddJob: false, openEditJob: false, displayJobs: true}};
+    let jobsState = {...this.store.state.jobsState, ...{openAddJob: false, openEditJob: false}};
     this.store.setState({
       jobsState: jobsState
     });
@@ -723,7 +722,6 @@ export class Reducer {
       ...this.store.state.jobsState, ...{
         openAddJob: false,
         openEditJob: true,
-        displayJobs: false,
         selectedJob: job
       }
     };
@@ -736,8 +734,7 @@ export class Reducer {
     let jobsState = {
       ...this.store.state.jobsState, ...{
         openAddJob: false,
-        openEditJob: false,
-        displayJobs: true,
+        openEditJob: false
       }
     };
     this.store.setState({

@@ -37,6 +37,7 @@ export class JobComponent implements OnInit, OnDestroy {
   public approvedApplications !: Array<Application>;
 
   public openProgramMeet : boolean = false;
+
   public selectedUser !: User;
 
   public ngOnInit() {
@@ -108,8 +109,11 @@ export class JobComponent implements OnInit, OnDestroy {
     this.eventService.dispatchEvent({eventType : EventType.APPROVE_TALENT, payload : application});
   }
 
-  public handleOpenProgramMeet(user : User) : void {
-    this.eventService.dispatchEvent({eventType : EventType.OPEN_ADD_MEET, payload : user});
+  public handleOpenProgramMeet(application : Application) : void {
+    if(application.hasMeet)
+      alert("You already programed a meet with this talent.");
+    else
+    this.eventService.dispatchEvent({eventType : EventType.OPEN_ADD_MEET, payload : application.talent});
   }
 
   public handleChangePage(page: number): void {

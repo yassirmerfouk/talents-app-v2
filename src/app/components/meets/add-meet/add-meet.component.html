@@ -2,7 +2,7 @@
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
-        <h6 class="h6 modal-title">Program a meet</h6>
+        <h6 class="h6 modal-title">{{type == 'VERIFICATION' ? 'Program a verification meet' : 'Program an interview meet'}}</h6>
         <button (click)="handleCloseProgramMeet()" type="button" class="btn-close"></button>
       </div>
       <form [formGroup]="meetForm" (ngSubmit)="handleProgramMeet()">
@@ -11,10 +11,10 @@
             <div class="col-md-6 mb-3">
               <label class="form-label">Title</label>
               <input formControlName="title" type="text" class="form-control" placeholder="Title">
-              <div class="me-1" *ngIf="meetForm.get('title')?.touched && meetForm.get('title')?.invalid">
+<!--              <div class="me-1" *ngIf="meetForm.get('title')?.touched && meetForm.get('title')?.invalid">
                 <div *ngIf="meetForm.get('title')?.errors?.['required']" class="text-danger mt-2 small">Title is required.
                 </div>
-              </div>
+              </div>-->
             </div>
             <div class="col-md-6 mb-3">
               <label class="form-label">Date</label>
@@ -28,17 +28,17 @@
             </div>
             <div class="col-md-6 mb-3">
               <label class="form-label">Contact type</label>
-              <select formControlName="contactType" class="form-select">
+              <select (change)="handleOnChangeContactType()" formControlName="contactType" class="form-select">
                 <option value="">Select...</option>
                 <option value="VIDEO_CALL">Video call</option>
                 <option value="PHONE_CALL">Phone call</option>
               </select>
             </div>
           </div>
-          <div class="mb-3">
+<!--          <div class="mb-3">
             <label class="form-label">Meet link</label>
             <input (change)="handleOnChangeLink()" formControlName="resource" type="url" class="form-control" placeholder="Meet link">
-          </div>
+          </div>-->
           <div class="mb-3">
             <label class="form-label">Message</label>
             <textarea formControlName="body" class="form-control" placeholder="Message" rows="14"></textarea>

@@ -14,6 +14,7 @@ export interface AuthState{
   firstName : string | undefined,
   lastName : string | undefined,
   email : string | undefined,
+  status : string | undefined,
   image : string | undefined,
   authorities: string[] | undefined,
   accessToken: string | undefined,

@@ -16,8 +16,8 @@
                                            placeholder="Your email"
                                            id="email">
             </div>
-            <div *ngIf="errors?.has('email')" class="text-danger mt-2 small">{{errors?.get('email')}}</div>
-            <!--<div *ngIf="login.get('email')?.touched && login.get('email')?.invalid">
+            <div *ngIf="errors?.has('email')" class="text-danger mt-2 small">{{errors?.get('email')}}</div><!--
+            <div *ngIf="login.get('email')?.touched && login.get('email')?.invalid">
               <div *ngIf="login.get('email')?.errors?.['required']" class="text-danger mt-2 small">Email is required.
               </div>
               <div *ngIf="login.get('email')?.errors?.['email']" class="text-danger mt-2 small">Email is not valid.

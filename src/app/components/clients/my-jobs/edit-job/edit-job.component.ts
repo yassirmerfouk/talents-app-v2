@@ -47,6 +47,9 @@ export class EditJobComponent implements OnInit{
       jobRequest.skills = this.jobForm.value.skills.split(" ");
     else
       jobRequest.skills = [];
+    if(jobRequest.contractType == 'OPEN_ENDED'){
+      jobRequest.period = null; jobRequest.periodUnit = null;
+    }
     this.eventService.dispatchEvent({eventType : EventType.UPDATE_JOB, payload : jobRequest});
   }
 

@@ -1,10 +1,11 @@
 import {Component, inject, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup} from "@angular/forms";
-import {CClientRegistration, PClientRegistration} from "../../../../models/registration.model";
 import {EventService} from "../../../../services/event.service";
 import {EventType} from "../../../../state/event-type.enum";
 import {Store} from "../../../../state/store.service";
 import {Subscription} from "rxjs";
+import {NgToastService} from "ng-angular-popup";
+import {ClientRegistration} from "../../../../models/registration.model";
 
 @Component({
   selector: 'app-registration-client',
@@ -18,6 +19,8 @@ export class RegistrationClientComponent implements OnInit, OnDestroy{
   private stateSubscription !: Subscription;
 
   private formBuilder: FormBuilder = inject(FormBuilder);
+
+  private toast : NgToastService = inject(NgToastService);
 
   public clientRegistration !: FormGroup;
 
@@ -44,20 +47,23 @@ export class RegistrationClientComponent implements OnInit, OnDestroy{
 
     this.stateSubscription = this.store.state$.subscribe(
       (state : any) => {
-        this.error = state.registerClientState.error;
-        this.errors = this.errors = state.registerClientState.errors ? new Map(Object.entries(state.registerClientState.errors)) : new Map;
-        this.successMessage = state.registerClientState.successMessage;
+        this.error = state.registerClientState?.error;
+        this.errors = this.errors = state.registerClientState?.errors ? new Map(Object.entries(state.registerClientState.errors)) : new Map;
+        this.successMessage = state.registerClientState?.successMessage;
+        if(this.error)
+          this.toast.danger(this.error);
       }
     );
   }
 
   public handleRegistration() : void{
-    let clientRegistration !: any;
+    let clientRegistration : ClientRegistration = this.clientRegistration.value;
     let type = this.clientRegistration.value.type;
-    if(type == 'PERSONNEL')
-      clientRegistration = <PClientRegistration>this.clientRegistration.value;
-    if(type == 'COMPANY')
-      clientRegistration = <CClientRegistration>this.clientRegistration.value;
+    if(type == 'PERSONNEL'){
+      clientRegistration.companyName = null;
+      clientRegistration.website = null;
+      clientRegistration.size = null;
+    }
     this.eventService.dispatchEvent({eventType : EventType.REGISTER_CLIENT, payload : clientRegistration});
   }
 

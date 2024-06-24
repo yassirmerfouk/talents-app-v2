@@ -5,6 +5,7 @@ import {EventService} from "../../../../services/event.service";
 import {EventType} from "../../../../state/event-type.enum";
 import {Store} from "../../../../state/store.service";
 import {Subscription} from "rxjs";
+import {LocationService} from "../../../../services/location.service";
 
 @Component({
   selector: 'app-registration-talent',
@@ -19,23 +20,32 @@ export class RegistrationTalentComponent implements OnInit, OnDestroy {
 
   private formBuilder: FormBuilder = inject(FormBuilder);
 
+  private locationService : LocationService = inject(LocationService);
+
   public talentRegistration !: FormGroup;
 
   public error !: string;
   public errors !: any;
   public successMessage !: string;
 
+  public cities !: Array<string>;
+
   public ngOnInit(): void {
 
-    this.talentRegistration = this.formBuilder.group({
-      lastName: this.formBuilder.control(null),
-      firstName: this.formBuilder.control(null),
-      email: this.formBuilder.control(null),
-      password: this.formBuilder.control(null),
-      phone: this.formBuilder.control(null),
-      title: this.formBuilder.control(null),
-      dateOfBirth: this.formBuilder.control(null),
-      city: this.formBuilder.control("")
+    this.locationService.getCities().subscribe({
+      next : (cities : Array<string>) => {
+        this.cities = cities;
+        this.talentRegistration = this.formBuilder.group({
+          lastName: this.formBuilder.control(null),
+          firstName: this.formBuilder.control(null),
+          email: this.formBuilder.control(null),
+          password: this.formBuilder.control(null),
+          phone: this.formBuilder.control(null),
+          title: this.formBuilder.control(null),
+          dateOfBirth: this.formBuilder.control(null),
+          city: this.formBuilder.control("")
+        });
+      }
     });
 
     this.stateSubscription = this.store.state$.subscribe(
