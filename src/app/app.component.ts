@@ -5,6 +5,7 @@ import {EventService} from "./services/event.service";
 import {ActionEvent} from "./state/action-event.event";
 import {EventType} from "./state/event-type.enum";
 import {Reducer} from "./state/reducer.service";
+import {Store} from "./state/store.service";
 
 @Component({
   selector: 'app-root',
@@ -25,7 +26,9 @@ export class AppComponent implements OnInit {
 
   private body !: any;
 
+  private store : Store = inject(Store);
   private reducer : Reducer = inject(Reducer);
+
 
   public ngOnInit(): void {
     let accessToken = this.authStateService.getTokenFromLocalStorage();
@@ -56,6 +59,7 @@ export class AppComponent implements OnInit {
   public handleLogout(): void {
     this.authStateService.unloadUser();
     this.authStateService.removeTokenFromLocalStorage();
+    this.store.clearState();
     this.router.navigateByUrl('auth/login');
   }
 }

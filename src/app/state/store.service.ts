@@ -15,4 +15,8 @@ export class Store{
     this.state = {...this.state, ...state};
     this.stateSubject.next(this.state);
   }
+
+  public clearState() : void {
+    this.state = {};
+  }
 }

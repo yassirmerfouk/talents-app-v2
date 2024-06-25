@@ -34,7 +34,7 @@ export class EditJobComponent implements OnInit{
         type : this.formBuilder.control(this.job.type),
         contractType : this.formBuilder.control(this.job.contractType),
         period : this.formBuilder.control(this.job.period),
-        periodUnit : this.formBuilder.control(this.job.periodUnit),
+        periodUnit : this.formBuilder.control(this.job.periodUnit ? this.job.periodUnit : ''),
         description : this.formBuilder.control(this.job.description),
         skills : this.formBuilder.control(this.job.skills.join(" "))
       });

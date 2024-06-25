@@ -10,6 +10,11 @@
   </div>
 </div>
 <div *ngIf="jobsPage" class="d-flex flex-wrap col-12 justify-content-between">
+  <div *ngIf="jobsPage.totalElements == 0" class="container mt-3">
+    <div>
+      No results found for your job search. Please refine your criteria and try again.
+    </div>
+  </div>
   <div *ngFor="let job of jobsPage.content" style="width: 49.5%;">
     <a (click)="handleOpenJob(job)">
       <div class="card card-body border-0 shadow mb-4 mb-xl-0 mt-3 job-item">
