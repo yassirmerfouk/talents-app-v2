@@ -40,6 +40,10 @@ export class JobComponent implements OnInit, OnDestroy {
 
   public selectedUser !: User;
 
+  public openGetStats : boolean = false;
+
+  public selectedApplication !: Application;
+
   public ngOnInit() {
 
   this.stateSubscription = this.store.state$.subscribe(
@@ -51,6 +55,9 @@ export class JobComponent implements OnInit, OnDestroy {
 
         this.openProgramMeet = state.meetState?.openProgramMeet;
         this.selectedUser = state.meetState?.selectedUser;
+
+        this.openGetStats = state.statsState?.openGetStats;
+        this.selectedApplication = state.statsState?.selectedApplication;
       }
     );
 
@@ -114,6 +121,10 @@ export class JobComponent implements OnInit, OnDestroy {
       alert("You already programed a meet with this talent.");
     else
     this.eventService.dispatchEvent({eventType : EventType.OPEN_ADD_MEET, payload : application.talent});
+  }
+
+  public handleOpenGetStats(application : Application) : void {
+    this.eventService.dispatchEvent({eventType : EventType.OPEN_GET_APPLICATION_STATS, payload : application});
   }
 
   public handleChangePage(page: number): void {

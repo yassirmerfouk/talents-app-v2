@@ -56,6 +56,7 @@ export class AddMeetComponent implements OnInit {
   public phoneCallMessage : string = "You will be receiving a phone call from our administrative team shortly to discuss the verification details. Please ensure that you are available to take the call.";
 
   public oldGeneratedType : string = "[This part will be generated based on Contact Type]";
+  public oldGeneratedLink : string = "[link will be generated]";
 
   public ngOnInit(): void {
 
@@ -120,6 +121,12 @@ export class AddMeetComponent implements OnInit {
       this.oldGeneratedType = this.phoneCallMessage;
     }
 
+    this.meetForm.get("body")?.setValue(this.body);
+  }
+
+  public handleOnChangeLink() : void {
+    this.body = this.body.replace(this.oldGeneratedLink, this.meetForm.value.resource);
+    this.oldGeneratedLink = this.meetForm.value.resource;
     this.meetForm.get("body")?.setValue(this.body);
   }
 }

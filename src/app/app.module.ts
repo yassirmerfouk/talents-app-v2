@@ -55,6 +55,8 @@ import { AddMeetComponent } from './components/meets/add-meet/add-meet.component
 import { MeetsComponent } from './components/meets/meets/meets.component';
 import { MeetComponent } from './components/meets/meets/meet/meet.component';
 import { JobApplicationsComponent } from './components/jobs/job/job-applications/job-applications.component';
+import { ApplicationStatsComponent } from './components/jobs/job/application-stats/application-stats.component';
+import {NgCircleProgressModule} from "ng-circle-progress";
 
 @NgModule({
   declarations: [
@@ -105,6 +107,7 @@ import { JobApplicationsComponent } from './components/jobs/job/job-applications
     MeetsComponent,
     MeetComponent,
     JobApplicationsComponent,
+    ApplicationStatsComponent,
   ],
   imports: [
     BrowserModule,
@@ -116,7 +119,10 @@ import { JobApplicationsComponent } from './components/jobs/job/job-applications
       isCharsCode: false
     }),
     NgToastModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    NgCircleProgressModule.forRoot({
+
+    })
   ],
   providers: [
     {provide : HTTP_INTERCEPTORS, useClass : httpInterceptor, multi : true}

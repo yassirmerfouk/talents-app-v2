@@ -330,6 +330,12 @@ export class Reducer {
           case EventType.CLOSE_SHOW_MEET :
             this.closeShowMeet();
             break;
+          case EventType.OPEN_GET_APPLICATION_STATS:
+            this.openGetStats($event.payload);
+            break;
+          case EventType.CLOSE_GET_APPLICATION_STATS :
+            this.closeGetStats();
+            break;
         }
       }
     );
@@ -1306,5 +1312,13 @@ export class Reducer {
     let meetsState = this.store.state.meetsState;
     meetsState = {...meetsState, ...{openMeet : false, selectedMeet : null}}
     this.store.setState({meetsState : meetsState});
+  }
+
+  public openGetStats(application : Application){
+    this.store.setState({statsState : {openGetStats : true, selectedApplication : application}});
+  }
+
+  public closeGetStats() : void {
+    this.store.setState({statsState : {openGetStats : false, selectedApplication: null}});
   }
 }

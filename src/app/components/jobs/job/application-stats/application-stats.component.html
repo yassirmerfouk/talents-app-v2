@@ -1,0 +1,118 @@
+<div class="modal fade show" style="display: block;">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h6 class="h6 modal-title">{{title}}</h6>
+        <button (click)="handleCloseGetStats()" type="button" class="btn-close"></button>
+      </div>
+        <div class="modal-body">
+          <div class="d-flex justify-content-center">
+            <div class="d-flex flex-column justify-content-center">
+              <circle-progress
+                [percent]="75"
+                [radius]="60"
+                [space]="-10"
+                [animation] ="true"
+                [outerStrokeLinecap]="'round'"
+                [outerStrokeGradient]="true"
+                [outerStrokeWidth] = "10"
+                [outerStrokeColor]="'#4882c2'"
+                [outerStrokeGradientStopColor] = "'#53a9ff'"
+                [innerStrokeColor] = "'#e7e8ea'"
+                [innerStrokeWidth] = "10"
+                [title]="application.experiencesScore.toString()"
+                [showSubtitle]="false"
+                [animateTitle] = "true"
+                [animationDuration] ="1000"
+                [showUnits] = "false"
+                [showBackground] = "true"
+                [clockwise] = "true"
+                [startFromZero] = "true"
+                [lazy] = "false"
+              ></circle-progress>
+              <p class="text-center">Experiences</p>
+            </div>
+
+            <div>
+              <circle-progress
+                [percent]="75"
+                [radius]="60"
+                [space]="-10"
+                [animation] ="true"
+                [outerStrokeLinecap]="'round'"
+                [outerStrokeGradient]="true"
+                [outerStrokeWidth] = "10"
+                [outerStrokeColor]="'#4882c2'"
+                [outerStrokeGradientStopColor] = "'#53a9ff'"
+                [innerStrokeColor] = "'#e7e8ea'"
+                [innerStrokeWidth] = "10"
+                [title]="application.projectsScore.toString()"
+                [showSubtitle]="false"
+                [animateTitle] = "true"
+                [animationDuration] ="1000"
+                [showUnits] = "false"
+                [showBackground] = "true"
+                [clockwise] = "true"
+                [startFromZero] = "true"
+                [lazy] = "false"
+              ></circle-progress>
+              <p class="text-center">Projects</p>
+            </div>
+
+            <div>
+              <circle-progress
+                [percent]="75"
+                [radius]="60"
+                [space]="-10"
+                [animation] ="true"
+                [outerStrokeLinecap]="'round'"
+                [outerStrokeGradient]="true"
+                [outerStrokeWidth] = "10"
+                [outerStrokeColor]="'#4882c2'"
+                [outerStrokeGradientStopColor] = "'#53a9ff'"
+                [innerStrokeColor] = "'#e7e8ea'"
+                [innerStrokeWidth] = "10"
+                [title]="application.skillsScore.toString()"
+                [showSubtitle]="false"
+                [animateTitle] = "true"
+                [animationDuration] ="1000"
+                [showUnits] = "false"
+                [showBackground] = "true"
+                [clockwise] = "true"
+                [startFromZero] = "true"
+                [lazy] = "false"
+              ></circle-progress>
+              <p class="text-center">Skills</p>
+            </div>
+
+            <div>
+              <circle-progress
+                [percent]="75"
+                [radius]="60"
+                [space]="-10"
+                [animation] ="true"
+                [outerStrokeLinecap]="'round'"
+                [outerStrokeGradient]="true"
+                [outerStrokeWidth] = "10"
+                [outerStrokeColor]="'#4882c2'"
+                [outerStrokeGradientStopColor] = "'#53a9ff'"
+                [innerStrokeColor] = "'#e7e8ea'"
+                [innerStrokeWidth] = "10"
+                [title]="application.score.toString()"
+                [showSubtitle]="false"
+                [animateTitle] = "true"
+                [animationDuration] ="1000"
+                [showUnits] = "false"
+                [showBackground] = "true"
+                [clockwise] = "true"
+                [startFromZero] = "true"
+                [lazy] = "false"
+              ></circle-progress>
+              <p class="text-center">Total</p>
+            </div>
+          </div>
+        </div>
+    </div>
+  </div>
+</div>
+

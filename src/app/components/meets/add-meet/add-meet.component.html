@@ -35,10 +35,10 @@
               </select>
             </div>
           </div>
-<!--          <div class="mb-3">
+          <div *ngIf="meetForm.value.contactType == 'VIDEO_CALL'" class="mb-3">
             <label class="form-label">Meet link</label>
             <input (change)="handleOnChangeLink()" formControlName="resource" type="url" class="form-control" placeholder="Meet link">
-          </div>-->
+          </div>
           <div class="mb-3">
             <label class="form-label">Message</label>
             <textarea formControlName="body" class="form-control" placeholder="Message" rows="14"></textarea>
