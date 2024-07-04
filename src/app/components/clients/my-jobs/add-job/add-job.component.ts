@@ -9,42 +9,53 @@ import {JobRequest} from "../../../../models/job.model";
   templateUrl: './add-job.component.html',
   styleUrl: './add-job.component.css'
 })
-export class AddJobComponent implements OnInit{
+export class AddJobComponent implements OnInit {
 
-  private eventService : EventService = inject(EventService);
-  private formBuilder : FormBuilder = inject(FormBuilder);
+  private eventService: EventService = inject(EventService);
+  private formBuilder: FormBuilder = inject(FormBuilder);
 
   public jobForm !: FormGroup;
 
-  public ngOnInit()  : void{
+  public skillsList: Array<string> = [];
+
+  public ngOnInit(): void {
     this.jobForm = this.formBuilder.group({
-      title : this.formBuilder.control(null),
-      sector : this.formBuilder.control(null),
-      minSalary : this.formBuilder.control(""),
-      maxSalary : this.formBuilder.control(""),
-      currency : this.formBuilder.control(""),
-      yearsOfExperiences : this.formBuilder.control(""),
-      numberOfTalents : this.formBuilder.control(""),
-      type : this.formBuilder.control(""),
-      contractType : this.formBuilder.control(""),
-      period : this.formBuilder.control(""),
-      periodUnit : this.formBuilder.control(""),
-      description : this.formBuilder.control(null),
-      skills : this.formBuilder.control("")
+      title: this.formBuilder.control(null),
+      sector: this.formBuilder.control(null),
+      minSalary: this.formBuilder.control(""),
+      maxSalary: this.formBuilder.control(""),
+      currency: this.formBuilder.control(""),
+      yearsOfExperiences: this.formBuilder.control(""),
+      numberOfTalents: this.formBuilder.control(""),
+      type: this.formBuilder.control(""),
+      contractType: this.formBuilder.control(""),
+      period: this.formBuilder.control(""),
+      periodUnit: this.formBuilder.control(""),
+      description: this.formBuilder.control(null),
+      skill: this.formBuilder.control("")
     });
   }
 
-  public handleCloseAddJob() : void {
-    this.eventService.dispatchEvent({eventType : EventType.CLOSE_ADD_JOB});
+  public handleCloseAddJob(): void {
+    this.eventService.dispatchEvent({eventType: EventType.CLOSE_ADD_JOB});
   }
 
-  public handleAddJob() : void {
+  public handleAddSkill(): void {
+    let skill: string = this.jobForm.value.skill;
+    skill = skill.toUpperCase();
+    if (!this.skillsList.includes(skill))
+      this.skillsList.push(skill);
+    this.jobForm.get('skill')?.setValue(null);
+  }
+
+  public handleDeleteSkill(skill : string) : void {
+    this.skillsList = this.skillsList.filter(x => x != skill);
+  }
+
+
+  public handleAddJob(): void {
     let jobRequest : JobRequest = this.jobForm.value;
-    let skills : string = this.jobForm.value.skills;
-    if(skills)
-      jobRequest.skills = skills.split(" ");
-    else
-    jobRequest.skills = [];
+    jobRequest.skills = this.skillsList;
     if(jobRequest.contractType == 'OPEN_ENDED'){
       jobRequest.period = null; jobRequest.periodUnit = null;
     }

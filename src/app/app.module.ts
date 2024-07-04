@@ -57,6 +57,11 @@ import { MeetComponent } from './components/meets/meets/meet/meet.component';
 import { JobApplicationsComponent } from './components/jobs/job/job-applications/job-applications.component';
 import { ApplicationStatsComponent } from './components/jobs/job/application-stats/application-stats.component';
 import {NgCircleProgressModule} from "ng-circle-progress";
+import {NgWizardConfig, NgWizardModule, THEME} from "ng-wizard";
+
+const ngWizardConfig: NgWizardConfig = {
+  theme: THEME.default
+};
 
 @NgModule({
   declarations: [
@@ -121,8 +126,7 @@ import {NgCircleProgressModule} from "ng-circle-progress";
     NgToastModule,
     BrowserAnimationsModule,
     NgCircleProgressModule.forRoot({
-
-    })
+    }),
   ],
   providers: [
     {provide : HTTP_INTERCEPTORS, useClass : httpInterceptor, multi : true}

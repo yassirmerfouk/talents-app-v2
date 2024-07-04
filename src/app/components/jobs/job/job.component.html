@@ -1,5 +1,91 @@
 <div *ngIf="job">
-  <div>
+
+  <div class="d-flex justify-content-between">
+    <div class="card card-body border-0 shadow mt-3 align-self-baseline" style="width: 35%;flex: none;">
+      <div class="d-flex justify-content-between">
+        <a [routerLink]="'/job/' + job.id">
+          <h3 class="fs-5 fw-bold mb-0 custom-link">
+            {{job.title}}
+          </h3>
+        </a>
+      </div>
+      <div class="d-flex justify-content-center mt-2">
+        <div>
+          <img src="assets/img/offer.jpg" style="width: 355px; height: 165px;">
+          <!--<div class="mt-3">
+            <p class="pe-4 custom-p"><span class="fw-bold">Sector : </span>{{job.sector}}</p>
+            <p class="pe-4 custom-p"><span class="fw-bold">Type : </span>{{job.type == 'FULL_TIME' ? 'Full Time' : 'Part Time'}}</p>
+            <p class="pe-4 custom-p"><span class="fw-bold">Contract : </span>{{job.contractType == 'FIXED_DATE' ? 'Fixed Date' : 'Open Ended'}}</p>
+            <p class="pe-4 custom-p"><span class="fw-bold">Salary : </span>{{job.minSalary}} - {{job.maxSalary}} {{job.currency}}</p>
+            <p class="pe-4 custom-p"><span class="fw-bold">Talents : </span>{{job.numberOfTalents}} {{job.numberOfTalents > 1 ? 'talents' : 'talent'}}</p>
+            <p class="pe-4 custom-p"><span class="fw-bold">Applications : </span>{{job.applicationsNumber}}</p>
+          </div>-->
+
+          <div class="d-flex mt-3">
+            <div>
+              <span class="fw-bold">Sector</span><br>
+              <span class="fw-bold">Type</span><br>
+              <span class="fw-bold">Contract</span><br>
+              <span class="fw-bold">Salary</span><br>
+              <span class="fw-bold">Talents</span><br>
+              <span class="fw-bold">Applications</span><br>
+              <span class="fw-bold">Status</span>
+            </div>
+            <div>
+              <span class="fw-bold">&nbsp;:&nbsp;&nbsp;</span><br>
+              <span class="fw-bold">&nbsp;:&nbsp;&nbsp;</span><br>
+              <span class="fw-bold">&nbsp;:&nbsp;&nbsp;</span><br>
+              <span class="fw-bold">&nbsp;:&nbsp;&nbsp;</span><br>
+              <span class="fw-bold">&nbsp;:&nbsp;&nbsp;</span><br>
+              <span class="fw-bold">&nbsp;:&nbsp;&nbsp;</span><br>
+              <span class="fw-bold">&nbsp;:&nbsp;&nbsp;</span>
+            </div>
+            <div>
+              <span>{{job.sector}}</span><br>
+              <span>{{job.type == 'FULL_TIME' ? 'Full Time' : 'Part Time'}}</span><br>
+              <span>{{job.contractType == 'FIXED_DATE' ? 'Fixed Date' : 'Open Ended'}}</span><br>
+              <span>{{job.minSalary}} - {{job.maxSalary}} {{job.currency}}</span><br>
+              <span>{{job.numberOfTalents}} {{job.numberOfTalents > 1 ? 'talents' : 'talent'}}</span><br>
+              <span>{{job.applicationsNumber}} applications</span><br>
+              <span class="fw-normal small"
+                    [ngClass]="{
+                'text-success' : job.status == 'OPEN',
+                'text-warning' : job.status == 'WAITING',
+                'text-info' : job.status == 'IN_PROCESS',
+              }">
+              {{job.status}}
+            </span>
+            </div>
+          </div>
+
+          <div class="mt-3" *ngIf="authStateService.hasAuthority('ADMIN') || authStateService.authState.id == job.client.id">
+            <div class="d-flex justify-content-center">
+              <button *ngIf="job.status == 'OPEN' && authStateService.authState.id == job.client.id"
+                      class="btn btn-sm" style="background-color: #fb0206; color: white;" (click)="handleAskStartProcess(job)">Ask to start process
+              </button>
+              <button *ngIf="job.status == 'WAITING' && authStateService.hasAuthority('ADMIN')"
+                      class="btn btn-sm" style="background-color: #fb0206; color: white;" (click)="handleStartProcess(job)">Start process
+              </button>
+              <button *ngIf="job.status == 'IN_PROCESS' && authStateService.hasAuthority('ADMIN')"
+                      class="btn btn-sm" style="background-color: #fb0206; color: white;" (click)="handleStartSelection(job)">Start selection
+              </button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+    <div style="width:64%;flex: none;">
+      <div class="card card-body border-0 shadow mt-3 align-self-baseline" >
+        <p class="pe-4 custom-p mt-2">{{job.description}}</p>
+        <div class="d-flex me-2 mt-1">
+          <span *ngFor="let skill of job.skills" class="badge bg-primary small me-2" style="padding: 5px 8px;">{{skill}}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<!--  <div>
     <div class="card card-body border-0 shadow mt-3">
       <div class="d-flex justify-content-between">
         <a [routerLink]="'/job/' + job.id">
@@ -37,6 +123,9 @@
               </div>
             </div>
             <p class="pe-4 custom-p mt-2">{{job.description}}</p>
+            <div class="d-flex me-2 mt-3">
+              <span *ngFor="let skill of job.skills" class="badge bg-primary small me-2" style="padding: 5px 8px;">{{skill}}</span>
+            </div>
             <p class="pe-4 custom-p text-end">{{job.createdAt | date : 'short'}}</p>
             <div *ngIf="authStateService.hasAuthority('ADMIN') || authStateService.authState.id == job.client.id">
               <div class="d-flex justify-content-end pe-4">
@@ -55,7 +144,7 @@
         </li>
       </ul>
     </div>
-  </div>
+  </div>-->
 
   <div *ngIf="applicationsPage" class="mb-4 mt-3">
     <div class="card border-0 shadow">
@@ -164,10 +253,10 @@
               <div>
                 <div (click)="handleOnChangeApprove(application)" *ngIf="job.status == 'IN_SELECTION'">
                   <a *ngIf="!application.approved">
-                    <i class="bi bi-check-circle text-success me-2 custom-icon"></i>
+                    <i class="bi bi-check-circle text-primary me-2 custom-icon"></i>
                   </a>
                   <a *ngIf="application.approved">
-                    <i class="bi bi-x-circle text-danger me-2 custom-icon"></i>
+                    <i class="bi bi-x-circle text-primary me-2 custom-icon"></i>
                   </a>
                 </div>
               </div>
@@ -180,14 +269,6 @@
   <app-add-meet *ngIf="openProgramMeet" [type]="'INTERVIEW'" [user]="selectedUser" [job]="job"></app-add-meet>
   <app-application-stats *ngIf="openGetStats" [application]="selectedApplication"></app-application-stats>
 </div>
-<!--<div class="root">
-  <div class="process-container">
-    <ul class="progressbar">
-      <li >Step 1</li>
-      <li>Step 2</li>
-      <li>Step 3</li>
-      <li>Step 4</li>
-      <li>Step 5</li>
-    </ul>
-  </div>
-</div>-->
+
+
+

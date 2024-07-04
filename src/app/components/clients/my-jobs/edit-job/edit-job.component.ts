@@ -19,9 +19,10 @@ export class EditJobComponent implements OnInit{
 
   public jobForm !: FormGroup;
 
+  public skillsList: Array<string> = [];
+
   public ngOnInit()  : void{
     if(this.job){
-      console.log(this.job);
       this.jobForm = this.formBuilder.group({
         id : this.formBuilder.control(this.job.id),
         title : this.formBuilder.control(this.job.title),
@@ -36,17 +37,27 @@ export class EditJobComponent implements OnInit{
         period : this.formBuilder.control(this.job.period),
         periodUnit : this.formBuilder.control(this.job.periodUnit ? this.job.periodUnit : ''),
         description : this.formBuilder.control(this.job.description),
-        skills : this.formBuilder.control(this.job.skills.join(" "))
+        skill: this.formBuilder.control("")
       });
+      this.skillsList = this.job.skills;
     }
+  }
+
+  public handleAddSkill(): void {
+    let skill: string = this.jobForm.value.skill;
+    skill = skill.toUpperCase();
+    if (!this.skillsList.includes(skill))
+      this.skillsList.push(skill);
+    this.jobForm.get('skill')?.setValue(null);
+  }
+
+  public handleDeleteSkill(skill : string) : void {
+    this.skillsList = this.skillsList.filter(x => x != skill);
   }
 
   public handleUpdateJob() : void {
     let jobRequest : JobRequest = this.jobForm.value;
-    if(this.jobForm.value.skills)
-      jobRequest.skills = this.jobForm.value.skills.split(" ");
-    else
-      jobRequest.skills = [];
+    jobRequest.skills = this.skillsList;
     if(jobRequest.contractType == 'OPEN_ENDED'){
       jobRequest.period = null; jobRequest.periodUnit = null;
     }
