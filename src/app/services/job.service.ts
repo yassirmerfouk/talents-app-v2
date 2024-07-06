@@ -51,32 +51,33 @@ export class JobService{
     return this.httpClient.get<Page<Application>>(`${this.api}/${id}/applications?page=${page}&size=${size}`);
   }
 
-  public selectTalentForJob(jobId : number, talentId : number) : Observable<any>{
-    return this.httpClient.post<any>(`${this.api}/${jobId}/select/${talentId}`,{});
-  }
-
   public getSelectedJobApplication(jobId : number) : Observable<Array<Application>>{
     return this.httpClient.get<Array<Application>>(`${this.api}/${jobId}/applications/selected`);
   }
 
-  public getApprovedJobApplications(jobId : number) : Observable<Array<Application>>{
-    return this.httpClient.get<Array<Application>>(`${this.api}/${jobId}/applications/approved`);
+  public askToStartSelection(jobId : number) : Observable<any>{
+    return this.httpClient.post<any>(`${this.api}/${jobId}/selection/ask`, {});
+  }
+
+  public startSelection(jobId : number) : Observable<any>{
+    return this.httpClient.post<any>(`${this.api}/${jobId}/selection/start`, {});
+  }
+
+  public startApproving(jobId : number) : Observable<any>{
+    return this.httpClient.post<any>(`${this.api}/${jobId}/approving/start`, {});
+  }
+
+  public selectTalent(jobId : number, talentId : number) : Observable<any>{
+    return this.httpClient.post<any>(`${this.api}/${jobId}/select/${talentId}`,{});
   }
 
   public approveTalent(jobId : number, talentId : number) : Observable<any>{
     return this.httpClient.post<any>(`${this.api}/${jobId}/approve/${talentId}`, {});
   }
 
-  public askToStartProcess(jobId : number) : Observable<any>{
-    return this.httpClient.post(`${this.api}/${jobId}/process/ask`, {});
+  public refuseTalent(jobId : number, talentId : number) : Observable<any>{
+    return this.httpClient.post<any>(`${this.api}/${jobId}/refuse/${talentId}`, {});
   }
 
-  public startProcess(jobId : number) : Observable<any>{
-    return this.httpClient.post(`${this.api}/${jobId}/process/start`, {});
-  }
-
-  public startSelection(jobId : number) : Observable<any>{
-    return this.httpClient.post(`${this.api}/${jobId}/process/selection`, {});
-  }
 
 }

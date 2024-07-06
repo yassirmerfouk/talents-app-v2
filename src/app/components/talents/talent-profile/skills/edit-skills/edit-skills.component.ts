@@ -17,25 +17,36 @@ export class EditSkillsComponent implements OnInit{
   public skillsForm !: FormGroup;
 
   @Input()
-  public skills : Array<string> | null = null;
+  public skills !: Array<string>;
+
+  public skillsList : Array<string> = [];
 
   public ngOnInit() {
-    if(this.skills)
+    if(this.skills){
+      this.skillsList = this.skills.map(skill => skill);
       this.skillsForm = this.formBuilder.group({
-        skills : this.formBuilder.control(this.skills.join(" "))
+        skill : this.formBuilder.control("")
       });
+    }
   }
 
   public handleCloseUpdateSkills() : void {
     this.eventService.dispatchEvent({eventType : EventType.CLOSE_EDIT_SKILLS});
   }
 
+  public handleAddSkill(): void {
+    let skill: string = this.skillsForm.value.skill;
+    skill = skill.toUpperCase();
+    if (!this.skillsList?.includes(skill))
+      this.skillsList?.push(skill);
+    this.skillsForm.get('skill')?.setValue(null);
+  }
+
+  public handleDeleteSkill(skill : string) : void {
+    this.skillsList = this.skillsList?.filter(x => x != skill);
+  }
+
   public handleUpdateSkills() : void {
-    let skills : Array<string>;
-    if(this.skillsForm.value.skills)
-      skills = this.skillsForm.value.skills.split(" ");
-    else
-      skills = [];
-    this.eventService.dispatchEvent({eventType : EventType.UPDATE_SKILLS, payload : skills});
+    this.eventService.dispatchEvent({eventType : EventType.UPDATE_SKILLS, payload : this.skillsList});
   }
 }

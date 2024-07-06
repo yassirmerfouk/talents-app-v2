@@ -99,10 +99,13 @@ export class Reducer {
             this.getApprovedJobApplications($event.payload);
             break;
           case EventType.SELECT_TALENT :
-            this.selectTalentForJob($event.payload);
+            this.selectTalent($event.payload);
             break;
           case EventType.APPROVE_TALENT :
-            this.approveTalentForJob($event.payload);
+            this.approveTalent($event.payload);
+            break;
+          case EventType.REFUSE_TALENT :
+            this.refuseTalent($event.payload);
             break;
           case EventType.SEARCH_JOBS :
             this.searchJobs($event.payload);
@@ -285,15 +288,6 @@ export class Reducer {
           case EventType.CLOSE_EDIT_CERTIFICATION :
             this.closeEditCertification();
             break;
-          case EventType.ASK_TO_START_PROCESS :
-            this.askToStartProcess($event.payload);
-            break;
-          case EventType.START_PROCESS :
-            this.startProcess($event.payload);
-            break;
-          case EventType.START_SELECTION :
-            this.startSelection($event.payload);
-            break;
           case EventType.OPEN_EDIT_SKILLS :
             this.openEditSkills();
             break;
@@ -336,6 +330,16 @@ export class Reducer {
           case EventType.CLOSE_GET_APPLICATION_STATS :
             this.closeGetStats();
             break;
+
+          case EventType.ASK_TO_START_SELECTION:
+            this.askToStartSelection($event.payload);
+            break;
+          case EventType.START_SELECTION :
+            this.startSelection($event.payload);
+            break;
+          case EventType.START_APPROVING :
+            this.startApproving($event.payload);
+            break;
         }
       }
     );
@@ -345,7 +349,7 @@ export class Reducer {
   public login(authenticationRequest: AuthenticationRequest): void {
     this.authService.login(authenticationRequest).subscribe({
       next: (response: AuthenticationResponse) => {
-        if(this.authStateService.loadUser(response.accessToken)){
+        if (this.authStateService.loadUser(response.accessToken)) {
           this.authStateService.storeTokenInLocalStorage(response.accessToken);
           if (this.authStateService.hasAuthority('TALENT'))
             this.router.navigateByUrl('/jobs');
@@ -538,22 +542,22 @@ export class Reducer {
     });
   }
 
-  public getApprovedJobApplications(id : number) : void{
+  public getApprovedJobApplications(id: number): void {
     this.jobService.getSelectedJobApplication(id).subscribe({
-      next : (approvedApplications : Array<Application>) => {
-        let jobsState = {...this.store.state.jobsState, ...{approvedApplications : approvedApplications}};
+      next: (approvedApplications: Array<Application>) => {
+        let jobsState = {...this.store.state.jobsState, ...{approvedApplications: approvedApplications}};
         this.store.setState({
-          jobsState : jobsState
+          jobsState: jobsState
         });
       },
-      error : (error : HttpErrorResponse) => {
+      error: (error: HttpErrorResponse) => {
         console.log(error);
       }
     });
   }
 
-  public selectTalentForJob(application: Application): void {
-    this.jobService.selectTalentForJob(application.jobId, application.talent.id).subscribe({
+  public selectTalent(application: Application): void {
+    this.jobService.selectTalent(application.jobId, application.talent.id).subscribe({
       next: () => {
         application.selected = !application.selected;
       },
@@ -566,10 +570,24 @@ export class Reducer {
     });
   }
 
-  public approveTalentForJob(application: Application): void {
+  public approveTalent(application: Application): void {
     this.jobService.approveTalent(application.jobId, application.talent.id).subscribe({
       next: () => {
-        application.approved = !application.approved
+        application.approved = true;
+      },
+      error: (error: HttpErrorResponse) => {
+        console.log(error);
+        this.store.setState({
+          jobsState: {error: error.error.message}
+        });
+      }
+    });
+  }
+
+  public refuseTalent(application: Application): void {
+    this.jobService.refuseTalent(application.jobId, application.talent.id).subscribe({
+      next: () => {
+        application.refused = true;
       },
       error: (error: HttpErrorResponse) => {
         console.log(error);
@@ -1183,21 +1201,10 @@ export class Reducer {
     this.store.setState({certificationsState: {openAddCertification: false, openEditCertification: false}});
   }
 
-  private askToStartProcess(job: Job): void {
-    this.jobService.askToStartProcess(job.id).subscribe({
+  private askToStartSelection(job: Job): void {
+    this.jobService.askToStartSelection(job.id).subscribe({
       next: () => {
         job.status = 'WAITING';
-      },
-      error: (error: HttpErrorResponse) => {
-        console.log(error);
-      }
-    });
-  }
-
-  private startProcess(job: Job): void {
-    this.jobService.startProcess(job.id).subscribe({
-      next: () => {
-        job.status = 'IN_PROCESS'
       },
       error: (error: HttpErrorResponse) => {
         console.log(error);
@@ -1208,13 +1215,25 @@ export class Reducer {
   private startSelection(job: Job): void {
     this.jobService.startSelection(job.id).subscribe({
       next: () => {
-        job.status = 'IN_SELECTION'
+        job.status = 'IN_SELECTION';
       },
       error: (error: HttpErrorResponse) => {
         console.log(error);
       }
     });
   }
+
+  private startApproving(job: Job): void {
+    this.jobService.startApproving(job.id).subscribe({
+      next: () => {
+        job.status = 'IN_APPROVING';
+      },
+      error: (error: HttpErrorResponse) => {
+        console.log(error);
+      }
+    });
+  }
+
 
   private openEditSkills(): void {
     this.store.setState({skillsState: {openEditSkills: true}});
@@ -1302,23 +1321,23 @@ export class Reducer {
     });
   }
 
-  public openShowMeet(meet : Meet) : void {
+  public openShowMeet(meet: Meet): void {
     let meetsState = this.store.state.meetsState;
-    meetsState = {...meetsState, ...{openMeet : true, selectedMeet : meet}}
-    this.store.setState({meetsState : meetsState});
+    meetsState = {...meetsState, ...{openMeet: true, selectedMeet: meet}}
+    this.store.setState({meetsState: meetsState});
   }
 
-  public closeShowMeet() : void {
+  public closeShowMeet(): void {
     let meetsState = this.store.state.meetsState;
-    meetsState = {...meetsState, ...{openMeet : false, selectedMeet : null}}
-    this.store.setState({meetsState : meetsState});
+    meetsState = {...meetsState, ...{openMeet: false, selectedMeet: null}}
+    this.store.setState({meetsState: meetsState});
   }
 
-  public openGetStats(application : Application){
-    this.store.setState({statsState : {openGetStats : true, selectedApplication : application}});
+  public openGetStats(application: Application) {
+    this.store.setState({statsState: {openGetStats: true, selectedApplication: application}});
   }
 
-  public closeGetStats() : void {
-    this.store.setState({statsState : {openGetStats : false, selectedApplication: null}});
+  public closeGetStats(): void {
+    this.store.setState({statsState: {openGetStats: false, selectedApplication: null}});
   }
 }

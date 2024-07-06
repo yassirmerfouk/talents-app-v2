@@ -8,6 +8,7 @@ export interface Application{
   skillsScore : number,
   selected : boolean,
   approved : boolean,
+  refused : boolean,
   hasMeet : boolean,
   talent : Talent,
   jobId : number

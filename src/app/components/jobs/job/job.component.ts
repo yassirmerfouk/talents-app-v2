@@ -70,7 +70,7 @@ export class JobComponent implements OnInit, OnDestroy {
            this.getJobApplications();
            this.getSelectedJobApplications();
            this.getApprovedJobApplications();
-         }, 200);
+         }, 500);
         }
       }
     );
@@ -87,7 +87,7 @@ export class JobComponent implements OnInit, OnDestroy {
   }
 
   public getSelectedJobApplications(): void {
-    if (this.authStateService.hasAuthority('CLIENT'))
+    if (this.authStateService.hasAuthority('CLIENT') && this.job.status == 'IN_APPROVING')
       this.eventService.dispatchEvent({eventType : EventType.GET_JOB_SELECTED_APPLICATIONS, payload : this.id});
   }
 
@@ -96,24 +96,28 @@ export class JobComponent implements OnInit, OnDestroy {
       this.eventService.dispatchEvent({eventType : EventType.GET_JOB_APPROVED_APPLICATIONS, payload : this.id});
   }
 
-  public handleAskStartProcess(job : Job) : void {
-    this.eventService.dispatchEvent({eventType : EventType.ASK_TO_START_PROCESS, payload : job});
-  }
-
-  public handleStartProcess(job : Job) : void {
-    this.eventService.dispatchEvent({eventType : EventType.START_PROCESS, payload : job});
+  public handleAskToStartSelection(job : Job) : void {
+    this.eventService.dispatchEvent({eventType : EventType.ASK_TO_START_SELECTION, payload : job});
   }
 
   public handleStartSelection(job : Job) : void {
     this.eventService.dispatchEvent({eventType : EventType.START_SELECTION, payload : job});
   }
 
+  public handleStartApproving(job : Job) : void {
+    this.eventService.dispatchEvent({eventType : EventType.START_APPROVING, payload : job});
+  }
+
   public handleOnChangeSelection(application: Application): void {
     this.eventService.dispatchEvent({eventType : EventType.SELECT_TALENT, payload : application});
   }
 
-  public handleOnChangeApprove(application: Application): void {
+  public handleOnApprove(application: Application): void {
     this.eventService.dispatchEvent({eventType : EventType.APPROVE_TALENT, payload : application});
+  }
+
+  public handleOnRefuse(application : Application) : void{
+    this.eventService.dispatchEvent({eventType : EventType.REFUSE_TALENT, payload : application});
   }
 
   public handleOpenProgramMeet(application : Application) : void {

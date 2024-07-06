@@ -16,7 +16,7 @@ export class SkillsComponent implements OnInit, OnDestroy{
   private stateSubscription : Subscription | null = null;
 
   @Input()
-  public skills : Array<string> | null = null;
+  public skills !: Array<string>;
 
   public openEditSkills : boolean = false;
 

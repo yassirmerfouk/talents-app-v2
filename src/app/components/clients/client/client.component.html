@@ -7,8 +7,8 @@
             <img style="width: 100%; filter: blur(2px);" class="profile-cover rounded-top"
                  src="assets/img/profile-cover.jpg">
           </div>
-          <div class="card-body pb-1"><img style="position: relative;"
-                                           [src]="client.image ? client.image : 'assets/img/team/profile-picture-1.jpg'"
+          <div class="card-body pb-1"><img style="position: relative;width: 128px;height: 128px;"
+                                           [src]="client.image ? client.image : 'assets/img/no-image.jpg'"
                                            class="avatar-xl rounded-circle mx-auto mt-n7 mb-2" alt="Neil Portrait">
             <h4 class="h4">{{client.firstName + ' ' + client.lastName}} <i class="bi bi-check-circle-fill custom-icon"
                                                                            [ngClass]="{'text-success' : client.status == 'VERIFIED', 'text-warning' : client.status == 'WAITING', 'text-gray' : client.status == 'NOT_VERIFIED'}"></i>
