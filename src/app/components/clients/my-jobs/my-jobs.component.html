@@ -1,14 +1,11 @@
-<div class="d-flex justify-content-end">
-  <div class="col-4">
-
-  </div>
-</div>
 <div class="card border-0 shadow mb-4">
   <div class="card-body">
-    <div>
+    <div *ngIf="authStateService.authState.status != 'VERIFIED'">
+      Your account is currently not verified. To manage your job offers, please complete the verification process.
+    </div>
+    <div *ngIf="authStateService.authState.status == 'VERIFIED'">
       <div class="d-flex justify-content-end mb-2 container">
         <a (click)="handleOpenAddJob()"> <i class="bi bi-plus-circle fa-2x custom-icon"></i></a>
-<!--        <a class="btn btn-primary btn-sm" (click)="handleOpenAddJob()">Add new job</a>-->
       </div>
       <div *ngIf="jobsPage" class="table-responsive">
         <table class="table table-hover table-centered table-nowrap mb-0 rounded">
@@ -99,7 +96,6 @@
           </nav>
         </div>
       </div>
-
     </div>
   </div>
   <app-add-job *ngIf="openAddJob"></app-add-job>

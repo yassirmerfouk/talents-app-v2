@@ -773,6 +773,7 @@ export class Reducer {
         jobsPage.content.unshift(job);
         let jobsState = {...this.store.state.jobsState, ...{jobsPage: jobsPage}};
         this.store.setState(jobsState);
+        this.dispatcherSubject.next({eventType: EventType.CLOSE_ADD_JOB});
       },
       error: (error: HttpErrorResponse) => console.log(error)
     })
@@ -788,6 +789,7 @@ export class Reducer {
         });
         let jobsState = {...this.store.state.jobsState, ...{jobsPage: jobsPage}};
         this.store.setState(jobsState);
+        this.dispatcherSubject.next({eventType: EventType.CLOSE_EDIT_JOB});
       },
       error: (error: HttpErrorResponse) => console.log(error)
     });
@@ -1270,6 +1272,7 @@ export class Reducer {
     this.meetService.addMeet(meet).subscribe({
       next: (meet: Meet) => {
         console.log(meet);
+        this.dispatcherSubject.next({eventType: EventType.CLOSE_ADD_MEET});
       },
       error: (error: HttpErrorResponse) => {
         console.log(error);

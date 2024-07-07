@@ -5,6 +5,7 @@ import {EventType} from "../../../state/event-type.enum";
 import {Store} from "../../../state/store.service";
 import {Subscription} from "rxjs";
 import {Page} from "../../../models/page.model";
+import {AuthStateService} from "../../../services/auth.state.service";
 
 @Component({
   selector: 'app-my-jobs',
@@ -18,6 +19,8 @@ export class MyJobsComponent implements OnInit, OnDestroy {
   private eventService: EventService = inject(EventService);
   private stateSubscription !: Subscription;
 
+  public authStateService : AuthStateService = inject(AuthStateService);
+
   public openAddJob: boolean = false;
   public openEditJob: boolean = false;
 
@@ -26,6 +29,7 @@ export class MyJobsComponent implements OnInit, OnDestroy {
   public jobsPage !: Page<Job>;
   private page: number = 0;
   private size: number = 10;
+
 
 
   public ngOnInit(): void {
