@@ -1,13 +1,11 @@
 import {Component, inject, OnDestroy, OnInit} from '@angular/core';
-import {HttpErrorResponse} from "@angular/common/http";
 import {FormBuilder, FormGroup} from "@angular/forms";
-import {Talent, TalentRequest} from "../../../models/talent.model";
+import {Talent} from "../../../models/talent.model";
 import {EventService} from "../../../services/event.service";
 import {EventType} from "../../../state/event-type.enum";
-import {CertificationService} from "../../../services/certification.service";
-import {UserService} from "../../../services/user.service";
 import {Store} from "../../../state/store.service";
 import {Subscription} from "rxjs";
+import {AuthService} from "../../../services/auth.service";
 
 @Component({
   selector: 'app-talent-profile',
@@ -20,38 +18,41 @@ export class TalentProfileComponent implements OnInit, OnDestroy {
   private eventService: EventService = inject(EventService);
   private stateSubscription !: Subscription;
 
+  private authService : AuthService = inject(AuthService);
+
   private formBuilder: FormBuilder = inject(FormBuilder);
 
   public talent !: Talent;
-  public talentForm !: FormGroup;
   public imageForm !: FormGroup;
 
   private image !: File;
+
+  public profileCompletion : number = 0;
+
+  public openUpdateInfos : boolean = false;
 
   public ngOnInit(): void {
 
     this.stateSubscription = this.store.state$.subscribe(
       (state: any) => {
+
         this.talent = state.talentState?.talent;
         let image = state.profileImage;
+
         if (this.talent) {
-          this.talentForm = this.formBuilder.group({
-            lastName: this.formBuilder.control(this.talent.lastName),
-            firstName: this.formBuilder.control(this.talent.firstName),
-            email: this.formBuilder.control(this.talent.email),
-            phone: this.formBuilder.control(this.talent.phone),
-            title: this.formBuilder.control(this.talent.title),
-            summary: this.formBuilder.control(this.talent.summary),
-            dateOfBirth: this.formBuilder.control(this.talent.dateOfBirth),
-            city: this.formBuilder.control(this.talent.city),
-            address: this.formBuilder.control(this.talent.address),
-          });
           this.imageForm = this.formBuilder.group({
             image: this.formBuilder.control(null)
           });
+          this.authService.getProfileCompletion().subscribe({
+            next : (score : number) => this.profileCompletion = score
+          });
         }
+
         if(image)
           this.talent.image = image;
+
+        this.openUpdateInfos = state.talentState?.openUpdateInfos;
+
       }
     );
 
@@ -67,17 +68,16 @@ export class TalentProfileComponent implements OnInit, OnDestroy {
     this.image = $event.target.files.item(0);
   }
 
-  public handleUpdateProfile(): void {
-    let talentRequest: TalentRequest = this.talentForm.value;
-    this.eventService.dispatchEvent({eventType: EventType.UPDATE_TALENT_PROFILE, payload: talentRequest})
-  }
-
   public handleAskForVerification(): void {
     this.eventService.dispatchEvent({eventType: EventType.ASK_VERIFICATION, payload: this.talent});
   }
 
   public handleUpdateImage(): void {
     this.eventService.dispatchEvent({eventType: EventType.UPDATE_IMAGE, payload : this.image});
+  }
+
+  public handleOpenUpdateTalentProfile() : void {
+    this.eventService.dispatchEvent({eventType : EventType.OPEN_UPDATE_TALENT_PROFILE});
   }
 
 

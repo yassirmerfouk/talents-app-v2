@@ -78,9 +78,9 @@
           <span *ngFor="let skill of job.skills" class="badge bg-primary small me-2"
                 style="padding: 5px 8px;">{{skill}}</span>
         </div>
-        <div class="mt-2">
+        <div class="mt-2" *ngIf="authStateService.hasAuthority('ADMIN')
+        || (authStateService.hasAuthority('CLIENT') && authStateService.authState.id == job.client.id)">
           <div class="card-body">
-            <!-- Project 1 -->
             <div class="row mb-4">
               <div class="col-auto">
                 <i class="bi bi-check-circle-fill" style="font-size: 20px;color: #fb0206;"></i>
@@ -97,7 +97,6 @@
                 </div>
               </div>
             </div>
-            <!-- Project 1 -->
             <div class="row mb-4">
               <div class="col-auto">
                 <i class="bi bi-check-circle-fill" style="font-size: 20px;color: #fb0206;"></i>
@@ -114,7 +113,6 @@
                 </div>
               </div>
             </div>
-            <!-- Project 1 -->
             <div class="row mb-4">
               <div class="col-auto">
                 <i class="bi bi-check-circle-fill" style="font-size: 20px;color: #fb0206;"></i>
@@ -131,7 +129,6 @@
                 </div>
               </div>
             </div>
-            <!-- Project 1 -->
             <div class="row mb-4">
               <div class="col-auto">
                 <i class="bi bi-check-circle-fill" style="font-size: 20px;color: #fb0206;"></i>
@@ -170,67 +167,6 @@
       </div>
     </div>
   </div>
-
-  <!--  <div>
-      <div class="card card-body border-0 shadow mt-3">
-        <div class="d-flex justify-content-between">
-          <a [routerLink]="'/job/' + job.id">
-            <h2 class="fs-5 fw-bold mb-0 custom-link">
-              {{job.title}},
-              <span class="fw-normal small" style="font-size: 13px;"
-                    [ngClass]="{
-                  'text-success' : job.status == 'OPEN',
-                  'text-warning' : job.status == 'WAITING',
-                  'text-info' : job.status == 'IN_PROCESS',
-                }">
-                {{job.status}}
-              </span>
-            </h2>
-          </a>
-        </div>
-        <ul class="list-group list-group-flush">
-          <li class="list-group-item d-flex align-items-center justify-content-between px-0 border-bottom">
-            <div class="col-12">
-              <div class="d-flex justify-content-between">
-                <div>
-                  <p class="pe-4 custom-p">{{job.sector}}</p>
-                  <p class="pe-4 custom-p">{{job.type == 'FULL_TIME' ? 'Full Time' : 'Part Time'}}</p>
-                  <p class="pe-4 custom-p">Years of experiences : {{job.yearsOfExperiences}}</p>
-                  <p class="pe-4 custom-p">Applications number : {{job.applicationsNumber}}</p>
-                </div>
-                <div>
-                  <p class="pe-4 custom-p">Number of talents : {{job.numberOfTalents}}</p>
-                  <p class="pe-4 custom-p">Salary : {{job.minSalary}} - {{job.maxSalary}} {{job.currency}}</p>
-                  <p class="pe-4 custom-p">
-                    Client : <a [routerLink]="'/client/' + job.client.id" class="text-info">
-                    <u>{{job.client.firstName + ' ' + job.client.lastName}}</u>
-                  </a>
-                  </p>
-                </div>
-              </div>
-              <p class="pe-4 custom-p mt-2">{{job.description}}</p>
-              <div class="d-flex me-2 mt-3">
-                <span *ngFor="let skill of job.skills" class="badge bg-primary small me-2" style="padding: 5px 8px;">{{skill}}</span>
-              </div>
-              <p class="pe-4 custom-p text-end">{{job.createdAt | date : 'short'}}</p>
-              <div *ngIf="authStateService.hasAuthority('ADMIN') || authStateService.authState.id == job.client.id">
-                <div class="d-flex justify-content-end pe-4">
-                  <button *ngIf="job.status == 'OPEN' && authStateService.authState.id == job.client.id"
-                          class="btn btn-primary btn-sm" (click)="handleAskStartProcess(job)">Ask to start process
-                  </button>
-                  <button *ngIf="job.status == 'WAITING' && authStateService.hasAuthority('ADMIN')"
-                          class="btn btn-primary btn-sm" (click)="handleStartProcess(job)">Start process
-                  </button>
-                  <button *ngIf="job.status == 'IN_PROCESS' && authStateService.hasAuthority('ADMIN')"
-                          class="btn btn-primary btn-sm" (click)="handleStartSelection(job)">Start selection
-                  </button>
-                </div>
-              </div>
-            </div>
-          </li>
-        </ul>
-      </div>
-    </div>-->
 
   <div *ngIf="applicationsPage" class="mb-4 mt-3">
     <div class="card border-0 shadow">

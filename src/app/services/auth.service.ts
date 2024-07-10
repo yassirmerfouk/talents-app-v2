@@ -37,4 +37,8 @@ export class AuthService{
   public confirmAccount(token : string) : Observable<any>{
     return this.httpClient.post<any>(`${this.api}/account/confirm?token=${token}`,{} );
   }
+
+  public getProfileCompletion() : Observable<number>{
+    return this.httpClient.get<number>(`${environment.api}/profile/completion`);
+  }
 }

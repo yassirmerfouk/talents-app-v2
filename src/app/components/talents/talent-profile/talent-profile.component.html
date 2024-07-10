@@ -1,58 +1,52 @@
 <div *ngIf="talent" class="row">
   <div class="col-12 col-xl-8">
     <div class="card card-body border-0 shadow mb-4">
-      <h2 class="h5 mb-4">Profile informations</h2>
-      <form [formGroup]="talentForm" (ngSubmit)="handleUpdateProfile()">
+      <div class="d-flex justify-content-between">
+        <h2 class="h5 mb-4">Profile informations</h2>
+        <a (click)="handleOpenUpdateTalentProfile()" class="custom-icon align-self-start"><i class="bi bi-pencil-fill custom-icon-sm"></i></a>
+      </div>
         <div class="row">
           <div class="col-md-6 mb-3">
             <label class="form-label">First name</label>
-            <input formControlName="firstName" type="text" class="form-control">
+            <input [value]="talent.firstName" type="text" class="form-control" readonly>
           </div>
           <div class="col-md-6 mb-3">
             <label class="form-label">Last name</label>
-            <input formControlName="lastName" type="text" class="form-control">
+            <input [value]="talent.lastName" type="text" class="form-control" readonly>
           </div>
         </div>
         <div class="row">
           <div class="col-md-6 mb-3">
             <label class="form-label">Email</label>
-            <input formControlName="email" type="email" class="form-control">
+            <input [value]="talent.email" type="email" class="form-control" readonly>
           </div>
           <div class="col-md-6 mb-3">
             <label class="form-label">Phone</label>
-            <input formControlName="phone" type="text" class="form-control">
+            <input [value]="talent.phone" type="text" class="form-control" readonly>
           </div>
         </div>
         <div class="mb-3">
           <label class="form-label">Title</label>
-          <input formControlName="title" type="text" class="form-control">
+          <input [value]="talent.title" type="text" class="form-control" readonly>
         </div>
         <div class="mb-3">
           <label class="form-label">Summary</label>
-          <textarea formControlName="summary" class="form-control" rows="3"></textarea>
+          <textarea [value]="talent.summary" class="form-control" rows="3" readonly></textarea>
         </div>
         <div class="row">
           <div class="col-md-6 mb-3">
             <label class="form-label">Birth date</label>
-            <input formControlName="dateOfBirth" type="date" class="form-control">
+            <input [value]="talent.dateOfBirth" type="date" class="form-control" readonly>
           </div>
           <div class="col-md-6 mb-3">
             <label class="form-label">City</label>
-            <select formControlName="city" class="form-select">
-              <option value="Casablanca">Casablanca</option>
-              <option value="Marrakech">Marrakech</option>
-              <option value="Safi">Safi</option>
-            </select>
+            <input [value]="talent.city" type="text" class="form-control" readonly>
           </div>
         </div>
         <div class="mb-3">
           <label class="form-label">Address</label>
-          <textarea formControlName="address" class="form-control" rows="2"></textarea>
+          <textarea [value]="talent.address" class="form-control" rows="2" readonly></textarea>
         </div>
-        <div class="d-flex justify-content-end">
-          <button type="submit" class="btn btn-primary btn-sm">Update</button>
-        </div>
-      </form>
     </div>
 
     <app-experiences [experiences]="talent.experiences"></app-experiences>
@@ -89,14 +83,32 @@
           </form>
         </div>
         <div class="d-flex justify-content-center mt-3">
-          <!--<i class="bi bi-check-circle-fill custom-icon-big"
-             [ngClass]="{
-             'text-success' : talent.status == 'VERIFIED',
-             'text-warning' : talent.status == 'WAITING',
-             'text-gray' : talent.status == 'NOT_VERIFIED',
-             }"
-          ></i>-->
-          <button *ngIf="talent.status == 'NOT_VERIFIED'" (click)="handleAskForVerification()"
+          <div>
+            <circle-progress
+              [percent]="profileCompletion"
+              [radius]="60"
+              [space]="-10"
+              [animation]="true"
+              [outerStrokeLinecap]="'round'"
+              [outerStrokeGradient]="true"
+              [outerStrokeWidth]="10"
+              [outerStrokeColor]="'000000FF'"
+              [outerStrokeGradientStopColor]="'#ff0000'"
+              [innerStrokeColor]="'#e7e8ea'"
+              [innerStrokeWidth]="10"
+              [title]="profileCompletion.toString() + '%'"
+              [showSubtitle]="false"
+              [animateTitle]="true"
+              [animationDuration]="1000"
+              [showUnits]="false"
+              [showBackground]="true"
+              [clockwise]="true"
+              [startFromZero]="true"
+              [lazy]="false"
+            ></circle-progress>
+            <p class="text-center">Profile completion</p>
+          </div>
+          <button *ngIf="talent.status == 'NOT_VERIFIED' && profileCompletion < 100" (click)="handleAskForVerification()"
                   class="btn btn-secondary btn-sm">Ask for verification
           </button>
         </div>
@@ -108,3 +120,5 @@
     </div>
   </div>
 </div>
+
+<app-update-talent-infos *ngIf="openUpdateInfos" [talent]="talent"></app-update-talent-infos>

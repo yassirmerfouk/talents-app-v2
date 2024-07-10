@@ -24,7 +24,7 @@ export class MeetsComponent implements OnInit, OnDestroy{
 
   private formBuilder : FormBuilder = inject(FormBuilder);
 
-  public meetsPage : Page<Meet> | null = null;
+  public meetsPage !: Page<Meet>;
 
   private date : string = "";
   private page : number = 0;
@@ -83,6 +83,18 @@ export class MeetsComponent implements OnInit, OnDestroy{
   public handleOnFilter() : void {
     this.date = this.filterForm.value.date;
     this.getMeets();
+  }
+
+  public handleChangePage(page: number): void {
+    this.page = page;
+  }
+
+  public handlePreviousPage(): void {
+    this.page--;
+  }
+
+  public handleNextPage(): void {
+    this.page++;
   }
 
   public ngOnDestroy() : void {

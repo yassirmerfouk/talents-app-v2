@@ -340,6 +340,13 @@ export class Reducer {
           case EventType.START_APPROVING :
             this.startApproving($event.payload);
             break;
+
+          case EventType.OPEN_UPDATE_TALENT_PROFILE :
+            this.openUpdateTalentProfile();
+            break;
+          case EventType.CLOSE_UPDATE_TALENT_PROFILE :
+            this.closeUpdateTalentProfile();
+            break;
         }
       }
     );
@@ -849,7 +856,10 @@ export class Reducer {
     this.talentService.updateProfile(talentRequest).subscribe({
       next: (talent: any) => {
         this.reverseTalent(talent);
-        this.store.setState({talentState: {talent: talent}});
+        let talentState = this.store.state.talentState;
+        talentState = {...talentState, ...{talent : talent}}
+        this.store.setState({talentState: talentState});
+        this.dispatcherSubject.next({eventType : EventType.CLOSE_UPDATE_TALENT_PROFILE});
       },
       error: (error: HttpErrorResponse) => {
         console.log(error);
@@ -1342,5 +1352,17 @@ export class Reducer {
 
   public closeGetStats(): void {
     this.store.setState({statsState: {openGetStats: false, selectedApplication: null}});
+  }
+
+  public openUpdateTalentProfile() : void {
+    let talentState = this.store.state.talentState;
+    talentState = {...talentState, ...{openUpdateInfos : true}};
+    this.store.setState({talentState : talentState});
+  }
+
+  public closeUpdateTalentProfile() : void {
+    let talentState = this.store.state.talentState;
+    talentState = {...talentState, ...{openUpdateInfos : false}};
+    this.store.setState({talentState : talentState});
   }
 }
