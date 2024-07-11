@@ -125,8 +125,8 @@
           <div>
             <h3 class="h6 mb-1">{{education.level}} - {{education.domain}}</h3>
             <p class="small pe-4">{{education.university}}, {{education.city}}</p>
-            <p class="small pe-4">{{education.monthOfStart}} {{education.yearOfStart}}
-              to {{education.monthOfEnd}} {{education.yearOfEnd}}</p>
+            <p class="small pe-4">{{helper.getMonth(education.monthOfStart)}} {{education.yearOfStart}}
+              to {{helper.getMonth(education.monthOfEnd)}} {{education.yearOfEnd}}</p>
           </div>
         </li>
       </ul>

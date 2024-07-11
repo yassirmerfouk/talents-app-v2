@@ -2,6 +2,7 @@ import {Component, inject, Input} from '@angular/core';
 import {EventService} from "../../../../../services/event.service";
 import {EventType} from "../../../../../state/event-type.enum";
 import {Education} from "../../../../../models/education.model";
+import {Helper} from "../../../../../helper/helper";
 
 @Component({
   selector: 'app-education',
@@ -11,6 +12,8 @@ import {Education} from "../../../../../models/education.model";
 export class EducationComponent {
 
   private eventService : EventService = inject(EventService);
+
+  public helper : Helper = inject(Helper);
 
   @Input()
   public education !: Education;

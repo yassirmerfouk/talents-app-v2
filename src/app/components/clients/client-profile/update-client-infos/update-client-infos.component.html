@@ -1,0 +1,82 @@
+<div class="modal fade show" style="display: block;">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h6 class="h6 modal-title">Update your infos</h6>
+        <button (click)="handleCloseUpdateClientProfile()" type="button" class="btn-close"></button>
+      </div>
+      <form [formGroup]="clientForm" (ngSubmit)="handleUpdateProfile()">
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label class="form-label">First name</label>
+              <input formControlName="firstName" type="text" class="form-control">
+            </div>
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Last name</label>
+              <input formControlName="lastName" type="text" class="form-control">
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Email</label>
+              <input formControlName="email" type="email" class="form-control">
+            </div>
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Phone</label>
+              <input formControlName="phone" type="text" class="form-control">
+            </div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Sector</label>
+            <input formControlName="sector" type="text" class="form-control">
+          </div>
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Country</label>
+              <input formControlName="country" type="text" class="form-control">
+            </div>
+            <div class="col-md-6 mb-3">
+              <label class="form-label">City</label>
+              <input formControlName="city" type="text" class="form-control">
+            </div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Description</label>
+            <textarea formControlName="shortDescription" class="form-control" rows="3"></textarea>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Type</label>
+            <select formControlName="type" class="form-select">
+              <option value="PERSONNEL">Personnel</option>
+              <option value="COMPANY">Company</option>
+            </select>
+          </div>
+          <div class="row">
+            <div *ngIf="clientForm.value.type == 'COMPANY'" class="col-md-6 mb-3">
+              <label class="form-label">Company name</label>
+              <input formControlName="companyName" type="text" class="form-control">
+            </div>
+            <div *ngIf="clientForm.value.type == 'COMPANY'" class="col-md-6 mb-3">
+              <label class="form-label">Website</label>
+              <input formControlName="website" type="text" class="form-control">
+            </div>
+          </div>
+          <div *ngIf="clientForm.value.type == 'COMPANY'" class="mb-3">
+            <label class="form-label">Company size</label>
+            <select formControlName="size" class="form-select">
+              <option value="">Select</option>
+              <option value="1 - 50">1 - 50</option>
+              <option value="51 - 100">51 - 100</option>
+            </select>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary btn-sm">Close</button>
+          <button type="submit" class="btn btn-primary btn-sm">Update</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+

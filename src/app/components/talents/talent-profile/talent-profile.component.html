@@ -82,7 +82,7 @@
             </div>
           </form>
         </div>
-        <div class="d-flex justify-content-center mt-3">
+        <div class="d-flex flex-column align-items-center mt-3 mb-3">
           <div>
             <circle-progress
               [percent]="profileCompletion"
@@ -97,6 +97,7 @@
               [innerStrokeColor]="'#e7e8ea'"
               [innerStrokeWidth]="10"
               [title]="profileCompletion.toString() + '%'"
+              [titleFontSize]="'23'"
               [showSubtitle]="false"
               [animateTitle]="true"
               [animationDuration]="1000"
@@ -108,7 +109,7 @@
             ></circle-progress>
             <p class="text-center">Profile completion</p>
           </div>
-          <button *ngIf="talent.status == 'NOT_VERIFIED' && profileCompletion < 100" (click)="handleAskForVerification()"
+          <button *ngIf="talent.status == 'NOT_VERIFIED' && (profileCompletion == 100)" (click)="handleAskForVerification()"
                   class="btn btn-secondary btn-sm">Ask for verification
           </button>
         </div>

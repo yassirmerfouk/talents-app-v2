@@ -59,6 +59,7 @@ import { ApplicationStatsComponent } from './components/jobs/job/application-sta
 import {NgCircleProgressModule} from "ng-circle-progress";
 import {NgWizardConfig, NgWizardModule, THEME} from "ng-wizard";
 import { UpdateTalentInfosComponent } from './components/talents/talent-profile/update-talent-infos/update-talent-infos.component';
+import { UpdateClientInfosComponent } from './components/clients/client-profile/update-client-infos/update-client-infos.component';
 
 const ngWizardConfig: NgWizardConfig = {
   theme: THEME.default
@@ -115,6 +116,7 @@ const ngWizardConfig: NgWizardConfig = {
     JobApplicationsComponent,
     ApplicationStatsComponent,
     UpdateTalentInfosComponent,
+    UpdateClientInfosComponent,
   ],
   imports: [
     BrowserModule,

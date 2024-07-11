@@ -6,6 +6,7 @@ import {Store} from "../../../state/store.service";
 import {EventService} from "../../../services/event.service";
 import {Subscription} from "rxjs";
 import {EventType} from "../../../state/event-type.enum";
+import {Helper} from "../../../helper/helper";
 
 @Component({
   selector: 'app-talent',
@@ -17,6 +18,8 @@ export class TalentComponent implements OnInit, OnDestroy {
   private store: Store = inject(Store);
   private eventService: EventService = inject(EventService);
   private stateSubscription !: Subscription;
+
+  public helper : Helper = inject(Helper);
 
   private activatedRoute: ActivatedRoute = inject(ActivatedRoute);
 

@@ -347,6 +347,12 @@ export class Reducer {
           case EventType.CLOSE_UPDATE_TALENT_PROFILE :
             this.closeUpdateTalentProfile();
             break;
+          case EventType.OPEN_UPDATE_CLIENT_PROFILE :
+            this.openUpdateClientProfile();
+            break;
+          case EventType.CLOSE_UPDATE_CLIENT_PROFILE :
+            this.closeUpdateClientProfile();
+            break;
         }
       }
     );
@@ -695,7 +701,10 @@ export class Reducer {
   public updateClientProfile(clientRequest: ClientRequest): void {
     this.clientService.updateProfile(clientRequest).subscribe({
       next: (client: Client) => {
-        this.store.setState({clientState: {client: client}});
+        let clientState = this.store.state.clientState;
+        clientState = {...clientState, ...{client : client}};
+        this.store.setState({clientState: clientState});
+        this.dispatcherSubject.next({eventType : EventType.CLOSE_UPDATE_CLIENT_PROFILE});
       },
       error: (error: HttpErrorResponse) => console.log(error)
     });
@@ -1364,5 +1373,17 @@ export class Reducer {
     let talentState = this.store.state.talentState;
     talentState = {...talentState, ...{openUpdateInfos : false}};
     this.store.setState({talentState : talentState});
+  }
+
+  public openUpdateClientProfile() : void{
+    let clientState = this.store.state.clientState;
+    clientState = {...clientState, ...{openUpdateInfos : true}};
+    this.store.setState({clientState : clientState});
+  }
+
+  public closeUpdateClientProfile() : void{
+    let clientState = this.store.state.clientState;
+    clientState = {...clientState, ...{openUpdateInfos : false}}
+    this.store.setState({clientState : clientState});
   }
 }

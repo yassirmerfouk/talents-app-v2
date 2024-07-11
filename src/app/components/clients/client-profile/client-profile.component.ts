@@ -5,6 +5,7 @@ import {EventService} from "../../../services/event.service";
 import {EventType} from "../../../state/event-type.enum";
 import {Store} from "../../../state/store.service";
 import {Subscription} from "rxjs";
+import {AuthService} from "../../../services/auth.service";
 
 @Component({
   selector: 'app-client-profile',
@@ -17,14 +18,19 @@ export class ClientProfileComponent implements OnInit, OnDestroy {
   private eventService: EventService = inject(EventService);
   private stateSubscription !: Subscription;
 
+  private authService : AuthService = inject(AuthService);
+
   private formBuilder: FormBuilder = inject(FormBuilder);
 
   public client !: Client;
 
-  public clientForm !: FormGroup;
   public imageForm !: FormGroup;
 
   private image !: File;
+
+  public profileCompletion !: number;
+
+  public openUpdateInfos : boolean = false;
 
   public ngOnInit(): void {
 
@@ -33,24 +39,19 @@ export class ClientProfileComponent implements OnInit, OnDestroy {
         this.client = state.clientState.client;
         let image = state.profileImage;
         if (this.client) {
-          this.clientForm = this.formBuilder.group({
-            lastName: this.formBuilder.control(this.client.lastName),
-            firstName: this.formBuilder.control(this.client.firstName),
-            email: this.formBuilder.control(this.client.email),
-            phone: this.formBuilder.control(this.client.phone),
-            sector: this.formBuilder.control(this.client.sector),
-            country: this.formBuilder.control(this.client.country),
-            city: this.formBuilder.control(this.client.city),
-            shortDescription: this.formBuilder.control(this.client.shortDescription),
-            type: this.formBuilder.control(this.client.type),
-            companyName: this.formBuilder.control(this.client.companyName),
-            website: this.formBuilder.control(this.client.website),
-            size: this.formBuilder.control(this.client.size ? this.client.size : ''),
-          });
+
           this.imageForm = this.formBuilder.group({
             image: this.formBuilder.control(null)
           });
+
+          this.authService.getProfileCompletion().subscribe({
+            next : (score : number) => this.profileCompletion = score
+          });
+
+          this.openUpdateInfos = state.clientState?.openUpdateInfos;
+
         }
+
         if(image)
           this.client.image = image;
       }
@@ -67,22 +68,16 @@ export class ClientProfileComponent implements OnInit, OnDestroy {
     this.image = $event.target.files.item(0);
   }
 
-  public handleUpdateProfile(): void {
-    let clientRequest: ClientRequest = this.clientForm.value;
-    if(clientRequest.type == 'PERSONNEL'){
-      clientRequest.companyName = null;
-      clientRequest.website = null;
-      clientRequest.size = null;
-    }
-    this.eventService.dispatchEvent({eventType: EventType.UPDATE_CLIENT_PROFILE, payload: clientRequest});
-  }
-
   public handleUpdateImage(): void {
     this.eventService.dispatchEvent({eventType: EventType.UPDATE_IMAGE, payload : this.image});
   }
 
   public handleAskForVerification(): void {
     this.eventService.dispatchEvent({eventType: EventType.ASK_VERIFICATION, payload : this.client});
+  }
+
+  public handleOpenUpdateClientProfile() : void {
+    this.eventService.dispatchEvent({eventType : EventType.OPEN_UPDATE_CLIENT_PROFILE});
   }
 
   public ngOnDestroy(): void {
