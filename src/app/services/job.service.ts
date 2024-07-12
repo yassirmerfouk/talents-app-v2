@@ -67,6 +67,10 @@ export class JobService{
     return this.httpClient.post<any>(`${this.api}/${jobId}/approving/start`, {});
   }
 
+  public closeJobProcess(jobId : number) : Observable<any>{
+    return this.httpClient.post<any>(`${this.api}/${jobId}/close`, {});
+  }
+
   public selectTalent(jobId : number, talentId : number) : Observable<any>{
     return this.httpClient.post<any>(`${this.api}/${jobId}/select/${talentId}`,{});
   }

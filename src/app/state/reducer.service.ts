@@ -353,6 +353,9 @@ export class Reducer {
           case EventType.CLOSE_UPDATE_CLIENT_PROFILE :
             this.closeUpdateClientProfile();
             break;
+          case EventType.CLOSE_JOB_PROCESS :
+            this.closeJobProcess($event.payload);
+            break;
         }
       }
     );
@@ -1385,5 +1388,17 @@ export class Reducer {
     let clientState = this.store.state.clientState;
     clientState = {...clientState, ...{openUpdateInfos : false}}
     this.store.setState({clientState : clientState});
+  }
+
+  public closeJobProcess(job : Job) : void {
+    this.jobService.closeJobProcess(job.id).subscribe({
+      next : () => {
+        if(job.status == 'IN_APPROVING')
+          job.status = 'CLIENT_CLOSE';
+        else
+          job.status = 'ADMIN_CLOSE';
+      },
+      error : (error : HttpErrorResponse) => console.log(error)
+    });
   }
 }

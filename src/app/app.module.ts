@@ -57,13 +57,9 @@ import { MeetComponent } from './components/meets/meets/meet/meet.component';
 import { JobApplicationsComponent } from './components/jobs/job/job-applications/job-applications.component';
 import { ApplicationStatsComponent } from './components/jobs/job/application-stats/application-stats.component';
 import {NgCircleProgressModule} from "ng-circle-progress";
-import {NgWizardConfig, NgWizardModule, THEME} from "ng-wizard";
 import { UpdateTalentInfosComponent } from './components/talents/talent-profile/update-talent-infos/update-talent-infos.component';
 import { UpdateClientInfosComponent } from './components/clients/client-profile/update-client-infos/update-client-infos.component';
 
-const ngWizardConfig: NgWizardConfig = {
-  theme: THEME.default
-};
 
 @NgModule({
   declarations: [

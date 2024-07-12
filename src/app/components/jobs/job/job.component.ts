@@ -87,7 +87,7 @@ export class JobComponent implements OnInit, OnDestroy {
   }
 
   public getSelectedJobApplications(): void {
-    if (this.authStateService.hasAuthority('CLIENT') && this.job.status == 'IN_APPROVING')
+    if (this.authStateService.hasAuthority('CLIENT') && (this.job.status == 'IN_APPROVING' || this.job.status == 'CLIENT_CLOSE' || this.job.status == 'ADMIN_CLOSE'))
       this.eventService.dispatchEvent({eventType : EventType.GET_JOB_SELECTED_APPLICATIONS, payload : this.id});
   }
 
@@ -106,6 +106,10 @@ export class JobComponent implements OnInit, OnDestroy {
 
   public handleStartApproving(job : Job) : void {
     this.eventService.dispatchEvent({eventType : EventType.START_APPROVING, payload : job});
+  }
+
+  public handleCloseJob(job : Job) : void {
+    this.eventService.dispatchEvent({eventType : EventType.CLOSE_JOB_PROCESS, payload : job})
   }
 
   public handleOnChangeSelection(application: Application): void {

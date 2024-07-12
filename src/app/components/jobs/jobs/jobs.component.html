@@ -17,24 +17,27 @@
   </div>
   <div *ngFor="let job of jobsPage.content" style="width: 49.5%;">
     <a (click)="handleOpenJob(job)">
-      <div class="card card-body border-0 shadow mb-4 mb-xl-0 mt-3 job-item">
-        <div class="d-flex justify-content-between">
-          <a (click)="handleOpenJob(job)">
-            <h6 class="h6 fw-bold mb-0 custom-link">{{job.title}}</h6>
-          </a>
-          <p *ngIf="job.applied" class="small pe-4 text-end fw-bold main-color">Already applied</p>
+      <div class="card card-body border-0 shadow mb-4 mb-xl-0 mt-3 job-item" style="padding: 0 0 20px 0;">
+        <img src="assets/img/offer.jpg" class="card-img-top mb-3" style="height: 210px;">
+        <div style="padding: 0 24px">
+          <div class="d-flex justify-content-between">
+            <a (click)="handleOpenJob(job)">
+              <h6 class="h6 fw-bold mb-0 custom-link">{{job.title}}</h6>
+            </a>
+            <p *ngIf="job.applied" class="small pe-4 text-end fw-bold main-color">Already applied</p>
+          </div>
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item d-flex align-items-center justify-content-between px-0 border-bottom">
+              <div>
+                <p class="small pe-4">{{job.sector}}</p>
+                <p class="small pe-4">{{job.type == 'FULL_TIME' ? 'Full TIME' : 'PART TIME'}}</p>
+                <p
+                  class="small pe-4">{{(job.description.length > 245) ? (job.description | slice:0:245) : job.description}}</p>
+                <p class="small pe-4 text-end fw-bold">{{job.createdAt | date : 'short'}}</p>
+              </div>
+            </li>
+          </ul>
         </div>
-        <ul class="list-group list-group-flush">
-          <li class="list-group-item d-flex align-items-center justify-content-between px-0 border-bottom">
-            <div>
-              <p class="small pe-4">{{job.sector}}</p>
-              <p class="small pe-4">{{job.type == 'FULL_TIME' ? 'Full TIME' : 'PART TIME'}}</p>
-              <p
-                class="small pe-4">{{(job.description.length > 245) ? (job.description | slice:0:245) : job.description}}</p>
-              <p class="small pe-4 text-end fw-bold">{{job.createdAt | date : 'short'}}</p>
-            </div>
-          </li>
-        </ul>
       </div>
     </a>
   </div>

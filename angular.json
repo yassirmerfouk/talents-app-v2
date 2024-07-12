@@ -37,7 +37,6 @@
             "styles": [
               "src/styles.css",
               "node_modules/bootstrap-icons/font/bootstrap-icons.min.css",
-              "node_modules/ng-wizard/themes/ng_wizard.min.css",
               "template/css/volt.css",
               "template/vendor/apexcharts/dist/apexcharts.css",
               "template/vendor/choices.js/public/assets/styles/choices.min.css",

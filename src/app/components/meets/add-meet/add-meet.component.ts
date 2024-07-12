@@ -84,7 +84,7 @@ export class AddMeetComponent implements OnInit {
       if (this.type == 'INTERVIEW') {
         if(this.job){
           this.meetForm.addControl('title',
-            this.formBuilder.control('Interview meet with ' + this.user.firstName + ' ' + this.user.lastName + ' - ' + this.job.title)
+            this.formBuilder.control('Interview meet with ' + this.user.firstName + ' ' + this.user.lastName + ' - ' + this.job.title + " job offer")
           );
           this.body = this.body.replace('[Job Title]', this.job?.title);
           this.meetForm.get('body')?.setValue(this.body);
