@@ -49,7 +49,7 @@
           </div>
         </div>
         <div><span class="fw-normal text-gray" [ngClass]="{'line-through' : meet.status == 'CLOSED'}">
-          {{(meet.body.length > 175) ? (meet.body | slice:0:160) + '...' : meet.body}}
+          {{(meet.firstBody.length > 175) ? (meet.firstBody | slice:0:160) + '...' : meet.firstBody}}
         </span></div>
       </div>
       <div

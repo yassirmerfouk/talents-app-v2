@@ -24,11 +24,11 @@ export class AddMeetComponent implements OnInit {
   public user: User | null = null;
 
   @Input()
-  public job : Job | null = null;
+  public job: Job | null = null;
 
   public meetForm !: FormGroup;
 
-  public verificationBody : string = "Dear [Freelancer’s Name],\n" +
+  public verificationBody: string = "Dear [Freelancer’s Name],\n" +
     "\n" +
     "I hope this message finds you well.\n" +
     "\n" +
@@ -39,7 +39,7 @@ export class AddMeetComponent implements OnInit {
     "\n" + "Best regards,\n\n" +
     "Pulse digital company";
 
-  public interviewBody : string = "Dear [Freelancer’s Name],\n" +
+  public interviewBody: string = "Dear [Freelancer’s Name],\n" +
     "\n" +
     "I hope this message finds you well.\n" +
     "\n" +
@@ -52,26 +52,29 @@ export class AddMeetComponent implements OnInit {
 
   public body !: string;
 
-  public videoCallMessage : string = "Please join the meeting using the following Google Meet link [link will be generated].";
-  public phoneCallMessage : string = "You will be receiving a phone call from our administrative team shortly to discuss the verification details. Please ensure that you are available to take the call.";
+  public videoCallMessage: string = "Please join the meeting using the following Google Meet link [link will be generated].";
+  public phoneCallMessage: string = "You will be receiving a phone call from our administrative team shortly to discuss the verification details. Please ensure that you are available to take the call.";
 
-  public oldGeneratedType : string = "[This part will be generated based on Contact Type]";
-  public oldGeneratedLink : string = "[link will be generated]";
+  public oldGeneratedType: string = "[This part will be generated based on Contact Type]";
+  public oldGeneratedLink: string = "[link will be generated]";
 
   public ngOnInit(): void {
 
-    if(this.type == 'VERIFICATION')
+    if (this.type == 'VERIFICATION')
       this.body = this.verificationBody;
-    else
-      this.body = this.interviewBody;
+    else {
+      if (this.type == 'ADMIN_INTERVIEW')
+        this.body = this.interviewBody;
+    }
 
-    if(this.user) {
+    if (this.user) {
       this.meetForm = this.formBuilder.group({
         date: this.formBuilder.control(null, [Validators.required]),
         meetType: this.formBuilder.control(this.type, [Validators.required]),
-        contactType: this.formBuilder.control("", [Validators.required]),
+        contactType: this.formBuilder.control(this.type == 'ADMIN_INTERVIEW' ? 'VIDEO_CALL' : '', [Validators.required]),
+        firstBody: this.formBuilder.control(this.body = this.body.replace("[Freelancer’s Name]", this.user.firstName + " " + this.user.lastName)),
+        secondBody: this.formBuilder.control(null),
         resource: this.formBuilder.control(null),
-        body: this.formBuilder.control( this.body = this.body.replace("[Freelancer’s Name]", this.user.firstName + " " + this.user.lastName))
       });
 
 
@@ -81,13 +84,15 @@ export class AddMeetComponent implements OnInit {
         );
       }
 
-      if (this.type == 'INTERVIEW') {
-        if(this.job){
+      if (this.type == 'ADMIN_INTERVIEW') {
+        if (this.job) {
           this.meetForm.addControl('title',
             this.formBuilder.control('Interview meet with ' + this.user.firstName + ' ' + this.user.lastName + ' - ' + this.job.title + " job offer")
           );
           this.body = this.body.replace('[Job Title]', this.job?.title);
-          this.meetForm.get('body')?.setValue(this.body);
+          this.meetForm.get('firstBody')?.setValue(this.body);
+
+          this.handleOnChangeContactType();
         }
       }
     }
@@ -97,36 +102,40 @@ export class AddMeetComponent implements OnInit {
     this.eventService.dispatchEvent({eventType: EventType.CLOSE_ADD_MEET});
   }
 
-  public handleProgramMeet() : void {
-    if(this.meetForm.invalid)
+  public handleProgramMeet(): void {
+    if (this.meetForm.invalid)
       alert("Please verify your fields!");
-    else{
-      let meet : Meet = this.meetForm.value;
-      meet.receiverId = this.user?.id;
-      if(meet.meetType == 'INTERVIEW')
+    else {
+      let meet: Meet = this.meetForm.value;
+      meet.receivers = [];
+      if (meet.meetType == 'VERIFICATION')
+        meet.receivers.push(this.user?.id);
+      if (meet.meetType == 'ADMIN_INTERVIEW') {
         meet.jobId = this.job?.id;
-      this.eventService.dispatchEvent({eventType : EventType.PROGRAM_MEET, payload : meet});
+        meet.receivers.push(this.user?.id);
+      }
+      this.eventService.dispatchEvent({eventType: EventType.PROGRAM_MEET, payload: meet});
     }
   }
 
-  public handleOnChangeContactType() : void {
+  public handleOnChangeContactType(): void {
 
-    if(this.meetForm.value.contactType == 'VIDEO_CALL'){
-      this.body = this.body.replace(this.oldGeneratedType,this.videoCallMessage);
+    if (this.meetForm.value.contactType == 'VIDEO_CALL') {
+      this.body = this.body.replace(this.oldGeneratedType, this.videoCallMessage);
       this.oldGeneratedType = this.videoCallMessage;
     }
 
-    if(this.meetForm.value.contactType == 'PHONE_CALL'){
-      this.body = this.body.replace(this.oldGeneratedType,this.phoneCallMessage);
+    if (this.meetForm.value.contactType == 'PHONE_CALL') {
+      this.body = this.body.replace(this.oldGeneratedType, this.phoneCallMessage);
       this.oldGeneratedType = this.phoneCallMessage;
     }
 
-    this.meetForm.get("body")?.setValue(this.body);
+    this.meetForm.get("firstBody")?.setValue(this.body);
   }
 
-  public handleOnChangeLink() : void {
+  public handleOnChangeLink(): void {
     this.body = this.body.replace(this.oldGeneratedLink, this.meetForm.value.resource);
     this.oldGeneratedLink = this.meetForm.value.resource;
-    this.meetForm.get("body")?.setValue(this.body);
+    this.meetForm.get("firstBody")?.setValue(this.body);
   }
 }

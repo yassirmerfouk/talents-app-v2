@@ -11,10 +11,6 @@
             <div class="col-md-6 mb-3">
               <label class="form-label">Title</label>
               <input formControlName="title" type="text" class="form-control" placeholder="Title">
-<!--              <div class="me-1" *ngIf="meetForm.get('title')?.touched && meetForm.get('title')?.invalid">
-                <div *ngIf="meetForm.get('title')?.errors?.['required']" class="text-danger mt-2 small">Title is required.
-                </div>
-              </div>-->
             </div>
             <div class="col-md-6 mb-3">
               <label class="form-label">Date</label>
@@ -28,11 +24,12 @@
             </div>
             <div class="col-md-6 mb-3">
               <label class="form-label">Contact type</label>
-              <select (change)="handleOnChangeContactType()" formControlName="contactType" class="form-select">
+              <select *ngIf="type == 'VERIFICATION'" (change)="handleOnChangeContactType()" formControlName="contactType" class="form-select">
                 <option value="">Select...</option>
                 <option value="VIDEO_CALL">Video call</option>
                 <option value="PHONE_CALL">Phone call</option>
               </select>
+              <input *ngIf="type == 'ADMIN_INTERVIEW'" formControlName="contactType" type="text" class="form-control" placeholder="Meet type" readonly>
             </div>
           </div>
           <div *ngIf="meetForm.value.contactType == 'VIDEO_CALL'" class="mb-3">
@@ -41,7 +38,7 @@
           </div>
           <div class="mb-3">
             <label class="form-label">Message</label>
-            <textarea formControlName="body" class="form-control" placeholder="Message" rows="14"></textarea>
+            <textarea formControlName="firstBody" class="form-control" placeholder="Message" rows="14"></textarea>
           </div>
         </div>
         <div class="modal-footer">

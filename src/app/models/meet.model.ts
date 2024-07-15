@@ -8,11 +8,11 @@ export interface Meet{
   meetType : string,
   contactType : string,
   status : string,
-  body : string,
+  firstBody : string,
+  secondBody : string,
   sender : User,
-  receiver : User,
+  receivers : Array<any>,
 
-  receiverId ?: number, // only to add the receiver to the path
 
   jobId ?: number
 }

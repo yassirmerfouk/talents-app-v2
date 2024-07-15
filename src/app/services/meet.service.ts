@@ -15,7 +15,11 @@ export class MeetService{
   private api : string = `${environment.api}/meets`;
 
   public addMeet(meet : Meet) : Observable<Meet>{
-    return this.httpClient.post<Meet>(`${this.api}/user/${meet.receiverId}`, meet);
+    return this.httpClient.post<Meet>(`${this.api}`, meet);
+  }
+
+  public closeMeet(id : number) : Observable<any>{
+    return this.httpClient.post(`${this.api}/${id}/close`, {});
   }
 
   public getMeets(date : string, page : number, size : number) : Observable<Page<Meet>>{
@@ -30,7 +34,4 @@ export class MeetService{
     return this.httpClient.post(`${this.api}/${id}/refuse`, {});
   }
 
-  public closeMeet(id : number) : Observable<any>{
-    return this.httpClient.post(`${this.api}/${id}/close`, {});
-  }
 }

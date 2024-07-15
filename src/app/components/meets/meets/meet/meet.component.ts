@@ -18,7 +18,7 @@ export class MeetComponent implements OnInit{
 
   public ngOnInit() : void {
     if(this.meet)
-        this.body = this.meet.body.replace(/\n/g, "<br>");
+        this.body = this.meet.firstBody.replace(/\n/g, "<br>");
   }
 
   public handleCloseShowMeet() : void {
