@@ -59,6 +59,7 @@ import {NgCircleProgressModule} from "ng-circle-progress";
 import { UpdateTalentInfosComponent } from './components/talents/talent-profile/update-talent-infos/update-talent-infos.component';
 import { UpdateClientInfosComponent } from './components/clients/client-profile/update-client-infos/update-client-infos.component';
 import { InterviewRequestComponent } from './components/jobs/job/interview-request/interview-request.component';
+import { InterviewComponent } from './components/jobs/job/interview/interview.component';
 
 
 @NgModule({
@@ -113,6 +114,7 @@ import { InterviewRequestComponent } from './components/jobs/job/interview-reque
     UpdateTalentInfosComponent,
     UpdateClientInfosComponent,
     InterviewRequestComponent,
+    InterviewComponent,
   ],
   imports: [
     BrowserModule,

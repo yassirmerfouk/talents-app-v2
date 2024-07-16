@@ -9,6 +9,7 @@ import {EventService} from "../../../services/event.service";
 import {EventType} from "../../../state/event-type.enum";
 import {Subscription} from "rxjs";
 import {User} from "../../../models/user.model";
+import {JobInterview} from "../../../models/job.interview.model";
 
 @Component({
   selector: 'app-job',
@@ -48,6 +49,10 @@ export class JobComponent implements OnInit, OnDestroy {
 
   public selectedApp !: Application;
 
+  public openJobInterview : boolean = false;
+
+  public selectedJobInterview !: JobInterview;
+
   public ngOnInit() {
 
   this.stateSubscription = this.store.state$.subscribe(
@@ -65,6 +70,10 @@ export class JobComponent implements OnInit, OnDestroy {
 
         this.openAskForJobInterview = state.jobInterviewsState?.openAskForJobInterview;
         this.selectedApp = state.jobInterviewsState?.selectedApp;
+
+        this.openJobInterview = state.jobInterviewState?.openJobInterview;
+        this.selectedJobInterview = state.jobInterviewState?.selectedJobInterview;
+
       }
     );
 
@@ -132,9 +141,6 @@ export class JobComponent implements OnInit, OnDestroy {
   }
 
   public handleOpenProgramMeet(application : Application) : void {
-    if(application.hasMeet)
-      alert("You already programed a meet with this talent.");
-    else
     this.eventService.dispatchEvent({eventType : EventType.OPEN_ADD_MEET, payload : application.talent});
   }
 
@@ -143,7 +149,14 @@ export class JobComponent implements OnInit, OnDestroy {
   }
 
   public handleOpenAskForJobInterview(application : Application) : void {
-    this.eventService.dispatchEvent({eventType : EventType.OPEN_ASK_FOR_JOB_INTERVIEW, payload : application});
+    if(application.hasClientMeet)
+      alert("You have already request for a meet for this talent!");
+    else
+      this.eventService.dispatchEvent({eventType : EventType.OPEN_ASK_FOR_JOB_INTERVIEW, payload : application});
+  }
+
+  public handleOpenJobInterview(jobInterview : JobInterview) : void{
+    this.eventService.dispatchEvent({eventType : EventType.OPEN_JOB_INTERVIEW, payload : jobInterview});
   }
 
   public handleChangePage(page: number): void {

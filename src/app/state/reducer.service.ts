@@ -31,7 +31,8 @@ import {Certification} from "../models/certification.model";
 import {CertificationService} from "../services/certification.service";
 import {Meet} from "../models/meet.model";
 import {MeetService} from "../services/meet.service";
-import {JobInterview} from "../models/job-interview.model";
+import {JobInterview} from "../models/job.interview.model";
+import {JobInterviewService} from "../services/job.interview.service";
 
 @Injectable({
   providedIn: 'root'
@@ -55,6 +56,7 @@ export class Reducer {
   private languageService: LanguageService = inject(LanguageService);
   private certificationService: CertificationService = inject(CertificationService);
   private meetService: MeetService = inject(MeetService);
+  private jobInterviewService: JobInterviewService = inject(JobInterviewService);
 
   private router: Router = inject(Router);
 
@@ -363,6 +365,15 @@ export class Reducer {
             break;
           case EventType.CLOSE_ASK_FOR_JOB_INTERVIEW :
             this.closeAskForJobInterview();
+            break;
+          case EventType.ADD_JOB_INTERVIEW :
+            this.addJobInterview($event.payload.application,$event.payload.jobInterview);
+            break;
+          case EventType.OPEN_JOB_INTERVIEW:
+            this.openJobInterview($event.payload);
+            break;
+          case EventType.CLOSE_JOB_INTERVIEW :
+            this.closeJobInterview();
             break;
         }
       }
@@ -713,9 +724,9 @@ export class Reducer {
     this.clientService.updateProfile(clientRequest).subscribe({
       next: (client: Client) => {
         let clientState = this.store.state.clientState;
-        clientState = {...clientState, ...{client : client}};
+        clientState = {...clientState, ...{client: client}};
         this.store.setState({clientState: clientState});
-        this.dispatcherSubject.next({eventType : EventType.CLOSE_UPDATE_CLIENT_PROFILE});
+        this.dispatcherSubject.next({eventType: EventType.CLOSE_UPDATE_CLIENT_PROFILE});
       },
       error: (error: HttpErrorResponse) => console.log(error)
     });
@@ -877,9 +888,9 @@ export class Reducer {
       next: (talent: any) => {
         this.reverseTalent(talent);
         let talentState = this.store.state.talentState;
-        talentState = {...talentState, ...{talent : talent}}
+        talentState = {...talentState, ...{talent: talent}}
         this.store.setState({talentState: talentState});
-        this.dispatcherSubject.next({eventType : EventType.CLOSE_UPDATE_TALENT_PROFILE});
+        this.dispatcherSubject.next({eventType: EventType.CLOSE_UPDATE_TALENT_PROFILE});
       },
       error: (error: HttpErrorResponse) => {
         console.log(error);
@@ -1374,48 +1385,67 @@ export class Reducer {
     this.store.setState({statsState: {openGetStats: false, selectedApplication: null}});
   }
 
-  public openUpdateTalentProfile() : void {
+  public openUpdateTalentProfile(): void {
     let talentState = this.store.state.talentState;
-    talentState = {...talentState, ...{openUpdateInfos : true}};
-    this.store.setState({talentState : talentState});
+    talentState = {...talentState, ...{openUpdateInfos: true}};
+    this.store.setState({talentState: talentState});
   }
 
-  public closeUpdateTalentProfile() : void {
+  public closeUpdateTalentProfile(): void {
     let talentState = this.store.state.talentState;
-    talentState = {...talentState, ...{openUpdateInfos : false}};
-    this.store.setState({talentState : talentState});
+    talentState = {...talentState, ...{openUpdateInfos: false}};
+    this.store.setState({talentState: talentState});
   }
 
-  public openUpdateClientProfile() : void{
+  public openUpdateClientProfile(): void {
     let clientState = this.store.state.clientState;
-    clientState = {...clientState, ...{openUpdateInfos : true}};
-    this.store.setState({clientState : clientState});
+    clientState = {...clientState, ...{openUpdateInfos: true}};
+    this.store.setState({clientState: clientState});
   }
 
-  public closeUpdateClientProfile() : void{
+  public closeUpdateClientProfile(): void {
     let clientState = this.store.state.clientState;
-    clientState = {...clientState, ...{openUpdateInfos : false}}
-    this.store.setState({clientState : clientState});
+    clientState = {...clientState, ...{openUpdateInfos: false}}
+    this.store.setState({clientState: clientState});
   }
 
-  public closeJobProcess(job : Job) : void {
+  public closeJobProcess(job: Job): void {
     this.jobService.closeJobProcess(job.id).subscribe({
-      next : () => {
-        if(job.status == 'IN_APPROVING')
+      next: () => {
+        if (job.status == 'IN_APPROVING')
           job.status = 'CLIENT_CLOSE';
         else
           job.status = 'ADMIN_CLOSE';
       },
-      error : (error : HttpErrorResponse) => console.log(error)
+      error: (error: HttpErrorResponse) => console.log(error)
     });
   }
 
-  public openAskForJobInterview(application : Application) : void{
-    this.store.setState({jobInterviewsState : {openAskForJobInterview : true, selectedApp : application}});
+  public openAskForJobInterview(application: Application): void {
+    this.store.setState({jobInterviewsState: {openAskForJobInterview: true, selectedApp: application}});
   }
 
-  public closeAskForJobInterview() : void{
-    this.store.setState({jobInterviewsState : {openAskForJobInterview : false, selectedApp : undefined}});
+  public closeAskForJobInterview(): void {
+    this.store.setState({jobInterviewsState: {openAskForJobInterview: false, selectedApp: undefined}});
   }
 
+  public addJobInterview(application : Application,jobInterview: JobInterview): void {
+    this.jobInterviewService.addJobInterview(application.id,jobInterview).subscribe({
+      next: (jobInterview: JobInterview) => {
+        application.hasClientMeet = true;
+        this.dispatcherSubject.next({eventType : EventType.CLOSE_ASK_FOR_JOB_INTERVIEW});
+      },
+      error: (error: HttpErrorResponse) => {
+        console.log(error);
+      }
+    });
+  }
+
+  public openJobInterview(jobInterview : JobInterview) : void {
+    this.store.setState({jobInterviewState : {openJobInterview : true,selectedJobInterview : jobInterview}});
+  }
+
+  public closeJobInterview() : void {
+    this.store.setState({jobInterviewState : {openJobInterview : false,selectedJobInterview : undefined}});
+  }
 }

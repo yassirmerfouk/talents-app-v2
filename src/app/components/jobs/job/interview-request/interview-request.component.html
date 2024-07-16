@@ -5,7 +5,7 @@
         <h6 class="h6 modal-title">Ask for a job interview</h6>
         <button (click)="handleCloseAskForJobInterview()" type="button" class="btn-close"></button>
       </div>
-      <form *ngIf="interviewForm" [formGroup]="interviewForm">
+      <form *ngIf="interviewForm" [formGroup]="interviewForm" (ngSubmit)="handleAddJobInterview()">
         <div class="modal-body">
           <div class="mb-3">
             <label class="form-label">Message</label>
