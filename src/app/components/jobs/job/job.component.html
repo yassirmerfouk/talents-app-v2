@@ -293,7 +293,7 @@
               <div>
                 <div *ngIf="job.status == 'IN_APPROVING' && (!application.approved && !application.refused)">
                   <div class="d-flex justify-content-between">
-                    <button class="btn btn-primary btn-sm me-1" style="padding: 3px 6px;">Ask for a meet</button>
+                    <button (click)="handleOpenAskForJobInterview(application)" class="btn btn-primary btn-sm me-1" style="padding: 3px 6px;">Ask for a meet</button>
                     <button (click)="handleOnApprove(application)" class="btn btn-primary btn-sm me-1" style="padding: 3px 6px;">Approve</button>
                     <button (click)="handleOnRefuse(application)" class="btn btn-danger btn-sm" style="padding: 3px 6px;">Refuse</button>
                   </div>
@@ -307,6 +307,7 @@
   </div>
   <app-add-meet *ngIf="openProgramMeet" [type]="'ADMIN_INTERVIEW'" [user]="selectedUser" [job]="job"></app-add-meet>
   <app-application-stats *ngIf="openGetStats" [application]="selectedApplication"></app-application-stats>
+  <app-interview-request *ngIf="openAskForJobInterview" [application]="selectedApp"></app-interview-request>
 </div>
 
 

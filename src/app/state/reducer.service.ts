@@ -31,6 +31,7 @@ import {Certification} from "../models/certification.model";
 import {CertificationService} from "../services/certification.service";
 import {Meet} from "../models/meet.model";
 import {MeetService} from "../services/meet.service";
+import {JobInterview} from "../models/job-interview.model";
 
 @Injectable({
   providedIn: 'root'
@@ -355,6 +356,13 @@ export class Reducer {
             break;
           case EventType.CLOSE_JOB_PROCESS :
             this.closeJobProcess($event.payload);
+            break;
+
+          case EventType.OPEN_ASK_FOR_JOB_INTERVIEW :
+            this.openAskForJobInterview($event.payload);
+            break;
+          case EventType.CLOSE_ASK_FOR_JOB_INTERVIEW :
+            this.closeAskForJobInterview();
             break;
         }
       }
@@ -1401,4 +1409,13 @@ export class Reducer {
       error : (error : HttpErrorResponse) => console.log(error)
     });
   }
+
+  public openAskForJobInterview(application : Application) : void{
+    this.store.setState({jobInterviewsState : {openAskForJobInterview : true, selectedApp : application}});
+  }
+
+  public closeAskForJobInterview() : void{
+    this.store.setState({jobInterviewsState : {openAskForJobInterview : false, selectedApp : undefined}});
+  }
+
 }

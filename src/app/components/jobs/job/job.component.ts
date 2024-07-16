@@ -44,6 +44,10 @@ export class JobComponent implements OnInit, OnDestroy {
 
   public selectedApplication !: Application;
 
+  public openAskForJobInterview : boolean = false;
+
+  public selectedApp !: Application;
+
   public ngOnInit() {
 
   this.stateSubscription = this.store.state$.subscribe(
@@ -58,6 +62,9 @@ export class JobComponent implements OnInit, OnDestroy {
 
         this.openGetStats = state.statsState?.openGetStats;
         this.selectedApplication = state.statsState?.selectedApplication;
+
+        this.openAskForJobInterview = state.jobInterviewsState?.openAskForJobInterview;
+        this.selectedApp = state.jobInterviewsState?.selectedApp;
       }
     );
 
@@ -133,6 +140,10 @@ export class JobComponent implements OnInit, OnDestroy {
 
   public handleOpenGetStats(application : Application) : void {
     this.eventService.dispatchEvent({eventType : EventType.OPEN_GET_APPLICATION_STATS, payload : application});
+  }
+
+  public handleOpenAskForJobInterview(application : Application) : void {
+    this.eventService.dispatchEvent({eventType : EventType.OPEN_ASK_FOR_JOB_INTERVIEW, payload : application});
   }
 
   public handleChangePage(page: number): void {

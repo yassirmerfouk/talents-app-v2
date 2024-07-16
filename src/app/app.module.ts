@@ -54,11 +54,11 @@ import { EditSkillsComponent } from './components/talents/talent-profile/skills/
 import { AddMeetComponent } from './components/meets/add-meet/add-meet.component';
 import { MeetsComponent } from './components/meets/meets/meets.component';
 import { MeetComponent } from './components/meets/meets/meet/meet.component';
-import { JobApplicationsComponent } from './components/jobs/job/job-applications/job-applications.component';
 import { ApplicationStatsComponent } from './components/jobs/job/application-stats/application-stats.component';
 import {NgCircleProgressModule} from "ng-circle-progress";
 import { UpdateTalentInfosComponent } from './components/talents/talent-profile/update-talent-infos/update-talent-infos.component';
 import { UpdateClientInfosComponent } from './components/clients/client-profile/update-client-infos/update-client-infos.component';
+import { InterviewRequestComponent } from './components/jobs/job/interview-request/interview-request.component';
 
 
 @NgModule({
@@ -109,10 +109,10 @@ import { UpdateClientInfosComponent } from './components/clients/client-profile/
     AddMeetComponent,
     MeetsComponent,
     MeetComponent,
-    JobApplicationsComponent,
     ApplicationStatsComponent,
     UpdateTalentInfosComponent,
     UpdateClientInfosComponent,
+    InterviewRequestComponent,
   ],
   imports: [
     BrowserModule,
