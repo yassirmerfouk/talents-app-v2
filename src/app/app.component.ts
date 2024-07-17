@@ -1,11 +1,11 @@
 import {Component, inject, OnInit, Renderer2} from '@angular/core';
 import {AuthStateService} from "./services/auth.state.service";
 import {Router} from "@angular/router";
-import {EventService} from "./services/event.service";
 import {ActionEvent} from "./state/action-event.event";
-import {EventType} from "./state/event-type.enum";
 import {Reducer} from "./state/reducer.service";
 import {Store} from "./state/store.service";
+
+
 
 @Component({
   selector: 'app-root',
@@ -28,6 +28,9 @@ export class AppComponent implements OnInit {
 
   private store : Store = inject(Store);
   private reducer : Reducer = inject(Reducer);
+
+
+
 
 
   public ngOnInit(): void {

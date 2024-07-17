@@ -51,7 +51,9 @@ export class JobComponent implements OnInit, OnDestroy {
 
   public openJobInterview : boolean = false;
 
-  public selectedJobInterview !: JobInterview;
+  public selectedAppForInterviews !: Application;
+
+  public programClientMeet : any;
 
   public ngOnInit() {
 
@@ -72,7 +74,9 @@ export class JobComponent implements OnInit, OnDestroy {
         this.selectedApp = state.jobInterviewsState?.selectedApp;
 
         this.openJobInterview = state.jobInterviewState?.openJobInterview;
-        this.selectedJobInterview = state.jobInterviewState?.selectedJobInterview;
+        this.selectedAppForInterviews = state.jobInterviewState?.selectedApplication;
+
+        this.programClientMeet = state.programClientMeet;
 
       }
     );
@@ -155,8 +159,8 @@ export class JobComponent implements OnInit, OnDestroy {
       this.eventService.dispatchEvent({eventType : EventType.OPEN_ASK_FOR_JOB_INTERVIEW, payload : application});
   }
 
-  public handleOpenJobInterview(jobInterview : JobInterview) : void{
-    this.eventService.dispatchEvent({eventType : EventType.OPEN_JOB_INTERVIEW, payload : jobInterview});
+  public handleOpenJobInterview(application : Application) : void{
+    this.eventService.dispatchEvent({eventType : EventType.OPEN_JOB_INTERVIEW, payload : application});
   }
 
   public handleChangePage(page: number): void {

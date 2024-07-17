@@ -60,6 +60,7 @@ import { UpdateTalentInfosComponent } from './components/talents/talent-profile/
 import { UpdateClientInfosComponent } from './components/clients/client-profile/update-client-infos/update-client-infos.component';
 import { InterviewRequestComponent } from './components/jobs/job/interview-request/interview-request.component';
 import { InterviewComponent } from './components/jobs/job/interview/interview.component';
+import { AddClientMeetComponent } from './components/meets/add-client-meet/add-client-meet.component';
 
 
 @NgModule({
@@ -115,6 +116,7 @@ import { InterviewComponent } from './components/jobs/job/interview/interview.co
     UpdateClientInfosComponent,
     InterviewRequestComponent,
     InterviewComponent,
+    AddClientMeetComponent,
   ],
   imports: [
     BrowserModule,

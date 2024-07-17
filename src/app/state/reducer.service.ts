@@ -367,13 +367,23 @@ export class Reducer {
             this.closeAskForJobInterview();
             break;
           case EventType.ADD_JOB_INTERVIEW :
-            this.addJobInterview($event.payload.application,$event.payload.jobInterview);
+            this.addJobInterview($event.payload.application, $event.payload.jobInterview);
             break;
           case EventType.OPEN_JOB_INTERVIEW:
             this.openJobInterview($event.payload);
             break;
           case EventType.CLOSE_JOB_INTERVIEW :
             this.closeJobInterview();
+            break;
+
+          case EventType.OPEN_ADD_CLIENT_MEET :
+            this.openAddClientMeet($event.payload.job, $event.payload.application, $event.payload.date);
+            break;
+          case EventType.CLOSE_ADD_CLIENT_MEET :
+            this.closeAddClientMeet();
+            break;
+          case EventType.PROGRAM_CLIENT_MEET :
+            this.programClientMeet($event.payload);
             break;
         }
       }
@@ -1429,11 +1439,11 @@ export class Reducer {
     this.store.setState({jobInterviewsState: {openAskForJobInterview: false, selectedApp: undefined}});
   }
 
-  public addJobInterview(application : Application,jobInterview: JobInterview): void {
-    this.jobInterviewService.addJobInterview(application.id,jobInterview).subscribe({
+  public addJobInterview(application: Application, jobInterview: JobInterview): void {
+    this.jobInterviewService.addJobInterview(application.id, jobInterview).subscribe({
       next: (jobInterview: JobInterview) => {
         application.hasClientMeet = true;
-        this.dispatcherSubject.next({eventType : EventType.CLOSE_ASK_FOR_JOB_INTERVIEW});
+        this.dispatcherSubject.next({eventType: EventType.CLOSE_ASK_FOR_JOB_INTERVIEW});
       },
       error: (error: HttpErrorResponse) => {
         console.log(error);
@@ -1441,11 +1451,43 @@ export class Reducer {
     });
   }
 
-  public openJobInterview(jobInterview : JobInterview) : void {
-    this.store.setState({jobInterviewState : {openJobInterview : true,selectedJobInterview : jobInterview}});
+  public openJobInterview(application: Application): void {
+    this.store.setState({jobInterviewState: {openJobInterview: true, selectedApplication: application}});
   }
 
-  public closeJobInterview() : void {
-    this.store.setState({jobInterviewState : {openJobInterview : false,selectedJobInterview : undefined}});
+  public closeJobInterview(): void {
+    this.store.setState({jobInterviewState: {openJobInterview: false, selectedApplication: undefined}});
+  }
+
+  public openAddClientMeet(job: Job, application: Application, date: string): void {
+    this.dispatcherSubject.next({eventType: EventType.CLOSE_JOB_INTERVIEW});
+    this.store.setState({
+      programClientMeet: {
+        openAddClientMeet: true,
+        job: job,
+        application: application,
+        date: date
+      }
+    });
+  }
+
+  public closeAddClientMeet(): void {
+    this.store.setState({
+      programClientMeet: {
+        openAddClientMeet: false
+      }
+    });
+  }
+
+  public programClientMeet(meet: Meet): void {
+    this.meetService.addMeet(meet).subscribe({
+      next: (meet: Meet) => {
+        console.log(meet);
+        this.dispatcherSubject.next({eventType: EventType.CLOSE_ADD_CLIENT_MEET});
+      },
+      error: (error: HttpErrorResponse) => {
+        console.log(error);
+      }
+    });
   }
 }
