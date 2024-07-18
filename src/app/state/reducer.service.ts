@@ -41,7 +41,7 @@ export class Reducer {
 
   private store: Store = inject(Store);
 
-  private dispatcherSubject: Subject<ActionEvent> = new Subject<ActionEvent>();
+  public dispatcherSubject: Subject<ActionEvent> = new Subject<ActionEvent>();
   public dispatcher$: Observable<ActionEvent> = this.dispatcherSubject.asObservable();
 
   private authService: AuthService = inject(AuthService);
@@ -396,6 +396,7 @@ export class Reducer {
       next: (response: AuthenticationResponse) => {
         if (this.authStateService.loadUser(response.accessToken)) {
           this.authStateService.storeTokenInLocalStorage(response.accessToken);
+          this.dispatcherSubject.next({eventType : EventType.CONNECT_TO_NOTIFICATION});
           if (this.authStateService.hasAuthority('TALENT'))
             this.router.navigateByUrl('/jobs');
           if (this.authStateService.hasAuthority('CLIENT'))

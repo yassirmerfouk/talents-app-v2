@@ -4,8 +4,10 @@ import {Router} from "@angular/router";
 import {ActionEvent} from "./state/action-event.event";
 import {Reducer} from "./state/reducer.service";
 import {Store} from "./state/store.service";
-
-
+import {EventType} from "./state/event-type.enum";
+import {NotificationService} from "./services/notification.service";
+import {HttpErrorResponse} from "@angular/common/http";
+import {Notification} from "./models/notification.model";
 
 @Component({
   selector: 'app-root',
@@ -26,18 +28,21 @@ export class AppComponent implements OnInit {
 
   private body !: any;
 
-  private store : Store = inject(Store);
-  private reducer : Reducer = inject(Reducer);
+  private store: Store = inject(Store);
+  private reducer: Reducer = inject(Reducer);
 
-
-
+  private notificationService: NotificationService = inject(NotificationService);
 
 
   public ngOnInit(): void {
+
     let accessToken = this.authStateService.getTokenFromLocalStorage();
-    if (accessToken)
-      if(!this.authStateService.loadUser(accessToken))
+    let login : boolean = false;
+    if (accessToken){
+      login = this.authStateService.loadUser(accessToken)
+      if (!login)
         this.authStateService.removeTokenFromLocalStorage();
+    }
 
     this.body = this.renderer.selectRootElement('body', true);
 
@@ -49,13 +54,31 @@ export class AppComponent implements OnInit {
           this.renderer.setStyle(this.body, 'padding-right', '17px');
         }
 
-        if ($event.eventType.startsWith('CLOSE')){
+        if ($event.eventType.startsWith('CLOSE')) {
           this.changeStyle = false;
           this.renderer.removeStyle(this.body, 'overflow');
           this.renderer.removeStyle(this.body, 'padding-right');
         }
+
+        if ($event.eventType == EventType.CONNECT_TO_NOTIFICATION) {
+          this.notificationService.stompConnection();
+          this.notificationService.specificNotificationsSubscription();
+          this.notificationService.getUserUnreadNotification().subscribe({
+            next : (notifications : Array<Notification>)=> {
+              console.log(notifications);
+            },
+            error : (error : HttpErrorResponse)=>{
+              console.log(error);
+            }
+          });
+        }
+
+
       }
     );
+
+    if(login)
+      this.reducer.dispatcherSubject.next({eventType : EventType.CONNECT_TO_NOTIFICATION});
 
   }
 
@@ -63,6 +86,7 @@ export class AppComponent implements OnInit {
     this.authStateService.unloadUser();
     this.authStateService.removeTokenFromLocalStorage();
     this.store.clearState();
+    /*    this.notificationService.specificNotificationUnsubscription();*/
     this.router.navigateByUrl('auth/login');
   }
 }
