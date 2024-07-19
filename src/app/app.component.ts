@@ -31,14 +31,14 @@ export class AppComponent implements OnInit {
   private store: Store = inject(Store);
   private reducer: Reducer = inject(Reducer);
 
-  private notificationService: NotificationService = inject(NotificationService);
+  public notificationService: NotificationService = inject(NotificationService);
 
 
   public ngOnInit(): void {
 
     let accessToken = this.authStateService.getTokenFromLocalStorage();
-    let login : boolean = false;
-    if (accessToken){
+    let login: boolean = false;
+    if (accessToken) {
       login = this.authStateService.loadUser(accessToken)
       if (!login)
         this.authStateService.removeTokenFromLocalStorage();
@@ -63,11 +63,12 @@ export class AppComponent implements OnInit {
         if ($event.eventType == EventType.CONNECT_TO_NOTIFICATION) {
           this.notificationService.stompConnection();
           this.notificationService.specificNotificationsSubscription();
-          this.notificationService.getUserUnreadNotification().subscribe({
-            next : (notifications : Array<Notification>)=> {
-              console.log(notifications);
+          this.notificationService.getUserNotifications().subscribe({
+            next: (notifications: Array<Notification>) => {
+              this.notificationService.notifications = notifications;
+              console.log(this.notificationService.notifications);
             },
-            error : (error : HttpErrorResponse)=>{
+            error: (error: HttpErrorResponse) => {
               console.log(error);
             }
           });
@@ -77,16 +78,33 @@ export class AppComponent implements OnInit {
       }
     );
 
-    if(login)
-      this.reducer.dispatcherSubject.next({eventType : EventType.CONNECT_TO_NOTIFICATION});
 
+    if (login)
+      this.reducer.dispatcherSubject.next({eventType: EventType.CONNECT_TO_NOTIFICATION});
+
+  }
+
+  public handleReadNotifications() : void{
+    this.notificationService.readUserNotifications().subscribe({
+      next : () => {
+      },
+      error : (error : HttpErrorResponse) => {}
+    });
+  }
+
+  public handleOnClickNotification(notification : Notification) : void {
+    this.notificationService.clickOnNotification(notification.id).subscribe({
+      next : () => {
+        notification.clicked = true;
+      }
+    });
   }
 
   public handleLogout(): void {
     this.authStateService.unloadUser();
     this.authStateService.removeTokenFromLocalStorage();
     this.store.clearState();
-    /*    this.notificationService.specificNotificationUnsubscription();*/
+    this.notificationService.specificNotificationUnsubscription();
     this.router.navigateByUrl('auth/login');
   }
 }

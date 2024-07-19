@@ -7,6 +7,7 @@ import {NgToastService} from "ng-angular-popup";
 import {Notification} from "../models/notification.model";
 import {Observable} from "rxjs";
 import {HttpClient} from "@angular/common/http";
+import {Store} from "../state/store.service";
 
 @Injectable({
   providedIn: 'root'
@@ -24,8 +25,10 @@ export class NotificationService {
 
   private toast: NgToastService = inject(NgToastService);
 
-  private httpClient : HttpClient = inject(HttpClient);
-  private api : string = `${environment.api}/notifications`;
+  private httpClient: HttpClient = inject(HttpClient);
+  private api: string = `${environment.api}/notifications`;
+
+  public notifications: Array<Notification> = [];
 
   public constructor() {
   }
@@ -37,20 +40,33 @@ export class NotificationService {
   }
 
   public specificNotificationsSubscription(): void {
-      this.stompClient.connect({}, () => {
-        this.stompClient.subscribe(this.specificNotificationBroker + this.authStateService.authState.id, (result) => {
-          let notification: Notification = JSON.parse(result.body);
-          this.toast.info(notification.body);
-        });
+    this.stompClient.connect({}, () => {
+      this.stompClient.subscribe(this.specificNotificationBroker + this.authStateService.authState.id, (result) => {
+        let notification: Notification = JSON.parse(result.body);
+        this.notifications.unshift(notification);
+        console.log(this.notifications);
+        this.toast.info(notification.body);
+      });
+    });
+  }
+
+  public specificNotificationUnsubscription(): void {
+    if (this.stompClient)
+      this.stompClient.disconnect(() => {
       });
   }
 
-  public specificNotificationUnsubscription() : void {
-    this.stompClient.disconnect(() => {});
-  }
-
-  public getUserUnreadNotification() : Observable<Array<Notification>>{
+  public getUserNotifications(): Observable<Array<Notification>> {
     return this.httpClient.get<Array<Notification>>(`${this.api}`);
   }
+
+  public readUserNotifications(): Observable<any> {
+    return this.httpClient.post<any>(`${this.api}/read`, {});
+  }
+
+  public clickOnNotification(id : number) : Observable<any>{
+    return this.httpClient.post<any>(`${this.api}/${id}/click`, {});
+  }
+
 
 }

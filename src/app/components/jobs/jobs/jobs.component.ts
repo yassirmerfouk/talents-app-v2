@@ -38,10 +38,10 @@ export class JobsComponent implements OnInit, OnDestroy {
 
     this.stateSubscription = this.store.state$.subscribe(
       (state: any) => {
-        this.jobsPage = state.jobsState.jobsPage;
-        this.openJob = state.jobsState.openJob;
-        this.selectedJob = state.jobsState.selectedJob;
-        this.error = state.jobsState.error;
+        this.jobsPage = state.jobsState?.jobsPage;
+        this.openJob = state.jobsState?.openJob;
+        this.selectedJob = state.jobsState?.selectedJob;
+        this.error = state.jobsState?.error;
       }
     );
 
