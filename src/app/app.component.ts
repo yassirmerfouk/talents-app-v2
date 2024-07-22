@@ -87,6 +87,11 @@ export class AppComponent implements OnInit {
   public handleReadNotifications() : void{
     this.notificationService.readUserNotifications().subscribe({
       next : () => {
+        this.notificationService.notifications = this.notificationService.notifications
+          .map(notification => {
+            notification.seen = true;
+            return notification;
+          });
       },
       error : (error : HttpErrorResponse) => {}
     });

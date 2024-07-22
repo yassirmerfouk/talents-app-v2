@@ -7,7 +7,6 @@ import {NgToastService} from "ng-angular-popup";
 import {Notification} from "../models/notification.model";
 import {Observable} from "rxjs";
 import {HttpClient} from "@angular/common/http";
-import {Store} from "../state/store.service";
 
 @Injectable({
   providedIn: 'root'
@@ -30,10 +29,6 @@ export class NotificationService {
 
   public notifications: Array<Notification> = [];
 
-  public constructor() {
-  }
-
-
   public stompConnection(): void {
     this.socket = new SockJS(this.socketUrl);
     this.stompClient = Stomp.over(this.socket);
@@ -54,6 +49,10 @@ export class NotificationService {
     if (this.stompClient)
       this.stompClient.disconnect(() => {
       });
+  }
+
+  public countUnseenNotifications() : number {
+    return this.notifications.filter(notification => !notification.seen).length;
   }
 
   public getUserNotifications(): Observable<Array<Notification>> {
