@@ -9,5 +9,6 @@ export interface Notification{
   clicked : boolean
   createdAt : string
 
-  sender : User
+  sender : User,
+  receiver : User
 }

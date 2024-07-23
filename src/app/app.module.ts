@@ -3,7 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import {ReactiveFormsModule} from "@angular/forms";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import { RegistrationTalentComponent } from './components/auth/registration/registration-talent/registration-talent.component';
 import { RegistrationClientComponent } from './components/auth/registration/registration-client/registration-client.component';
@@ -131,6 +131,7 @@ import { AddClientMeetComponent } from './components/meets/add-client-meet/add-c
     BrowserAnimationsModule,
     NgCircleProgressModule.forRoot({
     }),
+    FormsModule
   ],
   providers: [
     {provide : HTTP_INTERCEPTORS, useClass : httpInterceptor, multi : true}

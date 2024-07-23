@@ -3,6 +3,7 @@ import {Job, JobRequest} from "../../../../models/job.model";
 import {FormBuilder, FormGroup} from "@angular/forms";
 import {EventService} from "../../../../services/event.service";
 import {EventType} from "../../../../state/event-type.enum";
+import {SkillService} from "../../../../services/skill.service";
 
 @Component({
   selector: 'app-edit-job',
@@ -14,6 +15,8 @@ export class EditJobComponent implements OnInit{
   private eventService : EventService = inject(EventService);
   private formBuilder : FormBuilder = inject(FormBuilder);
 
+  private skillService : SkillService = inject(SkillService);
+
   @Input()
   public job !: Job;
 
@@ -21,34 +24,53 @@ export class EditJobComponent implements OnInit{
 
   public skillsList: Array<string> = [];
 
+  public existedSkills: Array<string> = [];
+
+  public searchedSkills: Array<string> = [];
+
+  public skill: string = '';
+
   public ngOnInit()  : void{
     if(this.job){
-      this.jobForm = this.formBuilder.group({
-        id : this.formBuilder.control(this.job.id),
-        title : this.formBuilder.control(this.job.title),
-        sector : this.formBuilder.control(this.job.sector),
-        minSalary : this.formBuilder.control(this.job.minSalary),
-        maxSalary : this.formBuilder.control(this.job.maxSalary),
-        currency : this.formBuilder.control(this.job.currency),
-        yearsOfExperiences : this.formBuilder.control(this.job.yearsOfExperiences),
-        numberOfTalents : this.formBuilder.control(this.job.numberOfTalents),
-        type : this.formBuilder.control(this.job.type),
-        contractType : this.formBuilder.control(this.job.contractType),
-        period : this.formBuilder.control(this.job.period),
-        periodUnit : this.formBuilder.control(this.job.periodUnit ? this.job.periodUnit : ''),
-        description : this.formBuilder.control(this.job.description),
-        skill: this.formBuilder.control("")
+      this.skillService.getSkills().subscribe({
+        next : (skills : Array<any>) => {
+
+          this.jobForm = this.formBuilder.group({
+            id : this.formBuilder.control(this.job.id),
+            title : this.formBuilder.control(this.job.title),
+            sector : this.formBuilder.control(this.job.sector),
+            minSalary : this.formBuilder.control(this.job.minSalary),
+            maxSalary : this.formBuilder.control(this.job.maxSalary),
+            currency : this.formBuilder.control(this.job.currency),
+            yearsOfExperiences : this.formBuilder.control(this.job.yearsOfExperiences),
+            numberOfTalents : this.formBuilder.control(this.job.numberOfTalents),
+            type : this.formBuilder.control(this.job.type),
+            contractType : this.formBuilder.control(this.job.contractType),
+            period : this.formBuilder.control(this.job.period),
+            periodUnit : this.formBuilder.control(this.job.periodUnit ? this.job.periodUnit : ''),
+            description : this.formBuilder.control(this.job.description),
+            skill: this.formBuilder.control("")
+          });
+
+          this.skillsList = this.job.skills;
+
+          this.existedSkills = skills.map(skill => skill.title);
+          this.jobForm.get('skill')?.valueChanges.subscribe((value: string) => {
+            if (value)
+              this.searchedSkills = this.existedSkills.filter(skill => skill.includes(value.toUpperCase()));
+            else
+              this.searchedSkills = [];
+          });
+
+        }
       });
-      this.skillsList = this.job.skills;
     }
   }
 
-  public handleAddSkill(): void {
-    let skill: string = this.jobForm.value.skill;
+  public handleAddSkill(skill : string): void {
     skill = skill.toUpperCase();
     if (!this.skillsList.includes(skill))
       this.skillsList.push(skill);
-    this.jobForm.get('skill')?.setValue(null);
   }
 
   public handleDeleteSkill(skill : string) : void {
