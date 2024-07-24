@@ -33,7 +33,6 @@ export class AppComponent implements OnInit {
 
   public notificationService: NotificationService = inject(NotificationService);
 
-
   public ngOnInit(): void {
 
     let accessToken = this.authStateService.getTokenFromLocalStorage();
@@ -66,7 +65,6 @@ export class AppComponent implements OnInit {
           this.notificationService.getUserNotifications().subscribe({
             next: (notifications: Array<Notification>) => {
               this.notificationService.notifications = notifications;
-              console.log(this.notificationService.notifications);
             },
             error: (error: HttpErrorResponse) => {
               console.log(error);
@@ -112,4 +110,5 @@ export class AppComponent implements OnInit {
     this.notificationService.specificNotificationUnsubscription();
     this.router.navigateByUrl('auth/login');
   }
+
 }

@@ -124,9 +124,10 @@
               </a>
               <div class="dropdown-menu dropdown-menu-lg dropdown-menu-center mt-2 py-0">
                 <div class="list-group list-group-flush">
-                  <a href="#" class="text-center text-primary fw-bold border-bottom border-light py-3">Notifications</a>
+                  <a class="text-center text-primary fw-bold border-bottom border-light py-3">Notifications</a>
                   <a *ngFor="let notification of notificationService.notifications.slice(0,5)"
-                   class="list-group-item list-group-item-action border-bottom">
+                   class="list-group-item list-group-item-action border-bottom" [ngStyle]="{'background-color' : notification.clicked ? 'white' : '#ebebeb'}"
+                  (click)="handleOnClickNotification(notification)">
                   <div class="row align-items-center">
                     <div class="col-auto"> <img alt="Image placeholder" [src]="(notification.sender && notification.sender.image) ? notification.sender.image : 'assets/img/no-image.jpg'"
                                                 class="avatar-md rounded"></div>

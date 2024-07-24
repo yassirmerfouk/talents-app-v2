@@ -2,21 +2,26 @@ import {Injectable} from "@angular/core";
 import {Observable, Subject} from "rxjs";
 
 @Injectable({
-  providedIn : 'root'
+  providedIn: 'root'
 })
-export class Store{
+export class Store {
 
-  private stateSubject : Subject<any> = new Subject<any>();
-  public state$ : Observable<any> = this.stateSubject.asObservable();
+  private stateSubject: Subject<any> = new Subject<any>();
+  public state$: Observable<any> = this.stateSubject.asObservable();
 
-  public state : any = {};
+  public state: any = {};
 
-  public setState(state : any) : void {
+  public setState(state: any): void {
     this.state = {...this.state, ...state};
     this.stateSubject.next(this.state);
   }
 
-  public clearState() : void {
+  public clearErrorSuccessState(): void {
+    if (this.state.errorSuccessState)
+      this.state.errorSuccessState = {};
+  }
+
+  public clearState(): void {
     this.state = {};
   }
 }

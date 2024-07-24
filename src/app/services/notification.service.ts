@@ -38,10 +38,8 @@ export class NotificationService {
     this.stompClient.connect({}, () => {
       this.stompClient.subscribe(this.specificNotificationBroker + this.authStateService.authState.id, (result) => {
         let notification: Notification = JSON.parse(result.body);
-        console.log(notification);
         this.notifications.unshift(notification);
-/*        console.log(this.notifications);*/
-        this.toast.info(notification.body);
+        this.toast.info(notification.body, "", 10000);
       });
     });
   }

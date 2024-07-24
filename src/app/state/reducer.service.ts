@@ -407,9 +407,9 @@ export class Reducer {
       },
       error: (error: HttpErrorResponse) => {
         this.store.setState({
-          loginState: {
-            error: error.error?.message,
-            errors: error.error?.errors
+          errorSuccessState : {
+            errors : error.error?.errors,
+            error : error.error?.message
           }
         });
       }
@@ -419,18 +419,17 @@ export class Reducer {
   public registerTalent(talentRegistration: TalentRegistration): void {
     this.authService.registerTalent(talentRegistration).subscribe({
       next: (response: number) => {
-        console.log(response)
         this.store.setState({
-          registerTalentState: {
-            successMessage: "Your registration was completed successfully."
+          errorSuccessState: {
+            successMessage: "Your registration was completed successfully, please check your email for the confirmation."
           }
         });
       },
       error: (error: HttpErrorResponse) => {
         this.store.setState({
-          registerTalentState: {
-            error: error.error?.message,
-            errors: error.error?.errors
+          errorSuccessState : {
+            errors : error.error?.errors,
+            error : error.error?.message
           }
         });
       }
@@ -440,19 +439,17 @@ export class Reducer {
   public registerClient(clientRegistration: ClientRegistration): void {
     this.authService.registerClient(clientRegistration).subscribe({
       next: (response: number) => {
-        console.log(response)
         this.store.setState({
-          registerTalentState: {
-            successMessage: "Your registration was completed successfully."
+          errorSuccessState: {
+            successMessage: "Your registration was completed successfully, please check your email for the confirmation."
           }
         });
       },
       error: (error: HttpErrorResponse) => {
-        console.log(error)
         this.store.setState({
-          registerClientState: {
-            error: error.error.message,
-            errors: error.error.errors
+          errorSuccessState : {
+            errors : error.error?.errors,
+            error : error.error?.message
           }
         });
       }
@@ -463,7 +460,7 @@ export class Reducer {
     this.authService.recoverPassword(email).subscribe({
       next: () => {
         this.store.setState({
-          recoverState: {
+          errorSuccessState: {
             successMessage: "Please check your inbox for instructions to reset your password."
           }
         });
@@ -471,7 +468,7 @@ export class Reducer {
       error: (error: HttpErrorResponse) => {
         console.log(error)
         this.store.setState({
-          recoverState: {
+          errorSuccessState: {
             error: error.error.message,
             errors: error.error.errors
           }
@@ -484,15 +481,14 @@ export class Reducer {
     this.authService.resetPassword(resetPasswordRequest).subscribe({
       next: () => {
         this.store.setState({
-          resetPasswordState: {
+          errorSuccessState: {
             successMessage: "Your password has been reset successfully. You can now log in with your new password."
           }
         });
       },
       error: (error: HttpErrorResponse) => {
-        console.log(error)
         this.store.setState({
-          resetPasswordState: {
+          errorSuccessState: {
             error: error.error.message,
             errors: error.error.errors
           }
@@ -505,15 +501,14 @@ export class Reducer {
     this.authService.confirmAccount(token).subscribe({
       next: () => {
         this.store.setState({
-          accountConfirmationState: {
+          errorSuccessState: {
             successMessage: "Your account has been successfully confirmed."
           }
         });
       },
       error: (error: HttpErrorResponse) => {
-        console.log(error)
         this.store.setState({
-          accountConfirmationState: {
+          errorSuccessState: {
             error: error.error.message,
             errors: error.error.errors
           }

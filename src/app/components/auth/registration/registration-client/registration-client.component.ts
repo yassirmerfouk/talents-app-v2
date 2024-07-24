@@ -12,15 +12,15 @@ import {ClientRegistration} from "../../../../models/registration.model";
   templateUrl: './registration-client.component.html',
   styleUrl: './registration-client.component.css'
 })
-export class RegistrationClientComponent implements OnInit, OnDestroy{
+export class RegistrationClientComponent implements OnInit, OnDestroy {
 
-  private store : Store = inject(Store);
-  private eventService : EventService = inject(EventService);
+  private store: Store = inject(Store);
+  private eventService: EventService = inject(EventService);
   private stateSubscription !: Subscription;
 
   private formBuilder: FormBuilder = inject(FormBuilder);
 
-  private toast : NgToastService = inject(NgToastService);
+  private toast: NgToastService = inject(NgToastService);
 
   public clientRegistration !: FormGroup;
 
@@ -36,40 +36,43 @@ export class RegistrationClientComponent implements OnInit, OnDestroy{
       email: this.formBuilder.control(null),
       password: this.formBuilder.control(null),
       phone: this.formBuilder.control(null),
-      sector : this.formBuilder.control(null),
-      country : this.formBuilder.control(""),
-      city : this.formBuilder.control(""),
-      type : this.formBuilder.control("PERSONNEL"),
-      companyName : this.formBuilder.control(null),
-      website : this.formBuilder.control(null),
-      size : this.formBuilder.control("")
+      sector: this.formBuilder.control(null),
+      country: this.formBuilder.control(""),
+      city: this.formBuilder.control(""),
+      type: this.formBuilder.control("PERSONNEL"),
+      companyName: this.formBuilder.control(null),
+      website: this.formBuilder.control(null),
+      size: this.formBuilder.control("")
     });
 
     this.stateSubscription = this.store.state$.subscribe(
-      (state : any) => {
-        this.error = state.registerClientState?.error;
-        this.errors = this.errors = state.registerClientState?.errors ? new Map(Object.entries(state.registerClientState.errors)) : new Map;
-        this.successMessage = state.registerClientState?.successMessage;
-        if(this.error)
-          this.toast.danger(this.error);
+      (state: any) => {
+        this.error = state.errorSuccessState?.error;
+        this.errors = state.errorSuccessState?.errors ? new Map(Object.entries(state.errorSuccessState.errors)) : new Map;
+        this.successMessage = state.errorSuccessState?.successMessage;
+        if (this.error)
+          this.toast.danger(this.error,"", 5000);
+        if(this.successMessage)
+          this.toast.success(this.successMessage,"", 5000);
       }
     );
   }
 
-  public handleRegistration() : void{
-    let clientRegistration : ClientRegistration = this.clientRegistration.value;
+  public handleRegistration(): void {
+    let clientRegistration: ClientRegistration = this.clientRegistration.value;
     let type = this.clientRegistration.value.type;
-    if(type == 'PERSONNEL'){
+    if (type == 'PERSONNEL') {
       clientRegistration.companyName = null;
       clientRegistration.website = null;
       clientRegistration.size = null;
     }
-    this.eventService.dispatchEvent({eventType : EventType.REGISTER_CLIENT, payload : clientRegistration});
+    this.eventService.dispatchEvent({eventType: EventType.REGISTER_CLIENT, payload: clientRegistration});
   }
 
   public ngOnDestroy() {
-    if(this.stateSubscription)
+    if (this.stateSubscription)
       this.stateSubscription.unsubscribe();
+    this.store.clearErrorSuccessState();
   }
 
 }

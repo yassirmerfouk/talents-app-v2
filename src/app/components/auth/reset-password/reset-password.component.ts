@@ -5,6 +5,7 @@ import {EventService} from "../../../services/event.service";
 import {EventType} from "../../../state/event-type.enum";
 import {Store} from "../../../state/store.service";
 import {Subscription} from "rxjs";
+import {NgToastService} from "ng-angular-popup";
 
 @Component({
   selector: 'app-reset-password',
@@ -19,6 +20,8 @@ export class ResetPasswordComponent implements OnInit, OnDestroy {
 
   private activatedRoute: ActivatedRoute = inject(ActivatedRoute);
   private formBuilder: FormBuilder = inject(FormBuilder);
+
+  private toast: NgToastService = inject(NgToastService);
 
   public token !: string;
   public email !: string;
@@ -50,9 +53,13 @@ export class ResetPasswordComponent implements OnInit, OnDestroy {
 
     this.stateSubscription = this.store.state$.subscribe(
       (state: any) => {
-        this.error = state.resetPasswordState.error;
-        this.errors = state.resetPasswordState.errors ? new Map(Object.entries(state.resetPasswordState.errors)) : new Map;
-        this.successMessage = state.resetPasswordState.successMessage;
+        this.error = state.errorSuccessState?.error;
+        this.errors = state.errorSuccessState?.errors ? new Map(Object.entries(state.errorSuccessState.errors)) : new Map;
+        this.successMessage = state.errorSuccessState?.successMessage;
+        if (this.error)
+          this.toast.danger(this.error, "", 5000);
+        if (this.successMessage)
+          this.toast.success(this.successMessage, "", 5000);
       }
     );
   }
@@ -63,7 +70,8 @@ export class ResetPasswordComponent implements OnInit, OnDestroy {
   }
 
   public ngOnDestroy() {
-    if(this.stateSubscription)
+    if (this.stateSubscription)
       this.stateSubscription.unsubscribe();
+    this.store.clearErrorSuccessState();
   }
 }

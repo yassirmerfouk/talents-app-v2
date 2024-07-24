@@ -6,6 +6,7 @@ import {EventType} from "../../../../state/event-type.enum";
 import {Store} from "../../../../state/store.service";
 import {Subscription} from "rxjs";
 import {LocationService} from "../../../../services/location.service";
+import {NgToastService} from "ng-angular-popup";
 
 @Component({
   selector: 'app-registration-talent',
@@ -14,13 +15,15 @@ import {LocationService} from "../../../../services/location.service";
 })
 export class RegistrationTalentComponent implements OnInit, OnDestroy {
 
-  private store : Store = inject(Store);
-  private eventService : EventService = inject(EventService);
+  private store: Store = inject(Store);
+  private eventService: EventService = inject(EventService);
   private stateSubscription !: Subscription;
 
   private formBuilder: FormBuilder = inject(FormBuilder);
 
-  private locationService : LocationService = inject(LocationService);
+  private locationService: LocationService = inject(LocationService);
+
+  private toast: NgToastService = inject(NgToastService);
 
   public talentRegistration !: FormGroup;
 
@@ -33,7 +36,7 @@ export class RegistrationTalentComponent implements OnInit, OnDestroy {
   public ngOnInit(): void {
 
     this.locationService.getCities().subscribe({
-      next : (cities : Array<string>) => {
+      next: (cities: Array<string>) => {
         this.cities = cities;
         this.talentRegistration = this.formBuilder.group({
           lastName: this.formBuilder.control(null),
@@ -49,21 +52,26 @@ export class RegistrationTalentComponent implements OnInit, OnDestroy {
     });
 
     this.stateSubscription = this.store.state$.subscribe(
-      (state : any) => {
-        this.error = state.registerTalentState.error;
-        this.errors = this.errors = state.registerTalentState.errors ? new Map(Object.entries(state.registerTalentState.errors)) : new Map;
-        this.successMessage = state.registerTalentState.successMessage;
+      (state: any) => {
+        this.error = state.errorSuccessState?.error;
+        this.errors = state.errorSuccessState?.errors ? new Map(Object.entries(state.errorSuccessState.errors)) : new Map;
+        this.successMessage = state.errorSuccessState?.successMessage;
+        if (this.error)
+          this.toast.danger(this.error,"", 5000);
+        if(this.successMessage)
+          this.toast.success(this.successMessage,"", 5000);
       }
     );
   }
 
-  public handleRegistration() : void{
-    let talentRegistration : TalentRegistration = this.talentRegistration.value;
-    this.eventService.dispatchEvent({eventType : EventType.REGISTER_TALENT, payload : talentRegistration})
+  public handleRegistration(): void {
+    let talentRegistration: TalentRegistration = this.talentRegistration.value;
+    this.eventService.dispatchEvent({eventType: EventType.REGISTER_TALENT, payload: talentRegistration})
   }
 
   public ngOnDestroy() {
-    if(this.stateSubscription)
+    if (this.stateSubscription)
       this.stateSubscription.unsubscribe();
+    this.store.clearErrorSuccessState();
   }
 }

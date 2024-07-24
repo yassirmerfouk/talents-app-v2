@@ -25,8 +25,6 @@ export class AddJobComponent implements OnInit {
 
   public searchedSkills: Array<string> = [];
 
-  public skill: string = '';
-
   public ngOnInit(): void {
     this.skillService.getSkills().subscribe({
       next: (skills: Array<any>) => {

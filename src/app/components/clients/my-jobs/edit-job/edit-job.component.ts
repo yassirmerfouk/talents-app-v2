@@ -28,8 +28,6 @@ export class EditJobComponent implements OnInit{
 
   public searchedSkills: Array<string> = [];
 
-  public skill: string = '';
-
   public ngOnInit()  : void{
     if(this.job){
       this.skillService.getSkills().subscribe({

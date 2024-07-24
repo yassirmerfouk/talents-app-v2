@@ -10,11 +10,11 @@
           <div class="mb-3">
             <label class="form-label">Skills</label>
             <div class="row">
-              <div class="col-md-10 mb-3">
+              <div class="mb-3">
                 <input formControlName="skill" type="text" class="form-control" placeholder="Skill name">
-              </div>
-              <div class="col-md-2 mb-3">
-                <button (click)="handleAddSkill()" type="button" class="btn btn-primary btn-sm">Add skill</button>
+                <ul class="list-group mt-2">
+                  <li (click)="handleAddSkill(skill)" *ngFor="let skill of searchedSkills" class="list-group-item" style="font-size: 15px;border: 1px solid rgba(0,0,0,.125);padding: 4px 8px;">{{skill}} <i *ngIf="skillsList.includes(skill)" class="bi bi-check-square-fill"></i></li>
+                </ul>
               </div>
               <div class="d-flex flex-wrap">
                 <div *ngFor="let skill of skillsList" class="d-flex align-items-center me-2">
