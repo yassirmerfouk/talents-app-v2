@@ -900,6 +900,12 @@ export class Reducer {
       },
       error: (error: HttpErrorResponse) => {
         console.log(error);
+        this.store.setState({
+          errorSuccessState: {
+            error: error.error.message,
+            errors: error.error.errors
+          }
+        });
       }
     });
   }
