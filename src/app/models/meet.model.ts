@@ -14,5 +14,6 @@ export interface Meet{
   receivers : Array<any>,
 
 
-  jobId ?: number
+  jobId ?: number,
+  applicationId ?: number
 }

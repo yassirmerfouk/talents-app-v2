@@ -155,7 +155,10 @@ export class JobComponent implements OnInit, OnDestroy {
   }
 
   public handleOpenProgramMeet(application: Application): void {
-    this.eventService.dispatchEvent({eventType: EventType.OPEN_ADD_MEET, payload: application.talent});
+    if (application.hasAdminMeet)
+      alert("You have already programmed a meet with this talent!");
+    else
+      this.eventService.dispatchEvent({eventType: EventType.OPEN_ADD_MEET, payload: application.talent});
   }
 
   public handleOpenGetStats(application: Application): void {

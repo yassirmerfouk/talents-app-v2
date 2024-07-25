@@ -319,7 +319,7 @@
                 <div *ngIf="job.status == 'IN_APPROVING' && (!application.approved && !application.refused)">
                   <div class="d-flex justify-content-between">
                     <button (click)="handleOpenAskForJobInterview(application)" class="btn btn-primary btn-sm me-1"
-                            style="padding: 3px 6px;">Ask for a meet
+                            style="padding: 3px 6px;" [disabled]="application.hasClientMeet">Ask for a meet
                     </button>
                     <button (click)="handleOnApprove(application)" class="btn btn-primary btn-sm me-1"
                             style="padding: 3px 6px;">Approve

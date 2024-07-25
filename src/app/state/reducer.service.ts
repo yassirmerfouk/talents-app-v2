@@ -502,7 +502,7 @@ export class Reducer {
   }
 
   public getJobApplications(payload: any): void {
-    this.jobService.getJobApplications(payload.id,payload.status, payload.page, payload.size).subscribe({
+    this.jobService.getJobApplications(payload.id, payload.status, payload.page, payload.size).subscribe({
       next: (applicationsPage: Page<Application>) => {
         let jobsState = {...this.store.state.jobsState, ...{applicationsPage: applicationsPage}}
         this.store.setState({
@@ -1269,9 +1269,17 @@ export class Reducer {
 
   public programMeet(meet: Meet): void {
     this.meetService.addMeet(meet).subscribe({
-      next: (meet: Meet) => {
-        console.log(meet);
-        this.dispatcherSubject.next({eventType: EventType.CLOSE_ADD_MEET});
+      next: (newMeet: Meet) => {
+        if (meet.meetType == "ADMIN_INTERVIEW") {
+          let jobsState = this.store.state.jobsState;
+          jobsState.applicationsPage.content = jobsState.applicationsPage.content.map((application: Application) => {
+            if (application.jobId == meet.jobId && application.talent.id == meet.receivers[0])
+              application.hasAdminMeet = true;
+            return application;
+          });
+          this.store.setState({jobsState: jobsState});
+          this.dispatcherSubject.next({eventType: EventType.CLOSE_ADD_MEET});
+        }
       },
       error: (error: HttpErrorResponse) => {
         console.log(error);
