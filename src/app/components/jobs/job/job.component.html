@@ -191,7 +191,18 @@
   <div *ngIf="applicationsPage" class="mb-4 mt-3">
     <div class="card border-0 shadow">
       <div class="card-header border-bottom">
-        <h2 class="fs-5 fw-bold mb-0">Job applications</h2>
+        <div class="d-flex">
+         <div class="col-9">
+           <h2 class="fs-5 fw-bold mb-0">Job applications</h2>
+         </div>
+          <div class="col-3" style="height: 35px;">
+            <select (change)="handleOnChangeStatus($event)" class="form-select form-select-sm mb-3">
+              <option value="">ALL</option>
+              <option value="SELECTED">SELECTED</option>
+              <option value="APPROVED">APPROVED</option>
+            </select>
+          </div>
+        </div>
       </div>
       <div class="card-body py-0">
         <div *ngIf="applicationsPage.totalElements == 0" class="container mt-3">

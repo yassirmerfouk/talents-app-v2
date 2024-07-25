@@ -11,14 +11,14 @@
               <div class="input-group">
                 <input formControlName="firstName" type="text" placeholder="First name" class="form-control">
               </div>
-              <div *ngIf="errors?.has('firstName')" class="text-danger mt-2 small">{{errors?.get('firstName')}}</div>
+              <div *ngIf="errorSuccessState.errors?.has('firstName')" class="text-danger mt-2 small">{{errorSuccessState.errors?.get('firstName')}}</div>
             </div>
             <div class="col-6 form-group mb-4">
               <label>Last name</label>
               <div class="input-group">
                 <input formControlName="lastName" type="text" placeholder="Last name" class="form-control">
               </div>
-              <div *ngIf="errors?.has('lastName')" class="text-danger mt-2 small">{{errors?.get('lastName')}}</div>
+              <div *ngIf="errorSuccessState.errors?.has('lastName')" class="text-danger mt-2 small">{{errorSuccessState.errors?.get('lastName')}}</div>
             </div>
           </div>
           <div class="row">
@@ -26,13 +26,13 @@
               <div class="input-group">
                 <input formControlName="email" type="email" placeholder="Email" class="form-control">
               </div>
-              <div *ngIf="errors?.has('email')" class="text-danger mt-2 small">{{errors?.get('email')}}</div>
+              <div *ngIf="errorSuccessState.errors?.has('email')" class="text-danger mt-2 small">{{errorSuccessState.errors?.get('email')}}</div>
             </div>
             <div class="col-6 form-group mb-4"><label>Password</label>
               <div class="input-group">
                 <input formControlName="password" type="password" placeholder="Password" class="form-control">
               </div>
-              <div *ngIf="errors?.has('password')" class="text-danger mt-2 small">{{errors?.get('password')}}</div>
+              <div *ngIf="errorSuccessState.errors?.has('password')" class="text-danger mt-2 small">{{errorSuccessState.errors?.get('password')}}</div>
             </div>
           </div>
           <div class="row">
@@ -40,13 +40,13 @@
               <div class="input-group">
                 <input formControlName="phone" type="text" placeholder="Phone" class="form-control">
               </div>
-              <div *ngIf="errors?.has('phone')" class="text-danger mt-2 small">{{errors?.get('phone')}}</div>
+              <div *ngIf="errorSuccessState.errors?.has('phone')" class="text-danger mt-2 small">{{errorSuccessState.errors?.get('phone')}}</div>
             </div>
             <div class="col-6 form-group mb-4"><label>Sector</label>
               <div class="input-group">
                 <input formControlName="sector" type="text" placeholder="Sector" class="form-control">
               </div>
-              <div *ngIf="errors?.has('sector')" class="text-danger mt-2 small">{{errors?.get('sector')}}</div>
+              <div *ngIf="errorSuccessState.errors?.has('sector')" class="text-danger mt-2 small">{{errorSuccessState.errors?.get('sector')}}</div>
             </div>
           </div>
           <div class="row">
@@ -54,13 +54,13 @@
               <div class="input-group">
                 <input formControlName="country" type="text" placeholder="Country" class="form-control">
               </div>
-              <div *ngIf="errors?.has('country')" class="text-danger mt-2 small">{{errors?.get('country')}}</div>
+              <div *ngIf="errorSuccessState.errors?.has('country')" class="text-danger mt-2 small">{{errorSuccessState.errors?.get('country')}}</div>
             </div>
             <div class="col-6 form-group mb-4"><label>City</label>
               <div class="input-group">
                 <input formControlName="city" type="text" placeholder="City" class="form-control">
               </div>
-              <div *ngIf="errors?.has('city')" class="text-danger mt-2 small">{{errors?.get('city')}}</div>
+              <div *ngIf="errorSuccessState.errors?.has('city')" class="text-danger mt-2 small">{{errorSuccessState.errors?.get('city')}}</div>
             </div>
           </div>
           <div class="form-group mb-4"><label>Client type</label>
@@ -70,21 +70,21 @@
                 <option value="COMPANY">Company</option>
               </select>
             </div>
-            <div *ngIf="errors?.has('type')" class="text-danger mt-2 small">{{errors?.get('type')}}</div>
+            <div *ngIf="errorSuccessState.errors?.has('type')" class="text-danger mt-2 small">{{errorSuccessState.errors?.get('type')}}</div>
           </div>
           <div *ngIf="clientRegistration.value.type == 'COMPANY'" class="row">
             <div class="col-6 form-group mb-4"><label>Comapny name</label>
               <div class="input-group">
                 <input formControlName="companyName" type="text" placeholder="Company name" class="form-control">
               </div>
-              <div *ngIf="errors?.has('companyName')"
-                   class="text-danger mt-2 small">{{errors?.get('companyName')}}</div>
+              <div *ngIf="errorSuccessState.errors?.has('companyName')"
+                   class="text-danger mt-2 small">{{errorSuccessState.errors?.get('companyName')}}</div>
             </div>
             <div class="col-6 form-group mb-4"><label>Website</label>
               <div class="input-group">
                 <input formControlName="website" type="text" placeholder="Website" class="form-control">
               </div>
-              <div *ngIf="errors?.has('website')" class="text-danger mt-2 small">{{errors?.get('website')}}</div>
+              <div *ngIf="errorSuccessState.errors?.has('website')" class="text-danger mt-2 small">{{errorSuccessState.errors?.get('website')}}</div>
             </div>
           </div>
           <div *ngIf="clientRegistration.value.type == 'COMPANY'" class="form-group mb-4"><label>Company size</label>
@@ -95,7 +95,7 @@
                 <option value="51 - 100">51 - 100</option>
               </select>
             </div>
-            <div *ngIf="errors?.has('size')" class="text-danger mt-2 small">{{errors?.get('size')}}</div>
+            <div *ngIf="errorSuccessState.errors?.has('size')" class="text-danger mt-2 small">{{errorSuccessState.errors?.get('size')}}</div>
           </div>
           <div class="d-grid">
             <button type="submit" class="btn btn-gray-800">Create account</button>

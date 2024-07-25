@@ -37,27 +37,29 @@ export class JobComponent implements OnInit, OnDestroy {
 
   public approvedApplications !: Array<Application>;
 
-  public openProgramMeet : boolean = false;
+  public openProgramMeet: boolean = false;
 
   public selectedUser !: User;
 
-  public openGetStats : boolean = false;
+  public openGetStats: boolean = false;
 
   public selectedApplication !: Application;
 
-  public openAskForJobInterview : boolean = false;
+  public openAskForJobInterview: boolean = false;
 
   public selectedApp !: Application;
 
-  public openJobInterview : boolean = false;
+  public openJobInterview: boolean = false;
 
   public selectedAppForInterviews !: Application;
 
-  public programClientMeet : any;
+  public programClientMeet: any;
+
+  public status: string = "";
 
   public ngOnInit() {
 
-  this.stateSubscription = this.store.state$.subscribe(
+    this.stateSubscription = this.store.state$.subscribe(
       (state: any) => {
         this.job = state.jobsState.job;
         this.applicationsPage = state.jobsState.applicationsPage;
@@ -84,13 +86,13 @@ export class JobComponent implements OnInit, OnDestroy {
     this.activatedRoute.params.subscribe(
       (params: any) => {
         this.id = params['id'];
-        if (this.id){
+        if (this.id) {
           this.getJob();
-         setTimeout(() => {
-           this.getJobApplications();
-           this.getSelectedJobApplications();
-           this.getApprovedJobApplications();
-         }, 500);
+          setTimeout(() => {
+            this.getJobApplications();
+            this.getSelectedJobApplications();
+            this.getApprovedJobApplications();
+          }, 500);
         }
       }
     );
@@ -103,64 +105,72 @@ export class JobComponent implements OnInit, OnDestroy {
 
   public getJobApplications(): void {
     if (this.authStateService.hasAuthority('ADMIN'))
-      this.eventService.dispatchEvent({eventType: EventType.GET_JOB_APPLICATIONS, payload: {id : this.id, page: this.page, size: this.size}});
+      this.eventService.dispatchEvent({
+        eventType: EventType.GET_JOB_APPLICATIONS,
+        payload: {id: this.id, status: this.status, page: this.page, size: this.size}
+      });
   }
 
   public getSelectedJobApplications(): void {
     if (this.authStateService.hasAuthority('CLIENT') && (this.job.status == 'IN_APPROVING' || this.job.status == 'CLIENT_CLOSE' || this.job.status == 'ADMIN_CLOSE'))
-      this.eventService.dispatchEvent({eventType : EventType.GET_JOB_SELECTED_APPLICATIONS, payload : this.id});
+      this.eventService.dispatchEvent({eventType: EventType.GET_JOB_SELECTED_APPLICATIONS, payload: this.id});
   }
 
-  public getApprovedJobApplications() : void {
-    if(this.authStateService.hasAuthority('ADMIN'))
-      this.eventService.dispatchEvent({eventType : EventType.GET_JOB_APPROVED_APPLICATIONS, payload : this.id});
+  public getApprovedJobApplications(): void {
+    if (this.authStateService.hasAuthority('ADMIN'))
+      this.eventService.dispatchEvent({eventType: EventType.GET_JOB_APPROVED_APPLICATIONS, payload: this.id});
   }
 
-  public handleAskToStartSelection(job : Job) : void {
-    this.eventService.dispatchEvent({eventType : EventType.ASK_TO_START_SELECTION, payload : job});
+  public handleOnChangeStatus($event: any): void {
+    this.status = $event.target.value;
+    this.getJobApplications();
   }
 
-  public handleStartSelection(job : Job) : void {
-    this.eventService.dispatchEvent({eventType : EventType.START_SELECTION, payload : job});
+  public handleAskToStartSelection(job: Job): void {
+    this.eventService.dispatchEvent({eventType: EventType.ASK_TO_START_SELECTION, payload: job});
   }
 
-  public handleStartApproving(job : Job) : void {
-    this.eventService.dispatchEvent({eventType : EventType.START_APPROVING, payload : job});
+  public handleStartSelection(job: Job): void {
+    this.eventService.dispatchEvent({eventType: EventType.START_SELECTION, payload: job});
   }
 
-  public handleCloseJob(job : Job) : void {
-    this.eventService.dispatchEvent({eventType : EventType.CLOSE_JOB_PROCESS, payload : job})
+  public handleStartApproving(job: Job): void {
+    this.eventService.dispatchEvent({eventType: EventType.START_APPROVING, payload: job});
+  }
+
+  public handleCloseJob(job: Job): void {
+    this.eventService.dispatchEvent({eventType: EventType.CLOSE_JOB_PROCESS, payload: job})
   }
 
   public handleOnChangeSelection(application: Application): void {
-    this.eventService.dispatchEvent({eventType : EventType.SELECT_TALENT, payload : application});
+    this.eventService.dispatchEvent({eventType: EventType.SELECT_TALENT, payload: application});
   }
 
   public handleOnApprove(application: Application): void {
-    this.eventService.dispatchEvent({eventType : EventType.APPROVE_TALENT, payload : application});
+    this.eventService.dispatchEvent({eventType: EventType.APPROVE_TALENT, payload: application});
   }
 
-  public handleOnRefuse(application : Application) : void{
-    this.eventService.dispatchEvent({eventType : EventType.REFUSE_TALENT, payload : application});
+  public handleOnRefuse(application: Application): void {
+    this.eventService.dispatchEvent({eventType: EventType.REFUSE_TALENT, payload: application});
   }
 
-  public handleOpenProgramMeet(application : Application) : void {
-    this.eventService.dispatchEvent({eventType : EventType.OPEN_ADD_MEET, payload : application.talent});
+  public handleOpenProgramMeet(application: Application): void {
+    this.eventService.dispatchEvent({eventType: EventType.OPEN_ADD_MEET, payload: application.talent});
   }
 
-  public handleOpenGetStats(application : Application) : void {
-    this.eventService.dispatchEvent({eventType : EventType.OPEN_GET_APPLICATION_STATS, payload : application});
+  public handleOpenGetStats(application: Application): void {
+    this.eventService.dispatchEvent({eventType: EventType.OPEN_GET_APPLICATION_STATS, payload: application});
   }
 
-  public handleOpenAskForJobInterview(application : Application) : void {
-    if(application.hasClientMeet)
+  public handleOpenAskForJobInterview(application: Application): void {
+    if (application.hasClientMeet)
       alert("You have already request for a meet for this talent!");
     else
-      this.eventService.dispatchEvent({eventType : EventType.OPEN_ASK_FOR_JOB_INTERVIEW, payload : application});
+      this.eventService.dispatchEvent({eventType: EventType.OPEN_ASK_FOR_JOB_INTERVIEW, payload: application});
   }
 
-  public handleOpenJobInterview(application : Application) : void{
-    this.eventService.dispatchEvent({eventType : EventType.OPEN_JOB_INTERVIEW, payload : application});
+  public handleOpenJobInterview(application: Application): void {
+    this.eventService.dispatchEvent({eventType: EventType.OPEN_JOB_INTERVIEW, payload: application});
   }
 
   public handleChangePage(page: number): void {
@@ -178,8 +188,8 @@ export class JobComponent implements OnInit, OnDestroy {
     this.getJobApplications();
   }
 
-  public ngOnDestroy() : void {
-    if(this.stateSubscription)
+  public ngOnDestroy(): void {
+    if (this.stateSubscription)
       this.stateSubscription.unsubscribe();
   }
 }

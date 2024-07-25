@@ -33,6 +33,7 @@ import {Meet} from "../models/meet.model";
 import {MeetService} from "../services/meet.service";
 import {JobInterview} from "../models/job.interview.model";
 import {JobInterviewService} from "../services/job.interview.service";
+import {Helper} from "../helper/helper";
 
 @Injectable({
   providedIn: 'root'
@@ -59,6 +60,8 @@ export class Reducer {
   private jobInterviewService: JobInterviewService = inject(JobInterviewService);
 
   private router: Router = inject(Router);
+
+  private helper: Helper = inject(Helper);
 
   public dispatch($event: ActionEvent): void {
     this.dispatcherSubject.next($event);
@@ -396,7 +399,7 @@ export class Reducer {
       next: (response: AuthenticationResponse) => {
         if (this.authStateService.loadUser(response.accessToken)) {
           this.authStateService.storeTokenInLocalStorage(response.accessToken);
-          this.dispatcherSubject.next({eventType : EventType.CONNECT_TO_NOTIFICATION});
+          this.dispatcherSubject.next({eventType: EventType.CONNECT_TO_NOTIFICATION});
           if (this.authStateService.hasAuthority('TALENT'))
             this.router.navigateByUrl('/jobs');
           if (this.authStateService.hasAuthority('CLIENT'))
@@ -406,12 +409,7 @@ export class Reducer {
         }
       },
       error: (error: HttpErrorResponse) => {
-        this.store.setState({
-          errorSuccessState : {
-            errors : error.error?.errors,
-            error : error.error?.message
-          }
-        });
+        this.helper.setErrorInState(error);
       }
     });
   }
@@ -419,19 +417,10 @@ export class Reducer {
   public registerTalent(talentRegistration: TalentRegistration): void {
     this.authService.registerTalent(talentRegistration).subscribe({
       next: (response: number) => {
-        this.store.setState({
-          errorSuccessState: {
-            successMessage: "Your registration was completed successfully, please check your email for the confirmation."
-          }
-        });
+        this.helper.setSuccessMessageInState("Your registration was completed successfully, please check your email for the confirmation.");
       },
       error: (error: HttpErrorResponse) => {
-        this.store.setState({
-          errorSuccessState : {
-            errors : error.error?.errors,
-            error : error.error?.message
-          }
-        });
+        this.helper.setErrorInState(error);
       }
     });
   }
@@ -439,19 +428,10 @@ export class Reducer {
   public registerClient(clientRegistration: ClientRegistration): void {
     this.authService.registerClient(clientRegistration).subscribe({
       next: (response: number) => {
-        this.store.setState({
-          errorSuccessState: {
-            successMessage: "Your registration was completed successfully, please check your email for the confirmation."
-          }
-        });
+        this.helper.setSuccessMessageInState("Your registration was completed successfully, please check your email for the confirmation.");
       },
       error: (error: HttpErrorResponse) => {
-        this.store.setState({
-          errorSuccessState : {
-            errors : error.error?.errors,
-            error : error.error?.message
-          }
-        });
+        this.helper.setErrorInState(error);
       }
     });
   }
@@ -459,20 +439,10 @@ export class Reducer {
   public recoverPassword(email: string): void {
     this.authService.recoverPassword(email).subscribe({
       next: () => {
-        this.store.setState({
-          errorSuccessState: {
-            successMessage: "Please check your inbox for instructions to reset your password."
-          }
-        });
+        this.helper.setSuccessMessageInState("Please check your inbox for instructions to reset your password.");
       },
       error: (error: HttpErrorResponse) => {
-        console.log(error)
-        this.store.setState({
-          errorSuccessState: {
-            error: error.error.message,
-            errors: error.error.errors
-          }
-        });
+        this.helper.setErrorInState(error);
       }
     });
   }
@@ -480,19 +450,10 @@ export class Reducer {
   public resetPassword(resetPasswordRequest: any): void {
     this.authService.resetPassword(resetPasswordRequest).subscribe({
       next: () => {
-        this.store.setState({
-          errorSuccessState: {
-            successMessage: "Your password has been reset successfully. You can now log in with your new password."
-          }
-        });
+        this.helper.setSuccessMessageInState("Your password has been reset successfully. You can now log in with your new password.");
       },
       error: (error: HttpErrorResponse) => {
-        this.store.setState({
-          errorSuccessState: {
-            error: error.error.message,
-            errors: error.error.errors
-          }
-        });
+        this.helper.setErrorInState(error);
       }
     });
   }
@@ -500,19 +461,10 @@ export class Reducer {
   public confirmAccount(token: string): void {
     this.authService.confirmAccount(token).subscribe({
       next: () => {
-        this.store.setState({
-          errorSuccessState: {
-            successMessage: "Your account has been successfully confirmed."
-          }
-        });
+        this.helper.setSuccessMessageInState("Your account has been successfully confirmed.");
       },
       error: (error: HttpErrorResponse) => {
-        this.store.setState({
-          errorSuccessState: {
-            error: error.error.message,
-            errors: error.error.errors
-          }
-        });
+        this.helper.setErrorInState(error);
       }
     });
   }
@@ -550,7 +502,7 @@ export class Reducer {
   }
 
   public getJobApplications(payload: any): void {
-    this.jobService.getJobApplications(payload.id, payload.page, payload.size).subscribe({
+    this.jobService.getJobApplications(payload.id,payload.status, payload.page, payload.size).subscribe({
       next: (applicationsPage: Page<Application>) => {
         let jobsState = {...this.store.state.jobsState, ...{applicationsPage: applicationsPage}}
         this.store.setState({
@@ -899,13 +851,7 @@ export class Reducer {
         this.dispatcherSubject.next({eventType: EventType.CLOSE_UPDATE_TALENT_PROFILE});
       },
       error: (error: HttpErrorResponse) => {
-        console.log(error);
-        this.store.setState({
-          errorSuccessState: {
-            error: error.error.message,
-            errors: error.error.errors
-          }
-        });
+        this.helper.setErrorInState(error);
       }
     });
   }

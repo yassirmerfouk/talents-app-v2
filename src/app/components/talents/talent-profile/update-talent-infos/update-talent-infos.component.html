@@ -11,54 +11,54 @@
             <div class="col-md-6 mb-3">
               <label class="form-label">First name</label>
               <input formControlName="firstName" type="text" class="form-control">
-              <div *ngIf="errors?.has('firstName')" class="text-danger mt-2 small">{{errors?.get('firstName')}}</div>
+              <div *ngIf="errorSuccessState.errors?.has('firstName')" class="text-danger mt-2 small">{{errorSuccessState.errors?.get('firstName')}}</div>
             </div>
             <div class="col-md-6 mb-3">
               <label class="form-label">Last name</label>
               <input formControlName="lastName" type="text" class="form-control">
-              <div *ngIf="errors?.has('lastName')" class="text-danger mt-2 small">{{errors?.get('lastName')}}</div>
+              <div *ngIf="errorSuccessState.errors?.has('lastName')" class="text-danger mt-2 small">{{errorSuccessState.errors?.get('lastName')}}</div>
             </div>
           </div>
           <div class="row">
             <div class="col-md-6 mb-3">
               <label class="form-label">Email</label>
               <input formControlName="email" type="email" class="form-control">
-              <div *ngIf="errors?.has('email')" class="text-danger mt-2 small">{{errors?.get('email')}}</div>
+              <div *ngIf="errorSuccessState.errors?.has('email')" class="text-danger mt-2 small">{{errorSuccessState.errors?.get('email')}}</div>
             </div>
             <div class="col-md-6 mb-3">
               <label class="form-label">Phone</label>
               <input formControlName="phone" type="text" class="form-control">
-              <div *ngIf="errors?.has('phone')" class="text-danger mt-2 small">{{errors?.get('phone')}}</div>
+              <div *ngIf="errorSuccessState.errors?.has('phone')" class="text-danger mt-2 small">{{errorSuccessState.errors?.get('phone')}}</div>
             </div>
           </div>
           <div class="mb-3">
             <label class="form-label">Title</label>
             <input formControlName="title" type="text" class="form-control">
-            <div *ngIf="errors?.has('title')" class="text-danger mt-2 small">{{errors?.get('title')}}</div>
+            <div *ngIf="errorSuccessState.errors?.has('title')" class="text-danger mt-2 small">{{errorSuccessState.errors?.get('title')}}</div>
           </div>
           <div class="mb-3">
             <label class="form-label">Summary</label>
             <textarea formControlName="summary" class="form-control" rows="3"></textarea>
-            <div *ngIf="errors?.has('summary')" class="text-danger mt-2 small">{{errors?.get('summary')}}</div>
+            <div *ngIf="errorSuccessState.errors?.has('summary')" class="text-danger mt-2 small">{{errorSuccessState.errors?.get('summary')}}</div>
           </div>
           <div class="row">
             <div class="col-md-6 mb-3">
               <label class="form-label">Birth date</label>
               <input formControlName="dateOfBirth" type="date" class="form-control">
-              <div *ngIf="errors?.has('dateOfBirth')" class="text-danger mt-2 small">{{errors?.get('dateOfBirth')}}</div>
+              <div *ngIf="errorSuccessState.errors?.has('dateOfBirth')" class="text-danger mt-2 small">{{errorSuccessState.errors?.get('dateOfBirth')}}</div>
             </div>
             <div class="col-md-6 mb-3">
               <label class="form-label">City</label>
               <select formControlName="city" class="form-select">
                 <option *ngFor="let city of cities" [value]="city">{{city}}</option>
               </select>
-              <div *ngIf="errors?.has('city')" class="text-danger mt-2 small">{{errors?.get('city')}}</div>
+              <div *ngIf="errorSuccessState.errors?.has('city')" class="text-danger mt-2 small">{{errorSuccessState.errors?.get('city')}}</div>
             </div>
           </div>
           <div class="mb-3">
             <label class="form-label">Address</label>
             <textarea formControlName="address" class="form-control" rows="2"></textarea>
-            <div *ngIf="errors?.has('address')" class="text-danger mt-2 small">{{errors?.get('address')}}</div>
+            <div *ngIf="errorSuccessState.errors?.has('address')" class="text-danger mt-2 small">{{errorSuccessState.errors?.get('address')}}</div>
           </div>
         </div>
         <div class="modal-footer">

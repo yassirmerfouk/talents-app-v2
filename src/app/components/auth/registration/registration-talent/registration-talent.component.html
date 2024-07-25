@@ -11,13 +11,13 @@
               <div class="input-group">
                 <input formControlName="firstName" type="text" placeholder="First name" class="form-control">
               </div>
-              <div *ngIf="errors?.has('firstName')" class="text-danger mt-2 small">{{errors?.get('firstName')}}</div>
+              <div *ngIf="errorSuccessState.errors?.has('firstName')" class="text-danger mt-2 small">{{errorSuccessState.errors?.get('firstName')}}</div>
             </div>
             <div class="col-6 form-group mb-4"><label>Last name</label>
               <div class="input-group">
                 <input formControlName="lastName" type="text" placeholder="Last name" class="form-control">
               </div>
-              <div *ngIf="errors?.has('lastName')" class="text-danger mt-2 small">{{errors?.get('lastName')}}</div>
+              <div *ngIf="errorSuccessState.errors?.has('lastName')" class="text-danger mt-2 small">{{errorSuccessState.errors?.get('lastName')}}</div>
             </div>
           </div>
           <div class="row">
@@ -25,13 +25,13 @@
               <div class="input-group">
                 <input formControlName="email" type="email" placeholder="email" class="form-control">
               </div>
-              <div *ngIf="errors?.has('email')" class="text-danger mt-2 small">{{errors?.get('email')}}</div>
+              <div *ngIf="errorSuccessState.errors?.has('email')" class="text-danger mt-2 small">{{errorSuccessState.errors?.get('email')}}</div>
             </div>
             <div class="col-6 form-group mb-4"><label>Password</label>
               <div class="input-group">
                 <input formControlName="password" type="password" placeholder="Password" class="form-control">
               </div>
-              <div *ngIf="errors?.has('password')" class="text-danger mt-2 small">{{errors?.get('password')}}</div>
+              <div *ngIf="errorSuccessState.errors?.has('password')" class="text-danger mt-2 small">{{errorSuccessState.errors?.get('password')}}</div>
             </div>
           </div>
           <div class="row">
@@ -39,13 +39,13 @@
               <div class="input-group">
                 <input formControlName="phone" type="text" placeholder="Phone" class="form-control">
               </div>
-              <div *ngIf="errors?.has('phone')" class="text-danger mt-2 small">{{errors?.get('phone')}}</div>
+              <div *ngIf="errorSuccessState.errors?.has('phone')" class="text-danger mt-2 small">{{errorSuccessState.errors?.get('phone')}}</div>
             </div>
             <div class="col-6 form-group mb-4"><label>Title</label>
               <div class="input-group">
                 <input formControlName="title" type="text" placeholder="Title" class="form-control">
               </div>
-              <div *ngIf="errors?.has('title')" class="text-danger mt-2 small">{{errors?.get('title')}}</div>
+              <div *ngIf="errorSuccessState.errors?.has('title')" class="text-danger mt-2 small">{{errorSuccessState.errors?.get('title')}}</div>
             </div>
           </div>
           <div class="row">
@@ -53,7 +53,7 @@
               <div class="input-group">
                 <input formControlName="dateOfBirth" type="date" class="form-control">
               </div>
-              <div *ngIf="errors?.has('dateOfBirth')" class="text-danger mt-2 small">{{errors?.get('dateOfBirth')}}</div>
+              <div *ngIf="errorSuccessState.errors?.has('dateOfBirth')" class="text-danger mt-2 small">{{errorSuccessState.errors?.get('dateOfBirth')}}</div>
             </div>
             <div class="col-6 form-group mb-4"><label>City</label>
               <div class="input-group">
@@ -62,7 +62,7 @@
                   <option *ngFor="let city of cities" [value]="city">{{city}}</option>
                 </select>
               </div>
-              <div *ngIf="errors?.has('city')" class="text-danger mt-2 small">{{errors?.get('city')}}</div>
+              <div *ngIf="errorSuccessState.errors?.has('city')" class="text-danger mt-2 small">{{errorSuccessState.errors?.get('city')}}</div>
             </div>
           </div>
           <div class="d-grid">

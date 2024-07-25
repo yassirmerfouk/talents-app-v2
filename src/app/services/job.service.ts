@@ -47,8 +47,8 @@ export class JobService{
     return this.httpClient.post<any>(`${this.api}/${id}/apply`, {});
   }
 
-  public getJobApplications(id : number, page : number, size : number) : Observable<Page<Application>> {
-    return this.httpClient.get<Page<Application>>(`${this.api}/${id}/applications?page=${page}&size=${size}`);
+  public getJobApplications(id : number,status : string, page : number, size : number) : Observable<Page<Application>> {
+    return this.httpClient.get<Page<Application>>(`${this.api}/${id}/applications?status=${status}&page=${page}&size=${size}`);
   }
 
   public getSelectedJobApplication(jobId : number) : Observable<Array<Application>>{
