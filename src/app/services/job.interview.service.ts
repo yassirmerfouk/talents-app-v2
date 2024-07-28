@@ -5,15 +5,19 @@ import {JobInterview} from "../models/job.interview.model";
 import {Observable} from "rxjs";
 
 @Injectable({
-  providedIn : 'root'
+  providedIn: 'root'
 })
-export class JobInterviewService{
+export class JobInterviewService {
 
-  private httpClient : HttpClient = inject(HttpClient);
+  private httpClient: HttpClient = inject(HttpClient);
 
-  private api : string = `${environment.api}/job-interviews`;
+  private api: string = `${environment.api}/job-interviews`;
 
-  public addJobInterview(applicationId : number,jobInterview : JobInterview) : Observable<JobInterview>{
+  public addJobInterview(applicationId: number, jobInterview: JobInterview): Observable<JobInterview> {
     return this.httpClient.post<JobInterview>(`${this.api}/${applicationId}`, jobInterview);
+  }
+
+  public acceptJobInterview(id: number): Observable<any> {
+    return this.httpClient.post<any>(`${this.api}/accept/${id}`, {});
   }
 }

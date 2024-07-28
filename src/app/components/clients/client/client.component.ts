@@ -5,6 +5,8 @@ import {Store} from "../../../state/store.service";
 import {EventService} from "../../../services/event.service";
 import {Subscription} from "rxjs";
 import {EventType} from "../../../state/event-type.enum";
+import {Helper} from "../../../helper/helper";
+import {ErrorSuccessState} from "../../../state/states.model";
 
 @Component({
   selector: 'app-client',
@@ -22,6 +24,11 @@ export class ClientComponent implements OnInit, OnDestroy {
   private id !: number;
   public client !: Client;
 
+  private helper: Helper = inject(Helper);
+  private errorSuccessSubscription !: Subscription;
+  public errorSuccessState : ErrorSuccessState = {};
+
+
   public ngOnInit(): void {
 
     this.activatedRoute.params.subscribe(
@@ -37,6 +44,8 @@ export class ClientComponent implements OnInit, OnDestroy {
         this.client = state.clientState.client;
       }
     );
+
+    this.errorSuccessSubscription = this.helper.subscribeToErrorSuccessState(this.errorSuccessState);
   }
 
   public getClient(): void {
@@ -46,5 +55,7 @@ export class ClientComponent implements OnInit, OnDestroy {
   public ngOnDestroy(): void {
     if (this.stateSubscription)
       this.stateSubscription.unsubscribe();
+    if(this.errorSuccessSubscription)
+      this.errorSuccessSubscription.unsubscribe();
   }
 }

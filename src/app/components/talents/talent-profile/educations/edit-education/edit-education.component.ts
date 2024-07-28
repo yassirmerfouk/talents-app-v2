@@ -1,15 +1,18 @@
-import {Component, inject, Input, OnInit} from '@angular/core';
+import {Component, inject, Input, OnDestroy, OnInit} from '@angular/core';
 import {EventService} from "../../../../../services/event.service";
 import {EventType} from "../../../../../state/event-type.enum";
 import {FormBuilder, FormGroup} from "@angular/forms";
 import {Education} from "../../../../../models/education.model";
+import {Helper} from "../../../../../helper/helper";
+import {Subscription} from "rxjs";
+import {ErrorSuccessState} from "../../../../../state/states.model";
 
 @Component({
   selector: 'app-edit-education',
   templateUrl: './edit-education.component.html',
   styleUrl: './edit-education.component.css'
 })
-export class EditEducationComponent implements OnInit{
+export class EditEducationComponent implements OnInit, OnDestroy{
 
   private eventService : EventService = inject(EventService);
   private formBuilder : FormBuilder = inject(FormBuilder);
@@ -18,6 +21,11 @@ export class EditEducationComponent implements OnInit{
 
   @Input()
   public education !: Education;
+
+  private helper: Helper = inject(Helper);
+  private errorSuccessSubscription !: Subscription;
+  public errorSuccessState : ErrorSuccessState = {};
+
 
   public ngOnInit() : void {
     if(this.education){
@@ -34,6 +42,8 @@ export class EditEducationComponent implements OnInit{
         yearOfEnd : this.formBuilder.control(this.education.yearOfEnd),
       });
     }
+
+    this.errorSuccessSubscription = this.helper.subscribeToErrorSuccessState(this.errorSuccessState);
   }
 
   public handleCloseEditEducation() : void{
@@ -43,5 +53,10 @@ export class EditEducationComponent implements OnInit{
   public handleUpdateEducation() : void{
     let education : Education = this.educationForm.value;
    this.eventService.dispatchEvent({eventType : EventType.UPDATE_EDUCATION, payload : education});
+  }
+
+  public ngOnDestroy(): void {
+    if(this.errorSuccessSubscription)
+      this.errorSuccessSubscription.unsubscribe();
   }
 }

@@ -11,20 +11,28 @@
             <div class="col-md-6 mb-3">
               <label class="form-label">Title</label>
               <input formControlName="title" type="text" class="form-control" placeholder="Title">
+              <div *ngIf="errorSuccessState.errors?.has('title')" class="text-danger mt-2 small">
+                {{errorSuccessState.errors?.get('title')}}</div>
             </div>
             <div class="col-md-6 mb-3">
               <label class="form-label">Company</label>
               <input formControlName="company" type="text" class="form-control" placeholder="Company">
+              <div *ngIf="errorSuccessState.errors?.has('company')" class="text-danger mt-2 small">
+                {{errorSuccessState.errors?.get('company')}}</div>
             </div>
           </div>
           <div class="row">
             <div class="col-md-6 mb-3">
               <label class="form-label">Country</label>
               <input formControlName="country" type="text" class="form-control" placeholder="Country">
+              <div *ngIf="errorSuccessState.errors?.has('country')" class="text-danger mt-2 small">
+                {{errorSuccessState.errors?.get('country')}}</div>
             </div>
             <div class="col-md-6 mb-3">
               <label class="form-label">City</label>
               <input formControlName="city" type="text" class="form-control" placeholder="City">
+              <div *ngIf="errorSuccessState.errors?.has('city')" class="text-danger mt-2 small">
+                {{errorSuccessState.errors?.get('city')}}</div>
             </div>
           </div>
           <div class="row">
@@ -43,6 +51,8 @@
                 <option value="11">November</option>
                 <option value="12">December</option>
               </select>
+              <div *ngIf="errorSuccessState.errors?.has('monthOfStart')" class="text-danger mt-2 small">
+                {{errorSuccessState.errors?.get('monthOfStart')}}</div>
             </div>
             <div class="mb-3 col-6">
               <select formControlName="yearOfStart" class="form-select">
@@ -52,6 +62,8 @@
                 <option value="2021">2021</option>
                 <option value="2020">2020</option>
               </select>
+              <div *ngIf="errorSuccessState.errors?.has('yearOfStart')" class="text-danger mt-2 small">
+                {{errorSuccessState.errors?.get('yearOfStart')}}</div>
             </div>
           </div>
           <div class="row">
@@ -70,6 +82,8 @@
                 <option value="11">November</option>
                 <option value="12">December</option>
               </select>
+              <div *ngIf="errorSuccessState.errors?.has('monthOfEnd')" class="text-danger mt-2 small">
+                {{errorSuccessState.errors?.get('monthOfEnd')}}</div>
             </div>
             <div class="mb-3 col-6">
               <select formControlName="yearOfEnd" class="form-select">
@@ -79,11 +93,15 @@
                 <option value="2021">2021</option>
                 <option value="2020">2020</option>
               </select>
+              <div *ngIf="errorSuccessState.errors?.has('yearOfEnd')" class="text-danger mt-2 small">
+                {{errorSuccessState.errors?.get('yearOfEnd')}}</div>
             </div>
           </div>
           <div class="mb-3">
             <label class="form-label">Description</label>
             <textarea formControlName="description" class="form-control" placeholder="Description" rows="4"></textarea>
+            <div *ngIf="errorSuccessState.errors?.has('description')" class="text-danger mt-2 small">
+              {{errorSuccessState.errors?.get('description')}}</div>
           </div>
         </div>
         <div class="modal-footer">

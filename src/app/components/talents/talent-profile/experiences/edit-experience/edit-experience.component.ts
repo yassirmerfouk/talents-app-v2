@@ -1,15 +1,18 @@
-import {Component, inject, Input, OnInit} from '@angular/core';
+import {Component, inject, Input, OnDestroy, OnInit} from '@angular/core';
 import {EventService} from "../../../../../services/event.service";
 import {FormBuilder, FormGroup} from "@angular/forms";
 import {Experience} from "../../../../../models/experience.model";
 import {EventType} from "../../../../../state/event-type.enum";
+import {Helper} from "../../../../../helper/helper";
+import {Subscription} from "rxjs";
+import {ErrorSuccessState} from "../../../../../state/states.model";
 
 @Component({
   selector: 'app-edit-experience',
   templateUrl: './edit-experience.component.html',
   styleUrl: './edit-experience.component.css'
 })
-export class EditExperienceComponent implements OnInit{
+export class EditExperienceComponent implements OnInit, OnDestroy{
 
   private eventService : EventService = inject(EventService);
   private formBuilder : FormBuilder = inject(FormBuilder);
@@ -18,6 +21,10 @@ export class EditExperienceComponent implements OnInit{
 
   @Input()
   public experience !: Experience;
+
+  private helper: Helper = inject(Helper);
+  private errorSuccessSubscription !: Subscription;
+  public errorSuccessState : ErrorSuccessState = {};
 
   public ngOnInit() : void {
     if(this.experience){
@@ -34,6 +41,8 @@ export class EditExperienceComponent implements OnInit{
         description : this.formBuilder.control(this.experience.description),
       });
     }
+
+    this.errorSuccessSubscription = this.helper.subscribeToErrorSuccessState(this.errorSuccessState);
   }
 
   public handleCloseEditExperience() : void{
@@ -44,4 +53,10 @@ export class EditExperienceComponent implements OnInit{
     let experience : Experience = this.experienceForm.value;
     this.eventService.dispatchEvent({eventType : EventType.UPDATE_EXPERIENCE, payload : experience});
   }
+
+  public ngOnDestroy(): void {
+    if(this.errorSuccessSubscription)
+      this.errorSuccessSubscription.unsubscribe();
+  }
+
 }

@@ -6,6 +6,8 @@ import {EventService} from "../../../services/event.service";
 import {EventType} from "../../../state/event-type.enum";
 import {Store} from "../../../state/store.service";
 import {Subscription} from "rxjs";
+import {Helper} from "../../../helper/helper";
+import {ErrorSuccessState} from "../../../state/states.model";
 
 @Component({
   selector: 'app-jobs',
@@ -32,7 +34,10 @@ export class JobsComponent implements OnInit, OnDestroy {
 
   public selectedJob !: Job;
 
-  public error !: string;
+  private helper: Helper = inject(Helper);
+  private errorSuccessSubscription !: Subscription;
+  public errorSuccessState : ErrorSuccessState = {};
+
 
   public ngOnInit(): void {
 
@@ -41,13 +46,14 @@ export class JobsComponent implements OnInit, OnDestroy {
         this.jobsPage = state.jobsState?.jobsPage;
         this.openJob = state.jobsState?.openJob;
         this.selectedJob = state.jobsState?.selectedJob;
-        this.error = state.jobsState?.error;
       }
     );
 
     this.searchForm = this.formBuilder.group({
       keyword: this.formBuilder.control("")
     });
+
+    this.errorSuccessSubscription = this.helper.subscribeToErrorSuccessState(this.errorSuccessState);
 
     this.searchJobs();
   }
@@ -84,6 +90,8 @@ export class JobsComponent implements OnInit, OnDestroy {
   public ngOnDestroy() {
     if(this.stateSubscription)
       this.stateSubscription.unsubscribe();
+    if(this.errorSuccessSubscription)
+      this.errorSuccessSubscription.unsubscribe();
   }
 
 }

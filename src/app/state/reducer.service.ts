@@ -477,10 +477,7 @@ export class Reducer {
         });
       },
       error: (error: HttpErrorResponse) => {
-        console.log(error)
-        this.store.setState({
-          jobsState: {error: error.error.message}
-        })
+        this.helper.setErrorInState(error);
       }
     });
   }
@@ -493,10 +490,7 @@ export class Reducer {
         });
       },
       error: (error: HttpErrorResponse) => {
-        console.log(error)
-        this.store.setState({
-          jobsState: {error: error.error.message}
-        });
+        this.helper.setErrorInState(error);
       }
     });
   }
@@ -510,10 +504,7 @@ export class Reducer {
         });
       },
       error: (error: HttpErrorResponse) => {
-        console.log(error)
-        this.store.setState({
-          jobsState: {error: error.error.message}
-        });
+        this.helper.setErrorInState(error);
       }
     });
   }
@@ -527,10 +518,7 @@ export class Reducer {
         });
       },
       error: (error: HttpErrorResponse) => {
-        console.log(error);
-        this.store.setState({
-          jobsState: {error: error.error.message}
-        });
+        this.helper.setErrorInState(error);
       }
     });
   }
@@ -544,7 +532,7 @@ export class Reducer {
         });
       },
       error: (error: HttpErrorResponse) => {
-        console.log(error);
+        this.helper.setErrorInState(error);
       }
     });
   }
@@ -553,12 +541,13 @@ export class Reducer {
     this.jobService.selectTalent(application.jobId, application.talent.id).subscribe({
       next: () => {
         application.selected = !application.selected;
+        if (application.selected)
+          this.helper.setSuccessMessageInState("Talent has been selected for the job with success.");
+        else
+          this.helper.setSuccessMessageInState("Talent has been unselected from the job.");
       },
       error: (error: HttpErrorResponse) => {
-        console.log(error);
-        this.store.setState({
-          jobsState: {error: error.error.message}
-        });
+        this.helper.setErrorInState(error);
       }
     });
   }
@@ -567,12 +556,10 @@ export class Reducer {
     this.jobService.approveTalent(application.jobId, application.talent.id).subscribe({
       next: () => {
         application.approved = true;
+        this.helper.setSuccessMessageInState("Talent has been approved for the job.");
       },
       error: (error: HttpErrorResponse) => {
-        console.log(error);
-        this.store.setState({
-          jobsState: {error: error.error.message}
-        });
+        this.helper.setErrorInState(error);
       }
     });
   }
@@ -581,12 +568,10 @@ export class Reducer {
     this.jobService.refuseTalent(application.jobId, application.talent.id).subscribe({
       next: () => {
         application.refused = true;
+        this.helper.setSuccessMessageInState("Talent has been refused for the job.");
       },
       error: (error: HttpErrorResponse) => {
-        console.log(error);
-        this.store.setState({
-          jobsState: {error: error.error.message}
-        });
+        this.helper.setErrorInState(error);
       }
     });
   }
@@ -597,6 +582,9 @@ export class Reducer {
         this.store.setState({
           jobsState: {jobsPage: jobsPage}
         });
+      },
+      error: (error: HttpErrorResponse) => {
+        this.helper.setErrorInState(error);
       }
     });
   }
@@ -618,9 +606,10 @@ export class Reducer {
         selectedJob.applied = true;
         let jobsState = {...this.store.state.jobsState, ...{openJob: true, selectedJob: selectedJob}};
         this.store.setState({jobsState: jobsState});
+        this.helper.setSuccessMessageInState("Your application has been successfully submitted. Thank you for applying.");
       },
       error: (error: HttpErrorResponse) => {
-        console.log(error);
+        this.helper.setErrorInState(error);
       }
     });
   }
@@ -629,6 +618,9 @@ export class Reducer {
     this.clientService.getClients(payload.status, payload.page, payload.size).subscribe({
       next: (clientsPage: Page<Client>) => {
         this.store.setState({clientsState: {clientsPage: clientsPage}});
+      },
+      error: (error: HttpErrorResponse) => {
+        this.helper.setErrorInState(error);
       }
     });
   }
@@ -636,9 +628,12 @@ export class Reducer {
   public verifyUser(user: User): void {
     this.userService.verifyUser(user.id).subscribe({
       next: () => {
-        user.status = 'VERIFIED'
+        user.status = 'VERIFIED';
+        this.helper.setSuccessMessageInState("User has been verified with success.");
       },
-      error: (error: HttpErrorResponse) => console.log(error)
+      error: (error: HttpErrorResponse) => {
+        this.helper.setErrorInState(error);
+      }
     });
   }
 
@@ -646,8 +641,11 @@ export class Reducer {
     this.userService.banUser(user.id).subscribe({
       next: () => {
         user.status = 'BANNED';
+        this.helper.setSuccessMessageInState("User has been baned with success.");
       },
-      error: (error: HttpErrorResponse) => console.log(error)
+      error: (error: HttpErrorResponse) => {
+        this.helper.setErrorInState(error);
+      }
     });
   }
 
@@ -655,8 +653,11 @@ export class Reducer {
     this.userService.banUser(user.id).subscribe({
       next: () => {
         user.status = 'NOT_VERIFIED';
+        this.helper.setSuccessMessageInState("User has been permitted with success.");
       },
-      error: (error: HttpErrorResponse) => console.log(error)
+      error: (error: HttpErrorResponse) => {
+        this.helper.setErrorInState(error);
+      }
     });
   }
 
@@ -665,7 +666,9 @@ export class Reducer {
       next: (client: Client) => {
         this.store.setState({clientState: {client: client}});
       },
-      error: (error: HttpErrorResponse) => console.log(error)
+      error: (error: HttpErrorResponse) => {
+        this.helper.setErrorInState(error);
+      }
     });
   }
 
@@ -674,7 +677,9 @@ export class Reducer {
       next: (client: Client) => {
         this.store.setState({clientState: {client: client}});
       },
-      error: (error: HttpErrorResponse) => console.log(error)
+      error: (error: HttpErrorResponse) => {
+        this.helper.setErrorInState(error);
+      }
     });
   }
 
@@ -685,8 +690,11 @@ export class Reducer {
         clientState = {...clientState, ...{client: client}};
         this.store.setState({clientState: clientState});
         this.dispatcherSubject.next({eventType: EventType.CLOSE_UPDATE_CLIENT_PROFILE});
+        this.helper.setSuccessMessageInState("Your profile infos has been updated with success.");
       },
-      error: (error: HttpErrorResponse) => console.log(error)
+      error: (error: HttpErrorResponse) => {
+        this.helper.setErrorInState(error);
+      }
     });
   }
 
@@ -694,9 +702,10 @@ export class Reducer {
     this.userService.updateImage(image).subscribe({
       next: (image: any) => {
         this.store.setState({profileImage: image});
+        this.helper.setSuccessMessageInState("Your profile image has been updated with success.");
       },
       error: (error: HttpErrorResponse) => {
-        console.log(error);
+        this.helper.setErrorInState(error);
       }
     });
   }
@@ -705,9 +714,10 @@ export class Reducer {
     this.userService.askForVerification().subscribe({
       next: () => {
         user.status = 'WAITING';
+        this.helper.setSuccessMessageInState("Your request for verification had been sent to admins.");
       },
       error: (error: HttpErrorResponse) => {
-        console.log(error);
+        this.helper.setErrorInState(error);
       }
     });
   }
@@ -719,7 +729,9 @@ export class Reducer {
           jobsState: {jobsPage: jobsPage, displayJobs: true}
         });
       },
-      error: (error: HttpErrorResponse) => console.log(error)
+      error: (error: HttpErrorResponse) => {
+        this.helper.setErrorInState(error);
+      }
     });
   }
 
@@ -770,8 +782,11 @@ export class Reducer {
         let jobsState = {...this.store.state.jobsState, ...{jobsPage: jobsPage}};
         this.store.setState(jobsState);
         this.dispatcherSubject.next({eventType: EventType.CLOSE_ADD_JOB});
+        this.helper.setSuccessMessageInState("Your job has been added with success.");
       },
-      error: (error: HttpErrorResponse) => console.log(error)
+      error: (error: HttpErrorResponse) => {
+        this.helper.setErrorInState(error);
+      }
     })
   }
 
@@ -786,8 +801,11 @@ export class Reducer {
         let jobsState = {...this.store.state.jobsState, ...{jobsPage: jobsPage}};
         this.store.setState(jobsState);
         this.dispatcherSubject.next({eventType: EventType.CLOSE_EDIT_JOB});
+        this.helper.setSuccessMessageInState("Your job has been updated with success.");
       },
-      error: (error: HttpErrorResponse) => console.log(error)
+      error: (error: HttpErrorResponse) => {
+        this.helper.setErrorInState(error);
+      }
     });
   }
 
@@ -798,8 +816,11 @@ export class Reducer {
         jobsPage.content = jobsPage.content.filter((job: Job) => job.id != id);
         let jobsState = {...this.store.state.jobsState, ...{jobsPage: jobsPage}};
         this.store.setState(jobsState);
+        this.helper.setSuccessMessageInState("Your job has been deleted with success.");
       },
-      error: (error: HttpErrorResponse) => console.log(error)
+      error: (error: HttpErrorResponse) => {
+        this.helper.setErrorInState(error);
+      }
     });
   }
 
@@ -808,7 +829,9 @@ export class Reducer {
       next: (talentsPage: Page<Talent>) => {
         this.store.setState({talentsState: {talentsPage: talentsPage}});
       },
-      error: (error: HttpErrorResponse) => console.log(error)
+      error: (error: HttpErrorResponse) => {
+        this.helper.setErrorInState(error);
+      }
     });
   }
 
@@ -818,7 +841,9 @@ export class Reducer {
         this.reverseTalent(talent);
         this.store.setState({talentState: {talent: talent}});
       },
-      error: (error: HttpErrorResponse) => console.log(error)
+      error: (error: HttpErrorResponse) => {
+        this.helper.setErrorInState(error);
+      }
     });
   }
 
@@ -836,7 +861,7 @@ export class Reducer {
         this.store.setState({talentState: {talent: talent}});
       },
       error: (error: HttpErrorResponse) => {
-        console.log(error)
+        this.helper.setErrorInState(error);
       }
     });
   }
@@ -849,6 +874,7 @@ export class Reducer {
         talentState = {...talentState, ...{talent: talent}}
         this.store.setState({talentState: talentState});
         this.dispatcherSubject.next({eventType: EventType.CLOSE_UPDATE_TALENT_PROFILE});
+        this.helper.setSuccessMessageInState("Your profile infos are updated with success.");
       },
       error: (error: HttpErrorResponse) => {
         this.helper.setErrorInState(error);
@@ -872,9 +898,10 @@ export class Reducer {
         let talentState = {...this.store.state.talentState, ...{talent: talent}};
         this.store.setState(talentState);
         this.dispatcherSubject.next({eventType: EventType.CLOSE_ADD_EXPERIENCE});
+        this.helper.setSuccessMessageInState("Your experience has been add with success.");
       },
       error: (error: HttpErrorResponse) => {
-        console.log(error);
+        this.helper.setErrorInState(error);
       }
     });
   }
@@ -904,9 +931,10 @@ export class Reducer {
         let talentState = {...this.store.state.talentState, ...{talent: talent}};
         this.store.setState(talentState);
         this.dispatcherSubject.next({eventType: EventType.CLOSE_EDIT_EXPERIENCE});
+        this.helper.setSuccessMessageInState("Your experience has been updated with success.");
       },
       error: (error: HttpErrorResponse) => {
-        console.log(error);
+        this.helper.setErrorInState(error);
       }
     });
   }
@@ -918,9 +946,10 @@ export class Reducer {
         talent.experiences = talent.experiences.filter((experience: { id: number; }) => experience.id != id);
         let talentState = {...this.store.state.talentState, ...{talent: talent}};
         this.store.setState(talentState);
+        this.helper.setSuccessMessageInState('Your experience has been deleted with success.');
       },
       error: (error: HttpErrorResponse) => {
-        console.log(error);
+        this.helper.setErrorInState(error);
       }
     });
   }
@@ -933,9 +962,10 @@ export class Reducer {
         let talentState = {...this.store.state.talentState, ...{talent: talent}};
         this.store.setState(talentState);
         this.dispatcherSubject.next({eventType: EventType.CLOSE_ADD_EDUCATION});
+        this.helper.setSuccessMessageInState("Your education has been added with success.");
       },
       error: (error: HttpErrorResponse) => {
-        console.log(error);
+        this.helper.setErrorInState(error);
       }
     });
   }
@@ -951,10 +981,11 @@ export class Reducer {
         let talentState = {...this.store.state.talentState, ...{talent: talent}};
         this.store.setState(talentState);
         this.dispatcherSubject.next({eventType: EventType.CLOSE_EDIT_EDUCATION});
+        this.helper.setSuccessMessageInState("Your experience has been updated with success.");
       },
       error: (error: HttpErrorResponse) => {
-        console.log(error);
-      }
+      this.helper.setErrorInState(error);
+    }
     });
   }
 
@@ -965,9 +996,10 @@ export class Reducer {
         talent.educations = talent.educations.filter((education: Education) => education.id != id);
         let talentState = {...this.store.state.talentState, ...{talent: talent}};
         this.store.setState(talentState);
+        this.helper.setSuccessMessageInState("Your experience has been deleted with success.");
       },
       error: (error: HttpErrorResponse) => {
-        console.log(error);
+        this.helper.setErrorInState(error);
       }
     });
   }
@@ -1002,9 +1034,10 @@ export class Reducer {
         let talentState = {...this.store.state.talentState, ...{talent: talent}};
         this.store.setState(talentState);
         this.dispatcherSubject.next({eventType: EventType.CLOSE_ADD_PROJECT});
+        this.helper.setSuccessMessageInState("Your project has been added with success.");
       },
       error: (error: HttpErrorResponse) => {
-        console.log(error);
+        this.helper.setErrorInState(error);
       }
     });
   }
@@ -1020,9 +1053,10 @@ export class Reducer {
         let talentState = {...this.store.state.talentState, ...{talent: talent}};
         this.store.setState(talentState);
         this.dispatcherSubject.next({eventType: EventType.CLOSE_EDIT_PROJECT});
+        this.helper.setSuccessMessageInState("Your project has been updated with success.");
       },
       error: (error: HttpErrorResponse) => {
-        console.log(error);
+        this.helper.setErrorInState(error);
       }
     });
   }
@@ -1034,9 +1068,10 @@ export class Reducer {
         talent.projects = talent.projects.filter((project: Project) => project.id != id);
         let talentState = {...this.store.state.talentState, ...{talent: talent}};
         this.store.setState(talentState);
+        this.helper.setSuccessMessageInState("Your project has been deleted with success.");
       },
       error: (error: HttpErrorResponse) => {
-        console.log(error);
+        this.helper.setErrorInState(error);
       }
     });
   }
@@ -1071,9 +1106,10 @@ export class Reducer {
         let talentState = {...this.store.state.talentState, ...{talent: talent}};
         this.store.setState(talentState);
         this.dispatcherSubject.next({eventType: EventType.CLOSE_ADD_LANGUAGE});
+        this.helper.setSuccessMessageInState("Your language has been added with success.");
       },
       error: (error: HttpErrorResponse) => {
-        console.log(error);
+        this.helper.setErrorInState(error);
       }
     });
   }
@@ -1089,10 +1125,10 @@ export class Reducer {
         let talentState = {...this.store.state.talentState, ...{talent: talent}};
         this.store.setState(talentState);
         this.dispatcherSubject.next({eventType: EventType.CLOSE_EDIT_LANGUAGE});
-
+        this.helper.setSuccessMessageInState("Your language has been updated with success.");
       },
       error: (error: HttpErrorResponse) => {
-        console.log(error);
+        this.helper.setErrorInState(error);
       }
     });
   }
@@ -1104,9 +1140,10 @@ export class Reducer {
         talent.languages = talent.languages.filter((language: Language) => language.id != id);
         let talentState = {...this.store.state.talentState, ...{talent: talent}};
         this.store.setState(talentState);
+        this.helper.setSuccessMessageInState("Your experience has been deleted with success.");
       },
       error: (error: HttpErrorResponse) => {
-        console.log(error);
+        this.helper.setErrorInState(error);
       }
     });
   }
@@ -1141,9 +1178,10 @@ export class Reducer {
         let talentState = {...this.store.state.talentState, ...{talent: talent}};
         this.store.setState(talentState);
         this.dispatcherSubject.next({eventType: EventType.CLOSE_ADD_CERTIFICATION});
+        this.helper.setSuccessMessageInState("Your certification has been added with success.");
       },
       error: (error: HttpErrorResponse) => {
-        console.log(error);
+        this.helper.setErrorInState(error);
       }
     });
   }
@@ -1159,9 +1197,10 @@ export class Reducer {
         let talentState = {...this.store.state.talentState, ...{talent: talent}};
         this.store.setState(talentState);
         this.dispatcherSubject.next({eventType: EventType.CLOSE_EDIT_CERTIFICATION});
+        this.helper.setSuccessMessageInState("Your certification has been updated with success.");
       },
       error: (error: HttpErrorResponse) => {
-        console.log(error);
+        this.helper.setErrorInState(error);
       }
     });
   }
@@ -1173,9 +1212,10 @@ export class Reducer {
         talent.certifications = talent.certifications.filter((certification: Certification) => certification.id != id)
         let talentState = {...this.store.state.talentState, ...{talent: talent}};
         this.store.setState(talentState);
+        this.helper.setSuccessMessageInState("Your certification has been deleted with success.");
       },
       error: (error: HttpErrorResponse) => {
-        console.log(error);
+        this.helper.setErrorInState(error);
       }
     });
   }
@@ -1206,9 +1246,10 @@ export class Reducer {
     this.jobService.askToStartSelection(job.id).subscribe({
       next: () => {
         job.status = 'WAITING';
+        this.helper.setSuccessMessageInState("Your request to start job selection has been sent with success.");
       },
       error: (error: HttpErrorResponse) => {
-        console.log(error);
+        this.helper.setErrorInState(error);
       }
     });
   }
@@ -1217,9 +1258,10 @@ export class Reducer {
     this.jobService.startSelection(job.id).subscribe({
       next: () => {
         job.status = 'IN_SELECTION';
+        this.helper.setSuccessMessageInState("Job is in selection state now.");
       },
       error: (error: HttpErrorResponse) => {
-        console.log(error);
+        this.helper.setErrorInState(error);
       }
     });
   }
@@ -1228,9 +1270,10 @@ export class Reducer {
     this.jobService.startApproving(job.id).subscribe({
       next: () => {
         job.status = 'IN_APPROVING';
+        this.helper.setSuccessMessageInState("Job is in approving state now.");
       },
       error: (error: HttpErrorResponse) => {
-        console.log(error);
+        this.helper.setErrorInState(error);
       }
     });
   }
@@ -1252,9 +1295,10 @@ export class Reducer {
         let talentState = {...this.store.state.talentState, ...{talent: talent}};
         this.store.setState(talentState);
         this.dispatcherSubject.next({eventType: EventType.CLOSE_EDIT_SKILLS});
+        this.helper.setSuccessMessageInState("Your skills has been updated with success.");
       },
       error: (error: HttpErrorResponse) => {
-        console.log(error);
+        this.helper.setErrorInState(error);
       }
     });
   }
@@ -1280,9 +1324,10 @@ export class Reducer {
           this.store.setState({jobsState: jobsState});
           this.dispatcherSubject.next({eventType: EventType.CLOSE_ADD_MEET});
         }
+        this.helper.setSuccessMessageInState("The meet has been programmed with success.");
       },
       error: (error: HttpErrorResponse) => {
-        console.log(error);
+        this.helper.setErrorInState(error);
       }
     });
   }
@@ -1293,7 +1338,7 @@ export class Reducer {
         this.store.setState({meetsState: {meetsPage: meetsPage}});
       },
       error: (error: HttpErrorResponse) => {
-        console.log(error);
+        this.helper.setErrorInState(error);
       }
     });
   }
@@ -1302,9 +1347,10 @@ export class Reducer {
     this.meetService.acceptMeet(meet.id).subscribe({
       next: () => {
         meet.status = 'ACCEPTED';
+        this.helper.setSuccessMessageInState("Your meet has been accepted with success.");
       },
       error: (error: HttpErrorResponse) => {
-        console.log(error);
+        this.helper.setErrorInState(error);
       }
     });
   }
@@ -1313,9 +1359,10 @@ export class Reducer {
     this.meetService.refuseMeet(meet.id).subscribe({
       next: () => {
         meet.status = 'REFUSED';
+        this.helper.setSuccessMessageInState("Your meet has been refused with success.");
       },
       error: (error: HttpErrorResponse) => {
-        console.log(error);
+        this.helper.setErrorInState(error);
       }
     });
   }
@@ -1324,9 +1371,10 @@ export class Reducer {
     this.meetService.closeMeet(meet.id).subscribe({
       next: () => {
         meet.status = 'CLOSED';
+        this.helper.setSuccessMessageInState("Your meet has been closed with success.");
       },
       error: (error: HttpErrorResponse) => {
-        console.log(error);
+        this.helper.setErrorInState(error);
       }
     });
   }
@@ -1382,8 +1430,11 @@ export class Reducer {
           job.status = 'CLIENT_CLOSE';
         else
           job.status = 'ADMIN_CLOSE';
+        this.helper.setSuccessMessageInState("Job has been closed with success.");
       },
-      error: (error: HttpErrorResponse) => console.log(error)
+      error: (error: HttpErrorResponse) => {
+        this.helper.setErrorInState(error);
+      }
     });
   }
 
@@ -1400,9 +1451,10 @@ export class Reducer {
       next: (jobInterview: JobInterview) => {
         application.hasClientMeet = true;
         this.dispatcherSubject.next({eventType: EventType.CLOSE_ASK_FOR_JOB_INTERVIEW});
+        this.helper.setSuccessMessageInState("Your request for the interview with the talent has been sent to admins with success.");
       },
       error: (error: HttpErrorResponse) => {
-        console.log(error);
+        this.helper.setErrorInState(error);
       }
     });
   }
@@ -1436,13 +1488,20 @@ export class Reducer {
   }
 
   public programClientMeet(meet: Meet): void {
-    this.meetService.addMeet(meet).subscribe({
-      next: (meet: Meet) => {
-        console.log(meet);
-        this.dispatcherSubject.next({eventType: EventType.CLOSE_ADD_CLIENT_MEET});
-      },
-      error: (error: HttpErrorResponse) => {
-        console.log(error);
+    this.jobInterviewService.acceptJobInterview(meet.application.jobInterviews[0].id).subscribe({
+      next : () => {
+        this.meetService.addMeet(meet).subscribe({
+          next: () => {
+            this.dispatcherSubject.next({eventType: EventType.CLOSE_ADD_CLIENT_MEET});
+            meet.application.jobInterviews[0].status = "ACCEPTED";
+            this.helper.setSuccessMessageInState("The client meet has been programmed with success.");
+          },
+          error: (error: HttpErrorResponse) => {
+            this.helper.setErrorInState(error);
+          }
+        });
+      }, error : (error : HttpErrorResponse) => {
+        this.helper.setErrorInState(error);
       }
     });
   }

@@ -1,4 +1,5 @@
 import {User} from "./user.model";
+import {Application} from "./application.model";
 
 export interface Meet{
 
@@ -15,5 +16,7 @@ export interface Meet{
 
 
   jobId ?: number,
-  applicationId ?: number
+  applicationId ?: number,
+
+  application : Application
 }

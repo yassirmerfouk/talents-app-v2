@@ -1,15 +1,18 @@
-import {Component, inject, Input, OnInit} from '@angular/core';
+import {Component, inject, Input, OnDestroy, OnInit} from '@angular/core';
 import {Client, ClientRequest} from "../../../../models/client.model";
 import {FormBuilder, FormGroup} from "@angular/forms";
 import {EventService} from "../../../../services/event.service";
 import {EventType} from "../../../../state/event-type.enum";
+import {Helper} from "../../../../helper/helper";
+import {Subscription} from "rxjs";
+import {ErrorSuccessState} from "../../../../state/states.model";
 
 @Component({
   selector: 'app-update-client-infos',
   templateUrl: './update-client-infos.component.html',
   styleUrl: './update-client-infos.component.css'
 })
-export class UpdateClientInfosComponent implements OnInit{
+export class UpdateClientInfosComponent implements OnInit, OnDestroy{
 
   private eventService : EventService = inject(EventService);
 
@@ -19,6 +22,10 @@ export class UpdateClientInfosComponent implements OnInit{
 
   @Input()
   public client !: Client;
+
+  private helper: Helper = inject(Helper);
+  private errorSuccessSubscription !: Subscription;
+  public errorSuccessState : ErrorSuccessState = {};
 
   public ngOnInit() : void {
     if(this.client){
@@ -37,6 +44,8 @@ export class UpdateClientInfosComponent implements OnInit{
         size: this.formBuilder.control(this.client.size ? this.client.size : ''),
       });
     }
+
+    this.errorSuccessSubscription = this.helper.subscribeToErrorSuccessState(this.errorSuccessState);
   }
 
   public handleCloseUpdateClientProfile() : void {
@@ -51,5 +60,10 @@ export class UpdateClientInfosComponent implements OnInit{
       clientRequest.size = null;
     }
     this.eventService.dispatchEvent({eventType: EventType.UPDATE_CLIENT_PROFILE, payload: clientRequest});
+  }
+
+  public ngOnDestroy() : void {
+    if(this.errorSuccessSubscription)
+      this.errorSuccessSubscription.unsubscribe();
   }
 }

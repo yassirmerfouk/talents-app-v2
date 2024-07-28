@@ -6,6 +6,8 @@ import {Store} from "../../../state/store.service";
 import {EventService} from "../../../services/event.service";
 import {Subscription} from "rxjs";
 import {EventType} from "../../../state/event-type.enum";
+import {Helper} from "../../../helper/helper";
+import {ErrorSuccessState} from "../../../state/states.model";
 
 @Component({
   selector: 'app-talents',
@@ -23,6 +25,11 @@ export class TalentsComponent implements OnInit, OnDestroy{
   private page : number = 0;
   private size : number = 10;
 
+  private helper: Helper = inject(Helper);
+  private errorSuccessSubscription !: Subscription;
+  public errorSuccessState : ErrorSuccessState = {};
+
+
   public ngOnInit() : void {
 
     this.stateSubscription = this.store.state$.subscribe(
@@ -30,6 +37,8 @@ export class TalentsComponent implements OnInit, OnDestroy{
         this.talentsPage = state.talentsState.talentsPage;
       }
     );
+
+    this.errorSuccessSubscription = this.helper.subscribeToErrorSuccessState(this.errorSuccessState);
 
     this.getTalents();
   }
@@ -56,5 +65,7 @@ export class TalentsComponent implements OnInit, OnDestroy{
   public ngOnDestroy() {
     if(this.stateSubscription)
       this.stateSubscription.unsubscribe();
+    if(this.errorSuccessSubscription)
+      this.errorSuccessSubscription.unsubscribe();
   }
 }

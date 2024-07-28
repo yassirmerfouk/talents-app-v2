@@ -8,6 +8,8 @@ import {EventService} from "../../../services/event.service";
 import {Subscription} from "rxjs";
 import {EventType} from "../../../state/event-type.enum";
 import {User} from "../../../models/user.model";
+import {Helper} from "../../../helper/helper";
+import {ErrorSuccessState} from "../../../state/states.model";
 
 @Component({
   selector: 'app-admin-talents',
@@ -34,6 +36,11 @@ export class AdminTalentsComponent implements OnInit, OnDestroy{
   public openProgramMeet : boolean = false;
   public selectedUser : User | null = null;
 
+  private helper: Helper = inject(Helper);
+  private errorSuccessSubscription !: Subscription;
+  public errorSuccessState : ErrorSuccessState = {};
+
+
   public ngOnInit() : void {
 
     this.filterForm = this.formBuilder.group({
@@ -47,6 +54,8 @@ export class AdminTalentsComponent implements OnInit, OnDestroy{
         this.selectedUser = state.meetState?.selectedUser;
       }
     );
+
+    this.errorSuccessSubscription = this.helper.subscribeToErrorSuccessState(this.errorSuccessState);
 
     this.getTalents();
   }
@@ -99,5 +108,7 @@ export class AdminTalentsComponent implements OnInit, OnDestroy{
   public ngOnDestroy() {
     if(this.stateSubscription)
       this.stateSubscription.unsubscribe();
+    if(this.errorSuccessSubscription)
+      this.errorSuccessSubscription.unsubscribe();
   }
 }

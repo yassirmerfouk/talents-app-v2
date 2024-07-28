@@ -6,6 +6,8 @@ import {EventType} from "../../../state/event-type.enum";
 import {Store} from "../../../state/store.service";
 import {Subscription} from "rxjs";
 import {AuthService} from "../../../services/auth.service";
+import {Helper} from "../../../helper/helper";
+import {ErrorSuccessState} from "../../../state/states.model";
 
 @Component({
   selector: 'app-talent-profile',
@@ -31,6 +33,10 @@ export class TalentProfileComponent implements OnInit, OnDestroy {
 
   public openUpdateInfos : boolean = false;
 
+  private helper: Helper = inject(Helper);
+  private errorSuccessSubscription !: Subscription;
+  public errorSuccessState : ErrorSuccessState = {};
+
   public ngOnInit(): void {
 
     this.stateSubscription = this.store.state$.subscribe(
@@ -55,6 +61,8 @@ export class TalentProfileComponent implements OnInit, OnDestroy {
 
       }
     );
+
+    this.errorSuccessSubscription = this.helper.subscribeToErrorSuccessState(this.errorSuccessState);
 
     this.getTalentProfile();
 
@@ -84,5 +92,7 @@ export class TalentProfileComponent implements OnInit, OnDestroy {
   public ngOnDestroy(): void {
     if (this.stateSubscription)
       this.stateSubscription.unsubscribe();
+    if(this.errorSuccessSubscription)
+      this.errorSuccessSubscription.unsubscribe();
   }
 }

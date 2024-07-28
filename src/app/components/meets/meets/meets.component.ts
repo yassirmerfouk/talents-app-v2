@@ -8,6 +8,8 @@ import {EventType} from "../../../state/event-type.enum";
 import {AuthStateService} from "../../../services/auth.state.service";
 import {FormBuilder, FormGroup} from "@angular/forms";
 import {format} from "date-fns";
+import {Helper} from "../../../helper/helper";
+import {ErrorSuccessState} from "../../../state/states.model";
 
 @Component({
   selector: 'app-meets',
@@ -35,6 +37,10 @@ export class MeetsComponent implements OnInit, OnDestroy{
   public openMeet : boolean = false;
   public selectedMeet !: Meet;
 
+  private helper: Helper = inject(Helper);
+  private errorSuccessSubscription !: Subscription;
+  public errorSuccessState : ErrorSuccessState = {};
+
   public ngOnInit() : void {
 
     this.stateSubscription = this.store.state$.subscribe(
@@ -46,9 +52,10 @@ export class MeetsComponent implements OnInit, OnDestroy{
     );
 
     this.filterForm = this.formBuilder.group({
-      /*date : this.formBuilder.control(format(new Date(), 'yyyy-MM-dd'))*/
       date : this.formBuilder.control(null)
     });
+
+    this.errorSuccessSubscription = this.helper.subscribeToErrorSuccessState(this.errorSuccessState);
 
     this.getMeets();
   }
@@ -69,14 +76,17 @@ export class MeetsComponent implements OnInit, OnDestroy{
   }
 
   public acceptMeet(meet : Meet) : void {
+    if(confirm("Are you sure to accept this meet?"))
     this.eventService.dispatchEvent({eventType : EventType.ACCEPT_MEET, payload : meet});
   }
 
   public refuseMeet(meet : Meet) : void {
+    if(confirm("Are you sure to refuse this meet?"))
     this.eventService.dispatchEvent({eventType : EventType.REFUSE_MEET, payload : meet});
   }
 
   public closeMeet(meet : Meet) : void {
+    if(confirm("Are you sure to close this meet?"))
     this.eventService.dispatchEvent({eventType : EventType.CLOSE_MEET, payload : meet});
   }
 
@@ -100,6 +110,8 @@ export class MeetsComponent implements OnInit, OnDestroy{
   public ngOnDestroy() : void {
     if(this.stateSubscription)
       this.stateSubscription.unsubscribe();
+    if(this.errorSuccessSubscription)
+      this.errorSuccessSubscription.unsubscribe();
   }
 
 }

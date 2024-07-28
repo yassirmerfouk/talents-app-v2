@@ -247,7 +247,7 @@
                   <i class="bi bi-calendar-minus-fill text-primary me-1 custom-icon" style="font-size: 24px;"></i>
                 </a>
                 <div (click)="handleOnChangeSelection(application)"
-                     *ngIf="job.status == 'IN_SELECTION' || job.status == 'IN_APPROVING'">
+                     *ngIf="job.status == 'IN_SELECTION'">
                   <a *ngIf="!application.selected">
                     <i class="bi bi-check-circle text-primary me-2 custom-icon"></i>
                   </a>

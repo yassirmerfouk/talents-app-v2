@@ -6,7 +6,7 @@
         <button (click)="handleCloseJobInterview()" type="button" class="btn-close"></button>
       </div>
         <div class="modal-body">
-          <div *ngIf="jobInterview">
+          <div *ngIf="jobInterview && jobInterview.status == 'CREATED'">
             <div class="mb-3">
               <label class="form-label">Message</label>
               <textarea class="form-control" rows="4" [value]="jobInterview.message" readonly></textarea>
@@ -40,7 +40,10 @@
             </div>
           </div>
           <div *ngIf="!jobInterview" class="alert alert-warning" role="alert">
-            There is no job interview requested bye the client for this talent.
+            There is no job interview requested by the client for this talent.
+          </div>
+          <div *ngIf="jobInterview && jobInterview.status != 'CREATED'" class="alert alert-warning" role="alert">
+            You have already programmed a meeting for this job interview request.
           </div>
         </div>
     </div>

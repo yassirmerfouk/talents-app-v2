@@ -1,5 +1,4 @@
 import {Component, inject, OnDestroy, OnInit} from '@angular/core';
-import {TalentService} from "../../../services/talent.service";
 import {ActivatedRoute} from "@angular/router";
 import {Talent} from "../../../models/talent.model";
 import {Store} from "../../../state/store.service";
@@ -7,6 +6,7 @@ import {EventService} from "../../../services/event.service";
 import {Subscription} from "rxjs";
 import {EventType} from "../../../state/event-type.enum";
 import {Helper} from "../../../helper/helper";
+import {ErrorSuccessState} from "../../../state/states.model";
 
 @Component({
   selector: 'app-talent',
@@ -19,12 +19,14 @@ export class TalentComponent implements OnInit, OnDestroy {
   private eventService: EventService = inject(EventService);
   private stateSubscription !: Subscription;
 
-  public helper : Helper = inject(Helper);
-
   private activatedRoute: ActivatedRoute = inject(ActivatedRoute);
 
   private id !: number;
   public talent !: Talent;
+
+  public helper: Helper = inject(Helper);
+  private errorSuccessSubscription !: Subscription;
+  public errorSuccessState : ErrorSuccessState = {};
 
   public ngOnInit(): void {
 
@@ -41,11 +43,15 @@ export class TalentComponent implements OnInit, OnDestroy {
           this.eventService.dispatchEvent({eventType : EventType.GET_TALENT, payload : this.id});
       }
     );
+
+    this.errorSuccessSubscription = this.helper.subscribeToErrorSuccessState(this.errorSuccessState);
   }
 
   public ngOnDestroy() {
     if(this.stateSubscription)
       this.stateSubscription.unsubscribe();
+    if(this.errorSuccessSubscription)
+      this.errorSuccessSubscription.unsubscribe();
   }
 
 }

@@ -7,6 +7,8 @@ import {Store} from "../../../state/store.service";
 import {EventType} from "../../../state/event-type.enum";
 import {Subscription} from "rxjs";
 import {NgToastService} from "ng-angular-popup";
+import {Helper} from "../../../helper/helper";
+import {ErrorSuccessState} from "../../../state/states.model";
 
 @Component({
   selector: 'app-admin-jobs',
@@ -25,24 +27,24 @@ export class AdminJobsComponent implements OnInit, OnDestroy {
 
   public jobsPage !: Page<Job>;
 
-  public error !: string;
-
   private status: string = "all";
   private page: number = 0;
   private size: number = 10;
 
-  private toast : NgToastService = inject(NgToastService);
+  private helper: Helper = inject(Helper);
+  private errorSuccessSubscription !: Subscription;
+  public errorSuccessState: ErrorSuccessState = {};
+
 
   public ngOnInit(): void {
 
-  this.stateSubscription = this.store.state$.subscribe(
+    this.stateSubscription = this.store.state$.subscribe(
       (state: any) => {
         this.jobsPage = state.jobsState.jobsPage;
-        this.error = state.jobsState.error;
-        if(this.error)
-          this.toast.danger(this.error);
       }
     );
+
+    this.errorSuccessSubscription = this.helper.subscribeToErrorSuccessState(this.errorSuccessState);
 
     this.filterForm = this.formBuilder.group({
       status: this.formBuilder.control("all")
@@ -51,8 +53,11 @@ export class AdminJobsComponent implements OnInit, OnDestroy {
     this.getJobs();
   }
 
-  public getJobs() : void {
-    this.eventService.dispatchEvent({eventType: EventType.GET_JOBS, payload: {status: this.status, page: this.page, size: this.size}});
+  public getJobs(): void {
+    this.eventService.dispatchEvent({
+      eventType: EventType.GET_JOBS,
+      payload: {status: this.status, page: this.page, size: this.size}
+    });
   }
 
   public handleChangeStatus(): void {
@@ -76,8 +81,10 @@ export class AdminJobsComponent implements OnInit, OnDestroy {
     this.getJobs();
   }
 
-  public ngOnDestroy() : void {
-    if(this.stateSubscription)
+  public ngOnDestroy(): void {
+    if (this.stateSubscription)
       this.stateSubscription.unsubscribe();
+    if(this.errorSuccessSubscription)
+      this.errorSuccessSubscription.unsubscribe();
   }
 }

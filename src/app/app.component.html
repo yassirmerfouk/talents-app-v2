@@ -1,4 +1,6 @@
-<ng-toast/>
+<div style="position: relative;">
+  <ng-toast [ngStyle]="{'z-index': 100, 'position': 'absolute'}"></ng-toast>
+</div>
 <div *ngIf="authStateService.authState.isAuthenticated">
   <nav
     id="sidebarMenu"

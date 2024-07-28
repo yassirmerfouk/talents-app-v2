@@ -1,16 +1,19 @@
-import {Component, inject, Input, OnInit} from '@angular/core';
+import {Component, inject, Input, OnDestroy, OnInit} from '@angular/core';
 import {Job, JobRequest} from "../../../../models/job.model";
 import {FormBuilder, FormGroup} from "@angular/forms";
 import {EventService} from "../../../../services/event.service";
 import {EventType} from "../../../../state/event-type.enum";
 import {SkillService} from "../../../../services/skill.service";
+import {Helper} from "../../../../helper/helper";
+import {Subscription} from "rxjs";
+import {ErrorSuccessState} from "../../../../state/states.model";
 
 @Component({
   selector: 'app-edit-job',
   templateUrl: './edit-job.component.html',
   styleUrl: './edit-job.component.css'
 })
-export class EditJobComponent implements OnInit{
+export class EditJobComponent implements OnInit, OnDestroy{
 
   private eventService : EventService = inject(EventService);
   private formBuilder : FormBuilder = inject(FormBuilder);
@@ -27,6 +30,10 @@ export class EditJobComponent implements OnInit{
   public existedSkills: Array<string> = [];
 
   public searchedSkills: Array<string> = [];
+
+  private helper: Helper = inject(Helper);
+  private errorSuccessSubscription !: Subscription;
+  public errorSuccessState : ErrorSuccessState = {};
 
   public ngOnInit()  : void{
     if(this.job){
@@ -53,15 +60,18 @@ export class EditJobComponent implements OnInit{
           this.skillsList = this.job.skills;
 
           this.existedSkills = skills.map(skill => skill.title);
+
           this.jobForm.get('skill')?.valueChanges.subscribe((value: string) => {
             if (value)
               this.searchedSkills = this.existedSkills.filter(skill => skill.includes(value.toUpperCase()));
             else
               this.searchedSkills = [];
           });
-
         }
       });
+
+      this.errorSuccessSubscription = this.helper.subscribeToErrorSuccessState(this.errorSuccessState);
+
     }
   }
 
@@ -87,4 +97,10 @@ export class EditJobComponent implements OnInit{
   public handleCloseEditJob() : void {
     this.eventService.dispatchEvent({eventType : EventType.CLOSE_EDIT_JOB});
   }
+
+  public ngOnDestroy(): void {
+    if(this.errorSuccessSubscription)
+      this.errorSuccessSubscription.unsubscribe();
+  }
+
 }

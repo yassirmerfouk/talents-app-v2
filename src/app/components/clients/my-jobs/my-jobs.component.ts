@@ -6,6 +6,8 @@ import {Store} from "../../../state/store.service";
 import {Subscription} from "rxjs";
 import {Page} from "../../../models/page.model";
 import {AuthStateService} from "../../../services/auth.state.service";
+import {Helper} from "../../../helper/helper";
+import {ErrorSuccessState} from "../../../state/states.model";
 
 @Component({
   selector: 'app-my-jobs',
@@ -19,7 +21,7 @@ export class MyJobsComponent implements OnInit, OnDestroy {
   private eventService: EventService = inject(EventService);
   private stateSubscription !: Subscription;
 
-  public authStateService : AuthStateService = inject(AuthStateService);
+  public authStateService: AuthStateService = inject(AuthStateService);
 
   public openAddJob: boolean = false;
   public openEditJob: boolean = false;
@@ -30,7 +32,9 @@ export class MyJobsComponent implements OnInit, OnDestroy {
   private page: number = 0;
   private size: number = 10;
 
-
+  private helper: Helper = inject(Helper);
+  private errorSuccessSubscription !: Subscription;
+  public errorSuccessState: ErrorSuccessState = {};
 
   public ngOnInit(): void {
 
@@ -43,6 +47,9 @@ export class MyJobsComponent implements OnInit, OnDestroy {
       }
     );
 
+    this.errorSuccessSubscription = this.helper.subscribeToErrorSuccessState(this.errorSuccessState);
+
+
     this.getMyJobs();
 
   }
@@ -51,39 +58,43 @@ export class MyJobsComponent implements OnInit, OnDestroy {
     this.eventService.dispatchEvent({eventType: EventType.GET_MY_JOBS, payload: {page: this.page, size: this.size}});
   }
 
-  public handleOpenAddJob() : void {
-    this.eventService.dispatchEvent({eventType : EventType.OPEN_ADD_JOB});
+  public handleOpenAddJob(): void {
+    this.eventService.dispatchEvent({eventType: EventType.OPEN_ADD_JOB});
   }
 
-  public handleOpenEditJob(job : Job) : void{
-    this.eventService.dispatchEvent({eventType : EventType.OPEN_EDIT_JOB, payload : job});
+  public handleOpenEditJob(job: Job): void {
+    this.eventService.dispatchEvent({eventType: EventType.OPEN_EDIT_JOB, payload: job});
   }
 
-  public handleDeleteJob(id : number) : void {
-    this.eventService.dispatchEvent({eventType : EventType.DELETE_JOB, payload : id});
+  public handleDeleteJob(id: number): void {
+    if (confirm("Are you sur for delete this job?"))
+      this.eventService.dispatchEvent({eventType: EventType.DELETE_JOB, payload: id});
   }
 
-  public handleAskToStartSelection(job : Job) : void {
-    this.eventService.dispatchEvent({eventType : EventType.ASK_TO_START_SELECTION, payload : job});
+  public handleAskToStartSelection(job: Job): void {
+    if (confirm("Are you sur for ask to start selection for this job?"))
+      this.eventService.dispatchEvent({eventType: EventType.ASK_TO_START_SELECTION, payload: job});
   }
 
 
-  public handleChangePage(page : number) : void {
+  public handleChangePage(page: number): void {
     this.page = page;
     this.getMyJobs();
   }
 
-  public handlePreviousPage() : void {
+  public handlePreviousPage(): void {
 
   }
 
-  public handleNextPage() : void{
+  public handleNextPage(): void {
 
   }
 
   public ngOnDestroy(): void {
     if (this.stateSubscription)
       this.stateSubscription.unsubscribe();
+    if (this.errorSuccessSubscription)
+      this.errorSuccessSubscription.unsubscribe();
   }
 
 }

@@ -1,17 +1,20 @@
-import {Component, inject, Input, OnInit} from '@angular/core';
+import {Component, inject, Input, OnDestroy, OnInit} from '@angular/core';
 import {User} from "../../../models/user.model";
 import {EventService} from "../../../services/event.service";
 import {EventType} from "../../../state/event-type.enum";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {Meet} from "../../../models/meet.model";
 import {Job} from "../../../models/job.model";
+import {Helper} from "../../../helper/helper";
+import {Subscription} from "rxjs";
+import {ErrorSuccessState} from "../../../state/states.model";
 
 @Component({
   selector: 'app-add-meet',
   templateUrl: './add-meet.component.html',
   styleUrl: './add-meet.component.css'
 })
-export class AddMeetComponent implements OnInit {
+export class AddMeetComponent implements OnInit,OnDestroy {
 
   private eventService: EventService = inject(EventService);
 
@@ -58,6 +61,10 @@ export class AddMeetComponent implements OnInit {
   public oldGeneratedType: string = "[This part will be generated based on Contact Type]";
   public oldGeneratedLink: string = "[link will be generated]";
 
+  private helper: Helper = inject(Helper);
+  private errorSuccessSubscription !: Subscription;
+  public errorSuccessState : ErrorSuccessState = {};
+
   public ngOnInit(): void {
 
     if (this.type == 'VERIFICATION')
@@ -96,6 +103,8 @@ export class AddMeetComponent implements OnInit {
         }
       }
     }
+
+    this.errorSuccessSubscription = this.helper.subscribeToErrorSuccessState(this.errorSuccessState);
   }
 
   public handleCloseProgramMeet(): void {
@@ -137,5 +146,10 @@ export class AddMeetComponent implements OnInit {
     this.body = this.body.replace(this.oldGeneratedLink, this.meetForm.value.resource);
     this.oldGeneratedLink = this.meetForm.value.resource;
     this.meetForm.get("firstBody")?.setValue(this.body);
+  }
+
+  public ngOnDestroy(): void {
+    if(this.errorSuccessSubscription)
+      this.errorSuccessSubscription.unsubscribe();
   }
 }

@@ -1,15 +1,19 @@
-import {Component, inject, Input} from '@angular/core';
+import {Component, inject, Input, OnDestroy, OnInit} from '@angular/core';
 import {EventService} from "../../../../../services/event.service";
 import {FormBuilder, FormGroup} from "@angular/forms";
 import {Certification} from "../../../../../models/certification.model";
 import {EventType} from "../../../../../state/event-type.enum";
+import {Store} from "../../../../../state/store.service";
+import {Helper} from "../../../../../helper/helper";
+import {Subscription} from "rxjs";
+import {ErrorSuccessState} from "../../../../../state/states.model";
 
 @Component({
   selector: 'app-edit-certification',
   templateUrl: './edit-certification.component.html',
   styleUrl: './edit-certification.component.css'
 })
-export class EditCertificationComponent {
+export class EditCertificationComponent implements OnInit, OnDestroy{
 
   private eventService : EventService = inject(EventService);
   private formBuilder : FormBuilder = inject(FormBuilder);
@@ -18,6 +22,11 @@ export class EditCertificationComponent {
 
   @Input()
   public certification !: Certification;
+
+  private helper: Helper = inject(Helper);
+  private errorSuccessSubscription !: Subscription;
+  public errorSuccessState : ErrorSuccessState = {};
+
 
   public ngOnInit() : void {
 
@@ -31,6 +40,8 @@ export class EditCertificationComponent {
       });
     }
 
+    this.errorSuccessSubscription = this.helper.subscribeToErrorSuccessState(this.errorSuccessState);
+
   }
 
   public handleUpdateCertification() : void {
@@ -41,4 +52,10 @@ export class EditCertificationComponent {
   public handleCloseEditCertification() : void {
     this.eventService.dispatchEvent({eventType : EventType.CLOSE_EDIT_CERTIFICATION});
   }
+
+  public ngOnDestroy(): void {
+    if(this.errorSuccessSubscription)
+      this.errorSuccessSubscription.unsubscribe();
+  }
+
 }

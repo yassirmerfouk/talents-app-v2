@@ -1,21 +1,28 @@
-import {Component, inject, OnInit} from '@angular/core';
+import {Component, inject, OnDestroy, OnInit} from '@angular/core';
 import {EventService} from "../../../../../services/event.service";
 import {FormBuilder, FormGroup} from "@angular/forms";
 import {Education} from "../../../../../models/education.model";
 import {EventType} from "../../../../../state/event-type.enum";
+import {Helper} from "../../../../../helper/helper";
+import {Subscription} from "rxjs";
+import {ErrorSuccessState} from "../../../../../state/states.model";
 
 @Component({
   selector: 'app-add-education',
   templateUrl: './add-education.component.html',
   styleUrl: './add-education.component.css'
 })
-export class AddEducationComponent implements OnInit{
+export class AddEducationComponent implements OnInit, OnDestroy{
 
   private eventService : EventService = inject(EventService);
 
   private formBuilder : FormBuilder = inject(FormBuilder);
 
   public educationForm !: FormGroup;
+
+  private helper: Helper = inject(Helper);
+  private errorSuccessSubscription !: Subscription;
+  public errorSuccessState : ErrorSuccessState = {};
 
   public ngOnInit() : void {
     this.educationForm = this.formBuilder.group({
@@ -29,6 +36,8 @@ export class AddEducationComponent implements OnInit{
       monthOfEnd : this.formBuilder.control(1),
       yearOfEnd : this.formBuilder.control(2024),
     });
+
+    this.errorSuccessSubscription = this.helper.subscribeToErrorSuccessState(this.errorSuccessState);
   }
 
   public handleAddEducation() : void{
@@ -38,5 +47,10 @@ export class AddEducationComponent implements OnInit{
 
   public handleCloseAddEducation() : void{
     this.eventService.dispatchEvent({eventType : EventType.CLOSE_ADD_EDUCATION});
+  }
+
+  public ngOnDestroy(): void {
+    if(this.errorSuccessSubscription)
+      this.errorSuccessSubscription.unsubscribe();
   }
 }

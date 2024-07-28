@@ -6,6 +6,8 @@ import {EventType} from "../../../state/event-type.enum";
 import {Store} from "../../../state/store.service";
 import {Subscription} from "rxjs";
 import {AuthService} from "../../../services/auth.service";
+import {Helper} from "../../../helper/helper";
+import {ErrorSuccessState} from "../../../state/states.model";
 
 @Component({
   selector: 'app-client-profile',
@@ -32,6 +34,10 @@ export class ClientProfileComponent implements OnInit, OnDestroy {
 
   public openUpdateInfos : boolean = false;
 
+  private helper: Helper = inject(Helper);
+  private errorSuccessSubscription !: Subscription;
+  public errorSuccessState : ErrorSuccessState = {};
+
   public ngOnInit(): void {
 
     this.stateSubscription = this.store.state$.subscribe(
@@ -56,6 +62,8 @@ export class ClientProfileComponent implements OnInit, OnDestroy {
           this.client.image = image;
       }
     );
+
+    this.errorSuccessSubscription = this.helper.subscribeToErrorSuccessState(this.errorSuccessState);
 
     this.getClientProfile();
   }
@@ -83,5 +91,7 @@ export class ClientProfileComponent implements OnInit, OnDestroy {
   public ngOnDestroy(): void {
     if (this.stateSubscription)
       this.stateSubscription.unsubscribe();
+    if(this.errorSuccessSubscription)
+      this.errorSuccessSubscription.unsubscribe();
   }
 }

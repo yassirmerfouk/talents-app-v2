@@ -11,19 +11,27 @@
             <div class="col-md-6 mb-3">
               <label class="form-label">Title</label>
               <input formControlName="title" type="text" class="form-control" placeholder="Title">
+              <div *ngIf="errorSuccessState.errors?.has('title')" class="text-danger mt-2 small">
+                {{errorSuccessState.errors?.get('title')}}</div>
             </div>
             <div class="col-md-6 mb-3">
               <label class="form-label">Issued at</label>
               <input formControlName="issuedAt" type="date" class="form-control">
+              <div *ngIf="errorSuccessState.errors?.has('issuedAt')" class="text-danger mt-2 small">
+                {{errorSuccessState.errors?.get('issuedAt')}}</div>
             </div>
           </div>
           <div class="mb-3">
             <label class="form-label">Resource</label>
             <input formControlName="resource" type="text" class="form-control" placeholder="Resource">
+            <div *ngIf="errorSuccessState.errors?.has('resource')" class="text-danger mt-2 small">
+              {{errorSuccessState.errors?.get('resource')}}</div>
           </div>
           <div class="mb-3">
             <label class="form-label">Description</label>
             <textarea formControlName="description" class="form-control" placeholder="Description"></textarea>
+            <div *ngIf="errorSuccessState.errors?.has('description')" class="text-danger mt-2 small">
+              {{errorSuccessState.errors?.get('description')}}</div>
           </div>
         </div>
         <div class="modal-footer">

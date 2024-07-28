@@ -10,6 +10,8 @@ import {EventType} from "../../../state/event-type.enum";
 import {Subscription} from "rxjs";
 import {User} from "../../../models/user.model";
 import {JobInterview} from "../../../models/job.interview.model";
+import {Helper} from "../../../helper/helper";
+import {ErrorSuccessState} from "../../../state/states.model";
 
 @Component({
   selector: 'app-job',
@@ -57,6 +59,10 @@ export class JobComponent implements OnInit, OnDestroy {
 
   public status: string = "";
 
+  private helper: Helper = inject(Helper);
+  private errorSuccessSubscription !: Subscription;
+  public errorSuccessState: ErrorSuccessState = {};
+
   public ngOnInit() {
 
     this.stateSubscription = this.store.state$.subscribe(
@@ -97,6 +103,8 @@ export class JobComponent implements OnInit, OnDestroy {
       }
     );
 
+    this.errorSuccessSubscription = this.helper.subscribeToErrorSuccessState(this.errorSuccessState);
+
   }
 
   public getJob(): void {
@@ -127,30 +135,37 @@ export class JobComponent implements OnInit, OnDestroy {
   }
 
   public handleAskToStartSelection(job: Job): void {
-    this.eventService.dispatchEvent({eventType: EventType.ASK_TO_START_SELECTION, payload: job});
+    if (confirm("Are you sure to ask to start selection for this job?"))
+      this.eventService.dispatchEvent({eventType: EventType.ASK_TO_START_SELECTION, payload: job});
   }
 
   public handleStartSelection(job: Job): void {
-    this.eventService.dispatchEvent({eventType: EventType.START_SELECTION, payload: job});
+    if (confirm("Are you sure to start selection for this job?"))
+      this.eventService.dispatchEvent({eventType: EventType.START_SELECTION, payload: job});
   }
 
   public handleStartApproving(job: Job): void {
-    this.eventService.dispatchEvent({eventType: EventType.START_APPROVING, payload: job});
+    if (confirm("Are you sure to ask to start approving for this job?"))
+      this.eventService.dispatchEvent({eventType: EventType.START_APPROVING, payload: job});
   }
 
   public handleCloseJob(job: Job): void {
-    this.eventService.dispatchEvent({eventType: EventType.CLOSE_JOB_PROCESS, payload: job})
+    if (confirm("Are you sur to ask to close this job?"))
+      this.eventService.dispatchEvent({eventType: EventType.CLOSE_JOB_PROCESS, payload: job})
   }
 
   public handleOnChangeSelection(application: Application): void {
-    this.eventService.dispatchEvent({eventType: EventType.SELECT_TALENT, payload: application});
+    if (confirm("Are you sure to change selection status for this talents?"))
+      this.eventService.dispatchEvent({eventType: EventType.SELECT_TALENT, payload: application});
   }
 
   public handleOnApprove(application: Application): void {
+    if (confirm("Are you sure to approve this talent for this job?"))
     this.eventService.dispatchEvent({eventType: EventType.APPROVE_TALENT, payload: application});
   }
 
   public handleOnRefuse(application: Application): void {
+    if (confirm("Are you sure to refuse this talent for this job?"))
     this.eventService.dispatchEvent({eventType: EventType.REFUSE_TALENT, payload: application});
   }
 
@@ -194,5 +209,7 @@ export class JobComponent implements OnInit, OnDestroy {
   public ngOnDestroy(): void {
     if (this.stateSubscription)
       this.stateSubscription.unsubscribe();
+    if (this.errorSuccessSubscription)
+      this.errorSuccessSubscription.unsubscribe();
   }
 }

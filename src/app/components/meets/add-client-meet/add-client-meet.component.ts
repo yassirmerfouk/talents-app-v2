@@ -1,15 +1,18 @@
-import {Component, inject, Input, OnInit} from '@angular/core';
+import {Component, inject, Input, OnDestroy, OnInit} from '@angular/core';
 import {EventService} from "../../../services/event.service";
 import {EventType} from "../../../state/event-type.enum";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {Meet} from "../../../models/meet.model";
+import {Helper} from "../../../helper/helper";
+import {Subscription} from "rxjs";
+import {ErrorSuccessState} from "../../../state/states.model";
 
 @Component({
   selector: 'app-add-client-meet',
   templateUrl: './add-client-meet.component.html',
   styleUrl: './add-client-meet.component.css'
 })
-export class AddClientMeetComponent implements OnInit {
+export class AddClientMeetComponent implements OnInit, OnDestroy {
 
   private eventService: EventService = inject(EventService);
 
@@ -51,6 +54,10 @@ export class AddClientMeetComponent implements OnInit {
 
     + "\n\n Pulse Digital Company;";
 
+  private helper: Helper = inject(Helper);
+  private errorSuccessSubscription !: Subscription;
+  public errorSuccessState : ErrorSuccessState = {};
+
   public ngOnInit(): void {
     if (this.programClientMeet) {
       this.clientMeetForm = this.formBuilder.group({
@@ -62,7 +69,11 @@ export class AddClientMeetComponent implements OnInit {
         secondBody: this.formBuilder.control(this.clientMassage.replace('[Client’s Name]', `${this.programClientMeet.job.client.firstName} ${this.programClientMeet.job.client.lastName}`).replace('[Job Title]', this.programClientMeet.job.title)),
         resource: this.formBuilder.control(null),
       });
+      console.log(this.programClientMeet);
     }
+
+    this.errorSuccessSubscription = this.helper.subscribeToErrorSuccessState(this.errorSuccessState);
+
   }
 
   public handleCloseProgramClientMeet(): void {
@@ -74,6 +85,12 @@ export class AddClientMeetComponent implements OnInit {
     meet.jobId = this.programClientMeet.job.id;
     meet.applicationId = this.programClientMeet.application.id;
     meet.receivers = [this.programClientMeet.job.client.id, this.programClientMeet.application.talent.id];
+    meet.application = this.programClientMeet.application;
     this.eventService.dispatchEvent({eventType: EventType.PROGRAM_CLIENT_MEET, payload: meet});
+  }
+
+  public ngOnDestroy(): void {
+    if(this.errorSuccessSubscription)
+      this.errorSuccessSubscription.unsubscribe();
   }
 }

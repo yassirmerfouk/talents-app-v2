@@ -58,17 +58,17 @@ export class Helper {
   }
 
   private handleErrorSuccessInComponent(state: any, errorSuccessState: ErrorSuccessState): void {
-    errorSuccessState.error = state.errorSuccessState?.error;
-    errorSuccessState.errors = state.errorSuccessState?.errors ? new Map(Object.entries(state.errorSuccessState.errors)) : new Map;
-    errorSuccessState.successMessage = state.errorSuccessState?.successMessage;
-    if (errorSuccessState?.error)
+    errorSuccessState.error = state.error;
+    errorSuccessState.errors = state.errors ? new Map(Object.entries(state.errors)) : new Map;
+    errorSuccessState.successMessage = state.successMessage;
+    /*if (errorSuccessState?.error)
       this.toast.danger(errorSuccessState?.error, "", 5000);
     if (errorSuccessState?.successMessage)
-      this.toast.success(errorSuccessState?.successMessage, "", 5000);
+      this.toast.success(errorSuccessState?.successMessage, "", 5000);*/
   }
 
   public subscribeToErrorSuccessState(errorSuccessState: ErrorSuccessState): Subscription {
-    return this.store.state$.subscribe(
+    return this.store.errorSuccessState$.subscribe(
       (state: any) => {
         this.handleErrorSuccessInComponent(state, errorSuccessState);
       }
@@ -76,25 +76,23 @@ export class Helper {
   }
 
   public clearErrorSuccessState(): void {
-    console.log("executed...");
     this.store.clearErrorSuccessState();
   }
 
   public setErrorInState(error: HttpErrorResponse): void {
-    this.store.setState({
-      errorSuccessState: {
-        errors: error.error?.errors,
-        error: error.error?.message
-      }
+    this.store.setErrorSuccessState({
+      errors: error.error?.errors,
+      error: error.error?.message
     });
+    if (error.error.message)
+      this.toast.danger(error.error.message, "", 5000);
   }
 
   public setSuccessMessageInState(successMessage: string): void {
-    this.store.setState({
-      errorSuccessState: {
-        successMessage: successMessage
-      }
+    this.store.setErrorSuccessState({
+      successMessage: successMessage
     });
+      this.toast.success(successMessage, "", 5000);
   }
 
   public displayFieldErrorMessage(key: string, errorSuccessState: ErrorSuccessState): HTMLDivElement {

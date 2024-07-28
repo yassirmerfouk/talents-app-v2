@@ -7,6 +7,8 @@ import {EventService} from "../../../services/event.service";
 import {Subscription} from "rxjs";
 import {EventType} from "../../../state/event-type.enum";
 import {User} from "../../../models/user.model";
+import {Helper} from "../../../helper/helper";
+import {ErrorSuccessState} from "../../../state/states.model";
 
 @Component({
   selector: 'app-admin-clients',
@@ -29,8 +31,12 @@ export class AdminClientsComponent implements OnInit, OnDestroy {
 
   public filterForm !: FormGroup;
 
-  public openProgramMeet : boolean = false;
-  public selectedUser : User | null = null;
+  public openProgramMeet: boolean = false;
+  public selectedUser: User | null = null;
+
+  private helper: Helper = inject(Helper);
+  private errorSuccessSubscription !: Subscription;
+  public errorSuccessState: ErrorSuccessState = {};
 
   public ngOnInit(): void {
 
@@ -41,6 +47,8 @@ export class AdminClientsComponent implements OnInit, OnDestroy {
         this.selectedUser = state.meetState?.selectedUser;
       }
     );
+
+    this.errorSuccessSubscription = this.helper.subscribeToErrorSuccessState(this.errorSuccessState);
 
     this.filterForm = this.formBuilder.group({
       status: this.formBuilder.control("all"),
@@ -62,19 +70,22 @@ export class AdminClientsComponent implements OnInit, OnDestroy {
   }
 
   public handleVerifyUser(client: Client): void {
-    this.eventService.dispatchEvent({eventType: EventType.VERIFY_USER, payload: client});
+    if (confirm("Are you sure to verify that client?"))
+      this.eventService.dispatchEvent({eventType: EventType.VERIFY_USER, payload: client});
   }
 
   public handleBanUser(client: Client): void {
+    if (confirm("Are you sure to ban that client?"))
     this.eventService.dispatchEvent({eventType: EventType.BAN_USER, payload: client});
   }
 
   public handlePermitUser(client: Client): void {
+    if (confirm("Are you sure to permit that client?"))
     this.eventService.dispatchEvent({eventType: EventType.PERMIT_USER, payload: client});
   }
 
-  public handleOpenProgramMeet(user : User) : void {
-    this.eventService.dispatchEvent({eventType : EventType.OPEN_ADD_MEET, payload : user});
+  public handleOpenProgramMeet(user: User): void {
+    this.eventService.dispatchEvent({eventType: EventType.OPEN_ADD_MEET, payload: user});
   }
 
   public handleChangePage(page: number): void {
@@ -95,6 +106,8 @@ export class AdminClientsComponent implements OnInit, OnDestroy {
   public ngOnDestroy(): void {
     if (this.stateSubscription)
       this.stateSubscription.unsubscribe();
+    if (this.errorSuccessSubscription)
+      this.errorSuccessSubscription.unsubscribe();
   }
 
 }

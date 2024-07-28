@@ -11,15 +11,21 @@
             <div class="mb-3 col-6">
               <label class="form-label">Title</label>
               <input formControlName="title" type="text" class="form-control" placeholder="Title">
+              <div *ngIf="errorSuccessState.errors?.has('title')" class="text-danger mt-2 small">
+                {{errorSuccessState.errors?.get('title')}}</div>
             </div>
             <div class="mb-3 col-6">
               <label class="form-label">Resource</label>
               <input formControlName="resource" type="text" class="form-control" placeholder="Resource">
+              <div *ngIf="errorSuccessState.errors?.has('resource')" class="text-danger mt-2 small">
+                {{errorSuccessState.errors?.get('resource')}}</div>
             </div>
           </div>
           <div class="mb-3">
             <label class="form-label">Description</label>
             <textarea formControlName="shortDescription" class="form-control" rows="4" placeholder="Description"></textarea>
+            <div *ngIf="errorSuccessState.errors?.has('shortDescription')" class="text-danger mt-2 small">
+              {{errorSuccessState.errors?.get('shortDescription')}}</div>
           </div>
         </div>
         <div class="modal-footer">

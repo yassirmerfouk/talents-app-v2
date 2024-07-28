@@ -11,20 +11,28 @@
             <div class="col-md-6 mb-3">
               <label class="form-label">Title</label>
               <input formControlName="title" type="text" class="form-control" placeholder="Title">
+              <div *ngIf="errorSuccessState.errors?.has('title')"
+                   class="text-danger mt-2 small">{{errorSuccessState.errors?.get('title')}}</div>
             </div>
             <div class="col-md-6 mb-3">
               <label class="form-label">Sector</label>
               <input formControlName="sector" type="text" class="form-control" placeholder="Sector">
+              <div *ngIf="errorSuccessState.errors?.has('sector')"
+                   class="text-danger mt-2 small">{{errorSuccessState.errors?.get('sector')}}</div>
             </div>
           </div>
           <div class="row">
             <div class="col-md-4 mb-3">
               <label class="form-label">Min salary</label>
               <input formControlName="minSalary" type="number" class="form-control" placeholder="Min salary">
+              <div *ngIf="errorSuccessState.errors?.has('minSalary')"
+                   class="text-danger mt-2 small">{{errorSuccessState.errors?.get('minSalary')}}</div>
             </div>
             <div class="col-md-4 mb-3">
               <label class="form-label">Max salary</label>
               <input formControlName="maxSalary" type="number" class="form-control" placeholder="Max salary">
+              <div *ngIf="errorSuccessState.errors?.has('maxSalary')"
+                   class="text-danger mt-2 small">{{errorSuccessState.errors?.get('maxSalary')}}</div>
             </div>
             <div class="col-md-2 mb-3">
               <label class="form-label">Salary unit</label>
@@ -33,6 +41,8 @@
                 <option value="DAY">DAY</option>
                 <option value="MONTH">MONTH</option>
               </select>
+              <div *ngIf="errorSuccessState.errors?.has('salaryUnit')"
+                   class="text-danger mt-2 small">{{errorSuccessState.errors?.get('salaryUnit')}}</div>
             </div>
             <div class="col-md-2 mb-3">
               <label class="form-label">Currency</label>
@@ -42,16 +52,24 @@
                 <option value="EUR">EUR</option>
                 <option value="USD">USD</option>
               </select>
+              <div *ngIf="errorSuccessState.errors?.has('currency')"
+                   class="text-danger mt-2 small">{{errorSuccessState.errors?.get('currency')}}</div>
             </div>
           </div>
           <div class="row">
             <div class="col-md-6 mb-3">
               <label class="form-label">Experience</label>
-              <input formControlName="yearsOfExperiences" type="number" class="form-control" placeholder="Years of experiences">
+              <input formControlName="yearsOfExperiences" type="number" class="form-control"
+                     placeholder="Years of experiences">
+              <div *ngIf="errorSuccessState.errors?.has('yearsOfExperiences')"
+                   class="text-danger mt-2 small">{{errorSuccessState.errors?.get('yearsOfExperiences')}}</div>
             </div>
             <div class="col-md-6 mb-3">
               <label class="form-label">Number of talents</label>
-              <input formControlName="numberOfTalents" type="number" class="form-control" placeholder="Number of talents">
+              <input formControlName="numberOfTalents" type="number" class="form-control"
+                     placeholder="Number of talents">
+              <div *ngIf="errorSuccessState.errors?.has('numberOfTalents')"
+                   class="text-danger mt-2 small">{{errorSuccessState.errors?.get('numberOfTalents')}}</div>
             </div>
           </div>
           <div class="row">
@@ -62,6 +80,8 @@
                 <option value="FULL_TIME">FULL TIME</option>
                 <option value="PART_TIME">PART TIME</option>
               </select>
+              <div *ngIf="errorSuccessState.errors?.has('type')"
+                   class="text-danger mt-2 small">{{errorSuccessState.errors?.get('type')}}</div>
             </div>
             <div class="col-md-6 mb-3">
               <label class="form-label">Contract type</label>
@@ -70,12 +90,16 @@
                 <option value="FIXED_DATE">FIXED DATE</option>
                 <option value="OPEN_ENDED">OPEN ENDED</option>
               </select>
+              <div *ngIf="errorSuccessState.errors?.has('contractType')"
+                   class="text-danger mt-2 small">{{errorSuccessState.errors?.get('contractType')}}</div>
             </div>
           </div>
           <div *ngIf="jobForm.value.contractType == 'FIXED_DATE'" class="row">
             <div class="col-md-6 mb-3">
               <label class="form-label">Period</label>
               <input formControlName="period" type="number" class="form-control" placeholder="Period">
+              <div *ngIf="errorSuccessState.errors?.has('period')"
+                   class="text-danger mt-2 small">{{errorSuccessState.errors?.get('period')}}</div>
             </div>
             <div class="col-md-6 mb-3">
               <label class="form-label">Period unit</label>
@@ -84,11 +108,16 @@
                 <option value="DAYS">DAYS</option>
                 <option value="MONTHS">MONTHS</option>
               </select>
+              <div *ngIf="errorSuccessState.errors?.has('periodUnit')"
+                   class="text-danger mt-2 small">{{errorSuccessState.errors?.get('periodUnit')}}</div>
             </div>
           </div>
           <div class="mb-3">
             <label class="form-label">Description</label>
-            <textarea formControlName="description" class="form-control" rows="8" placeholder="Job description"></textarea>
+            <textarea formControlName="description" class="form-control" rows="8"
+                      placeholder="Job description"></textarea>
+            <div *ngIf="errorSuccessState.errors?.has('description')"
+                 class="text-danger mt-2 small">{{errorSuccessState.errors?.get('description')}}</div>
           </div>
           <div class="mb-3">
             <label class="form-label">Skills</label>
@@ -96,14 +125,17 @@
               <div class="col-md-6 mb-2">
                 <input formControlName="skill" type="text" class="form-control" placeholder="Skill name">
                 <ul class="list-group mt-2">
-                  <li (click)="handleAddSkill(skill)" *ngFor="let skill of searchedSkills" class="list-group-item" style="font-size: 15px;border: 1px solid rgba(0,0,0,.125);padding: 4px 8px;">{{skill}} <i *ngIf="skillsList.includes(skill)" class="bi bi-check-square-fill"></i></li>
+                  <li (click)="handleAddSkill(skill)" *ngFor="let skill of searchedSkills" class="list-group-item"
+                      style="font-size: 15px;border: 1px solid rgba(0,0,0,.125);padding: 4px 8px;">{{skill}} <i
+                    *ngIf="skillsList.includes(skill)" class="bi bi-check-square-fill"></i></li>
                 </ul>
               </div>
               <div class="col-md-6 mb-2">
                 <div class="d-flex flex-wrap">
                   <div *ngFor="let skill of skillsList" class="d-flex align-items-center me-2">
                     <span class="badge bg-primary small" style="padding: 5px 8px;">{{skill}}</span>
-                    <a (click)="handleDeleteSkill(skill)"> <i class="bi bi-x text-danger fw-bold" style="font-size: 20px;"></i></a>
+                    <a (click)="handleDeleteSkill(skill)"> <i class="bi bi-x text-danger fw-bold"
+                                                              style="font-size: 20px;"></i></a>
                   </div>
                 </div>
               </div>

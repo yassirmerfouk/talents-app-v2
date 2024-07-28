@@ -16,8 +16,6 @@ import {ErrorSuccessState} from "../../../../state/states.model";
 export class UpdateTalentInfosComponent implements OnInit, OnDestroy {
 
   private eventService: EventService = inject(EventService);
-  private stateSubscription !: Subscription;
-  private helper: Helper = inject(Helper);
 
   private formBuilder: FormBuilder = inject(FormBuilder);
 
@@ -30,6 +28,8 @@ export class UpdateTalentInfosComponent implements OnInit, OnDestroy {
 
   public cities !: Array<string>;
 
+  private helper: Helper = inject(Helper);
+  private errorSuccessSubscription !: Subscription;
   public errorSuccessState : ErrorSuccessState = {};
 
   public ngOnInit() {
@@ -52,7 +52,7 @@ export class UpdateTalentInfosComponent implements OnInit, OnDestroy {
       });
     }
 
-    this.stateSubscription = this.helper.subscribeToErrorSuccessState(this.errorSuccessState);
+    this.errorSuccessSubscription = this.helper.subscribeToErrorSuccessState(this.errorSuccessState);
 
   }
 
@@ -66,8 +66,7 @@ export class UpdateTalentInfosComponent implements OnInit, OnDestroy {
   }
 
   public ngOnDestroy() {
-    if (this.stateSubscription)
-      this.stateSubscription.unsubscribe();
-    this.helper.clearErrorSuccessState();
+    if(this.errorSuccessSubscription)
+      this.errorSuccessSubscription.unsubscribe();
   }
 }

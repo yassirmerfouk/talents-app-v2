@@ -11,39 +11,55 @@
             <div class="col-md-6 mb-3">
               <label class="form-label">First name</label>
               <input formControlName="firstName" type="text" class="form-control">
+              <div *ngIf="errorSuccessState.errors?.has('firstName')"
+                   class="text-danger mt-2 small">{{errorSuccessState.errors?.get('firstName')}}</div>
             </div>
             <div class="col-md-6 mb-3">
               <label class="form-label">Last name</label>
               <input formControlName="lastName" type="text" class="form-control">
+              <div *ngIf="errorSuccessState.errors?.has('lastName')"
+                   class="text-danger mt-2 small">{{errorSuccessState.errors?.get('lastName')}}</div>
             </div>
           </div>
           <div class="row">
             <div class="col-md-6 mb-3">
               <label class="form-label">Email</label>
               <input formControlName="email" type="email" class="form-control">
+              <div *ngIf="errorSuccessState.errors?.has('email')"
+                   class="text-danger mt-2 small">{{errorSuccessState.errors?.get('email')}}</div>
             </div>
             <div class="col-md-6 mb-3">
               <label class="form-label">Phone</label>
               <input formControlName="phone" type="text" class="form-control">
+              <div *ngIf="errorSuccessState.errors?.has('phone')"
+                   class="text-danger mt-2 small">{{errorSuccessState.errors?.get('phone')}}</div>
             </div>
           </div>
           <div class="mb-3">
             <label class="form-label">Sector</label>
             <input formControlName="sector" type="text" class="form-control">
+            <div *ngIf="errorSuccessState.errors?.has('sector')"
+                 class="text-danger mt-2 small">{{errorSuccessState.errors?.get('sector')}}</div>
           </div>
           <div class="row">
             <div class="col-md-6 mb-3">
               <label class="form-label">Country</label>
               <input formControlName="country" type="text" class="form-control">
+              <div *ngIf="errorSuccessState.errors?.has('country')"
+                   class="text-danger mt-2 small">{{errorSuccessState.errors?.get('country')}}</div>
             </div>
             <div class="col-md-6 mb-3">
               <label class="form-label">City</label>
               <input formControlName="city" type="text" class="form-control">
+              <div *ngIf="errorSuccessState.errors?.has('city')"
+                   class="text-danger mt-2 small">{{errorSuccessState.errors?.get('city')}}</div>
             </div>
           </div>
           <div class="mb-3">
             <label class="form-label">Description</label>
             <textarea formControlName="shortDescription" class="form-control" rows="3"></textarea>
+            <div *ngIf="errorSuccessState.errors?.has('shortDescription')"
+                 class="text-danger mt-2 small">{{errorSuccessState.errors?.get('shortDescription')}}</div>
           </div>
           <div class="mb-3">
             <label class="form-label">Type</label>
@@ -51,15 +67,21 @@
               <option value="PERSONNEL">Personnel</option>
               <option value="COMPANY">Company</option>
             </select>
+            <div *ngIf="errorSuccessState.errors?.has('type')"
+                 class="text-danger mt-2 small">{{errorSuccessState.errors?.get('type')}}</div>
           </div>
           <div class="row">
             <div *ngIf="clientForm.value.type == 'COMPANY'" class="col-md-6 mb-3">
               <label class="form-label">Company name</label>
               <input formControlName="companyName" type="text" class="form-control">
+              <div *ngIf="errorSuccessState.errors?.has('companyName')"
+                   class="text-danger mt-2 small">{{errorSuccessState.errors?.get('companyName')}}</div>
             </div>
             <div *ngIf="clientForm.value.type == 'COMPANY'" class="col-md-6 mb-3">
               <label class="form-label">Website</label>
               <input formControlName="website" type="text" class="form-control">
+              <div *ngIf="errorSuccessState.errors?.has('website')"
+                   class="text-danger mt-2 small">{{errorSuccessState.errors?.get('website')}}</div>
             </div>
           </div>
           <div *ngIf="clientForm.value.type == 'COMPANY'" class="mb-3">
@@ -69,13 +91,9 @@
               <option value="1 - 50">1 - 50</option>
               <option value="51 - 100">51 - 100</option>
             </select>
+            <div *ngIf="errorSuccessState.errors?.has('size')"
+                 class="text-danger mt-2 small">{{errorSuccessState.errors?.get('size')}}</div>
           </div>
-          <select class="selectpicker" data-live-search="true">
-            <option data-tokens="ketchup mustard">Hot Dog, Fries and a Soda</option>
-            <option data-tokens="mustard">Burger, Shake and a Smile</option>
-            <option data-tokens="frosting">Sugar, Spice and all things nice</option>
-          </select>
-
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary btn-sm">Close</button>
