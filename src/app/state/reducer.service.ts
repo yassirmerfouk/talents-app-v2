@@ -1322,8 +1322,8 @@ export class Reducer {
             return application;
           });
           this.store.setState({jobsState: jobsState});
-          this.dispatcherSubject.next({eventType: EventType.CLOSE_ADD_MEET});
         }
+        this.dispatcherSubject.next({eventType: EventType.CLOSE_ADD_MEET});
         this.helper.setSuccessMessageInState("The meet has been programmed with success.");
       },
       error: (error: HttpErrorResponse) => {

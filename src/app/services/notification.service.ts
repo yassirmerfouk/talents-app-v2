@@ -51,15 +51,15 @@ export class NotificationService {
       });
   }
 
-  public countUnseenNotifications() : number {
+  public countUnseenNotifications(): number {
     return this.notifications.filter(notification => !notification.seen).length;
   }
 
-  public getUserNotifications() : Observable<Array<Notification>> {
+  public getUserNotifications(): Observable<Array<Notification>> {
     return this.httpClient.get<Array<Notification>>(`${this.api}`);
   }
 
-  public getUserNotificationsByPage(page : number, size : number) : Observable<Page<Notification>>{
+  public getUserNotificationsByPage(page: number, size: number): Observable<Page<Notification>> {
     return this.httpClient.get<Page<Notification>>(`${this.api}/page?page=${page}&size=${size}`);
   }
 
@@ -67,8 +67,12 @@ export class NotificationService {
     return this.httpClient.post<any>(`${this.api}/read`, {});
   }
 
-  public clickOnNotification(id : number) : Observable<any>{
+  public clickOnNotification(id: number): Observable<any> {
     return this.httpClient.post<any>(`${this.api}/${id}/click`, {});
+  }
+
+  public deleteNotification(id: number): Observable<any> {
+    return this.httpClient.delete<any>(`${this.api}/${id}`);
   }
 
 

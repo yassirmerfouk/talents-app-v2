@@ -8,6 +8,7 @@ import {EventType} from "./state/event-type.enum";
 import {NotificationService} from "./services/notification.service";
 import {HttpErrorResponse} from "@angular/common/http";
 import {Notification} from "./models/notification.model";
+import {Helper} from "./helper/helper";
 
 @Component({
   selector: 'app-root',
@@ -32,6 +33,8 @@ export class AppComponent implements OnInit {
   private reducer: Reducer = inject(Reducer);
 
   public notificationService: NotificationService = inject(NotificationService);
+
+  public helper: Helper = inject(Helper);
 
   public ngOnInit(): void {
 
@@ -82,23 +85,25 @@ export class AppComponent implements OnInit {
 
   }
 
-  public handleReadNotifications() : void{
+  public handleReadNotifications(): void {
     this.notificationService.readUserNotifications().subscribe({
-      next : () => {
+      next: () => {
         this.notificationService.notifications = this.notificationService.notifications
           .map(notification => {
             notification.seen = true;
             return notification;
           });
       },
-      error : (error : HttpErrorResponse) => {}
+      error: (error: HttpErrorResponse) => {
+      }
     });
   }
 
-  public handleOnClickNotification(notification : Notification) : void {
+  public handleOnClickNotification(notification: Notification): void {
     this.notificationService.clickOnNotification(notification.id).subscribe({
-      next : () => {
+      next: () => {
         notification.clicked = true;
+        this.helper.navigateToNotificationPage(notification);
       }
     });
   }

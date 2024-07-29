@@ -4,6 +4,9 @@ import {ErrorSuccessState} from "../state/states.model";
 import {Store} from "../state/store.service";
 import {Subscription} from "rxjs";
 import {HttpErrorResponse} from "@angular/common/http";
+import {Notification} from "../models/notification.model";
+import {Router} from "@angular/router";
+import {AuthStateService} from "../services/auth.state.service";
 
 @Injectable({
   providedIn: 'root'
@@ -13,6 +16,10 @@ export class Helper {
   private store: Store = inject(Store);
 
   private toast: NgToastService = inject(NgToastService);
+
+  private router: Router = inject(Router);
+
+  private authStateService : AuthStateService = inject(AuthStateService);
 
   public getMonth(monthNumber: number): string | undefined {
     let month: string = "";
@@ -92,7 +99,26 @@ export class Helper {
     this.store.setErrorSuccessState({
       successMessage: successMessage
     });
-      this.toast.success(successMessage, "", 5000);
+    this.toast.success(successMessage, "", 5000);
+  }
+
+  public navigateToNotificationPage(notification: Notification): void {
+    if (notification.type == 'JOB_STATUS_CHANGED')
+      this.router.navigateByUrl('/job/' + notification.relatedModel);
+    if (notification.type == 'MEET')
+      this.router.navigateByUrl('/meets');
+    if (notification.type == 'TALENT_VERIFICATION') {
+      if (this.authStateService.hasAuthority('ADMIN'))
+        this.router.navigateByUrl('/admin/talents');
+      else
+        this.router.navigateByUrl('/talent/my-profile');
+    }
+    if (notification.type == 'CLIENT_VERIFICATION') {
+      if (this.authStateService.hasAuthority('ADMIN'))
+        this.router.navigateByUrl('/admin/clients');
+      else
+        this.router.navigateByUrl('/client/my-profile');
+    }
   }
 
   public displayFieldErrorMessage(key: string, errorSuccessState: ErrorSuccessState): HTMLDivElement {
