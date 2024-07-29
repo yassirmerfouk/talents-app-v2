@@ -7,6 +7,7 @@ import {NgToastService} from "ng-angular-popup";
 import {Notification} from "../models/notification.model";
 import {Observable} from "rxjs";
 import {HttpClient} from "@angular/common/http";
+import {Page} from "../models/page.model";
 
 @Injectable({
   providedIn: 'root'
@@ -54,8 +55,12 @@ export class NotificationService {
     return this.notifications.filter(notification => !notification.seen).length;
   }
 
-  public getUserNotifications(): Observable<Array<Notification>> {
+  public getUserNotifications() : Observable<Array<Notification>> {
     return this.httpClient.get<Array<Notification>>(`${this.api}`);
+  }
+
+  public getUserNotificationsByPage(page : number, size : number) : Observable<Page<Notification>>{
+    return this.httpClient.get<Page<Notification>>(`${this.api}/page?page=${page}&size=${size}`);
   }
 
   public readUserNotifications(): Observable<any> {

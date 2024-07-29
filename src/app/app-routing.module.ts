@@ -25,6 +25,7 @@ import {JobsComponent} from "./components/jobs/jobs/jobs.component";
 import {JobComponent} from "./components/jobs/job/job.component";
 import {TalentsComponent} from "./components/talents/talents/talents.component";
 import {MeetsComponent} from "./components/meets/meets/meets.component";
+import {NotificationsComponent} from "./components/notifications/notifications/notifications.component";
 
 const routes: Routes = [
   {
@@ -110,6 +111,10 @@ const routes: Routes = [
 
   {
     path : 'meets', component : MeetsComponent, canActivate : [authenticationGuard]
+  },
+
+  {
+    path : 'notifications', component : NotificationsComponent, canActivate : [authenticationGuard]
   }
 ];
 
