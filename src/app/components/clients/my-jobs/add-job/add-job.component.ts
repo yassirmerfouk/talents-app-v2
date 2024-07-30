@@ -33,6 +33,7 @@ export class AddJobComponent implements OnInit, OnDestroy {
   public errorSuccessState : ErrorSuccessState = {};
 
   public ngOnInit(): void {
+
     this.skillService.getSkills().subscribe({
       next: (skills: Array<any>) => {
 
@@ -41,6 +42,7 @@ export class AddJobComponent implements OnInit, OnDestroy {
           sector: this.formBuilder.control(null),
           minSalary: this.formBuilder.control(""),
           maxSalary: this.formBuilder.control(""),
+          salaryUnit: this.formBuilder.control(""),
           currency: this.formBuilder.control(""),
           yearsOfExperiences: this.formBuilder.control(""),
           numberOfTalents: this.formBuilder.control(""),

@@ -40,10 +40,10 @@ export class MyJobsComponent implements OnInit, OnDestroy {
 
     this.stateSubscription = this.store.state$.subscribe(
       (state: any) => {
-        this.jobsPage = state.jobsState.jobsPage;
-        this.openAddJob = state.jobsState.openAddJob;
-        this.openEditJob = state.jobsState.openEditJob;
-        this.selectedJob = state.jobsState.selectedJob;
+        this.jobsPage = state.jobsState?.jobsPage;
+        this.openAddJob = state.jobsState?.openAddJob;
+        this.openEditJob = state.jobsState?.openEditJob;
+        this.selectedJob = state.jobsState?.selectedJob;
       }
     );
 
@@ -67,12 +67,12 @@ export class MyJobsComponent implements OnInit, OnDestroy {
   }
 
   public handleDeleteJob(id: number): void {
-    if (confirm("Are you sur for delete this job?"))
+    if (confirm("Are you sure for delete this job?"))
       this.eventService.dispatchEvent({eventType: EventType.DELETE_JOB, payload: id});
   }
 
   public handleAskToStartSelection(job: Job): void {
-    if (confirm("Are you sur for ask to start selection for this job?"))
+    if (confirm("Are you sure for ask to start selection for this job?"))
       this.eventService.dispatchEvent({eventType: EventType.ASK_TO_START_SELECTION, payload: job});
   }
 

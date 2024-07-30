@@ -41,7 +41,7 @@ export class ClientComponent implements OnInit, OnDestroy {
 
     this.stateSubscription = this.store.state$.subscribe(
       (state: any) => {
-        this.client = state.clientState.client;
+        this.client = state.clientState?.client;
       }
     );
 

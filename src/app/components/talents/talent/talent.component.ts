@@ -32,7 +32,7 @@ export class TalentComponent implements OnInit, OnDestroy {
 
     this.stateSubscription = this.store.state$.subscribe(
       (state : any) => {
-        this.talent = state.talentState.talent;
+        this.talent = state.talentState?.talent;
       }
     );
 

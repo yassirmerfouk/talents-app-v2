@@ -75,14 +75,17 @@ export class AdminTalentsComponent implements OnInit, OnDestroy{
   }
 
   public handleVerifyUser(talent : Talent) : void {
+    if(confirm("Are you sure to verify this talent?"))
     this.eventService.dispatchEvent({eventType : EventType.VERIFY_USER, payload : talent});
   }
 
   public handleBanUser(talent : Talent) : void {
+    if(confirm("Are you sure to ban this talent?"))
     this.eventService.dispatchEvent({eventType : EventType.BAN_USER, payload : talent});
   }
 
   public handlePermitUser(talent : Talent) : void {
+    if(confirm("Are you sure to permit this talent?"))
     this.eventService.dispatchEvent({eventType : EventType.PERMIT_USER, payload : talent});
   }
 

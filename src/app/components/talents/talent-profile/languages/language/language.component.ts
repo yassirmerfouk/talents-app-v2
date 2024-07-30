@@ -10,16 +10,17 @@ import {EventType} from "../../../../../state/event-type.enum";
 })
 export class LanguageComponent {
 
-  private eventService : EventService = inject(EventService);
+  private eventService: EventService = inject(EventService);
 
   @Input()
   public language !: Language;
 
-  public handleOpenEditLanguage(language : Language) : void {
-    this.eventService.dispatchEvent({eventType : EventType.OPEN_EDIT_LANGUAGE, payload : language});
+  public handleOpenEditLanguage(language: Language): void {
+    this.eventService.dispatchEvent({eventType: EventType.OPEN_EDIT_LANGUAGE, payload: language});
   }
 
-  public handleDeleteLanguage(id : number) : void {
-    this.eventService.dispatchEvent({eventType : EventType.DELETE_LANGUAGE, payload : id});
+  public handleDeleteLanguage(id: number): void {
+    if (confirm("Are you sure to delete this language?"))
+      this.eventService.dispatchEvent({eventType: EventType.DELETE_LANGUAGE, payload: id});
   }
 }

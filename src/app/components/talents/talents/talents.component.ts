@@ -1,5 +1,4 @@
 import {Component, inject, OnDestroy, OnInit} from '@angular/core';
-import {TalentService} from "../../../services/talent.service";
 import {Page} from "../../../models/page.model";
 import {Talent} from "../../../models/talent.model";
 import {Store} from "../../../state/store.service";

@@ -1,7 +1,6 @@
 import {Component, inject, Input, OnDestroy, OnInit} from '@angular/core';
 import {EventService} from "../../../../services/event.service";
 import {EventType} from "../../../../state/event-type.enum";
-import {ActionEvent} from "../../../../state/action-event.event";
 import {Experience} from "../../../../models/experience.model";
 import {Store} from "../../../../state/store.service";
 import {Subscription} from "rxjs";

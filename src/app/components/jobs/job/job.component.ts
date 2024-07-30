@@ -37,8 +37,6 @@ export class JobComponent implements OnInit, OnDestroy {
 
   public selectedApplications !: Array<Application>;
 
-  public approvedApplications !: Array<Application>;
-
   public openProgramMeet: boolean = false;
 
   public selectedUser !: User;
@@ -67,10 +65,9 @@ export class JobComponent implements OnInit, OnDestroy {
 
     this.stateSubscription = this.store.state$.subscribe(
       (state: any) => {
-        this.job = state.jobsState.job;
-        this.applicationsPage = state.jobsState.applicationsPage;
-        this.selectedApplications = state.jobsState.selectedApplications;
-        this.approvedApplications = state.jobsState.approvedApplications;
+        this.job = state.jobsState?.job;
+        this.applicationsPage = state.jobsState?.applicationsPage;
+        this.selectedApplications = state.jobsState?.selectedApplications;
 
         this.openProgramMeet = state.meetState?.openProgramMeet;
         this.selectedUser = state.meetState?.selectedUser;
@@ -97,7 +94,6 @@ export class JobComponent implements OnInit, OnDestroy {
           setTimeout(() => {
             this.getJobApplications();
             this.getSelectedJobApplications();
-            this.getApprovedJobApplications();
           }, 500);
         }
       }
@@ -124,11 +120,6 @@ export class JobComponent implements OnInit, OnDestroy {
       this.eventService.dispatchEvent({eventType: EventType.GET_JOB_SELECTED_APPLICATIONS, payload: this.id});
   }
 
-  public getApprovedJobApplications(): void {
-    if (this.authStateService.hasAuthority('ADMIN'))
-      this.eventService.dispatchEvent({eventType: EventType.GET_JOB_APPROVED_APPLICATIONS, payload: this.id});
-  }
-
   public handleOnChangeStatus($event: any): void {
     this.status = $event.target.value;
     this.getJobApplications();
@@ -150,7 +141,7 @@ export class JobComponent implements OnInit, OnDestroy {
   }
 
   public handleCloseJob(job: Job): void {
-    if (confirm("Are you sur to ask to close this job?"))
+    if (confirm("Are you sure to close this job?"))
       this.eventService.dispatchEvent({eventType: EventType.CLOSE_JOB_PROCESS, payload: job})
   }
 

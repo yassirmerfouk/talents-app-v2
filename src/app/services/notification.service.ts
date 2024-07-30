@@ -5,7 +5,7 @@ import SockJS from "sockjs-client";
 import {AuthStateService} from "./auth.state.service";
 import {NgToastService} from "ng-angular-popup";
 import {Notification} from "../models/notification.model";
-import {Observable} from "rxjs";
+import {Observable, Subject} from "rxjs";
 import {HttpClient} from "@angular/common/http";
 import {Page} from "../models/page.model";
 
@@ -30,6 +30,9 @@ export class NotificationService {
 
   public notifications: Array<Notification> = [];
 
+  private notificationSubject: Subject<Notification> = new Subject<Notification>();
+  public notificationObservable: Observable<Notification> = this.notificationSubject.asObservable();
+
   public stompConnection(): void {
     this.socket = new SockJS(this.socketUrl);
     this.stompClient = Stomp.over(this.socket);
@@ -41,6 +44,7 @@ export class NotificationService {
         let notification: Notification = JSON.parse(result.body);
         this.notifications.unshift(notification);
         this.toast.info(notification.body, "", 10000);
+        this.notificationSubject.next(notification);
       });
     });
   }

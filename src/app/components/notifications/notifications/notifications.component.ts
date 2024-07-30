@@ -21,7 +21,15 @@ export class NotificationsComponent implements OnInit {
   public size: number = 10;
 
   public ngOnInit(): void {
+
     this.getNotifications();
+
+    this.notificationService.notificationObservable.subscribe(
+      (notification: Notification) => {
+        if (this.page == 0)
+          this.notificationsPage.content.unshift(notification);
+      }
+    );
   }
 
   public getNotifications(): void {

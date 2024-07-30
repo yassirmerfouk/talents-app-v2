@@ -40,7 +40,7 @@ export class AdminJobsComponent implements OnInit, OnDestroy {
 
     this.stateSubscription = this.store.state$.subscribe(
       (state: any) => {
-        this.jobsPage = state.jobsState.jobsPage;
+        this.jobsPage = state.jobsState?.jobsPage;
       }
     );
 

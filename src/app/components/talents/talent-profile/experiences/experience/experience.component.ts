@@ -10,18 +10,17 @@ import {Experience} from "../../../../../models/experience.model";
 })
 export class ExperienceComponent {
 
-  private eventService : EventService = inject(EventService);
+  private eventService: EventService = inject(EventService);
 
   @Input()
   public experience !: Experience;
 
-  public handleOpenEditExperience(experience : Experience) : void{
-    this.eventService.dispatchEvent({eventType : EventType.OPEN_EDIT_EXPERIENCE , payload : experience});
+  public handleOpenEditExperience(experience: Experience): void {
+    this.eventService.dispatchEvent({eventType: EventType.OPEN_EDIT_EXPERIENCE, payload: experience});
   }
 
-  public handleDeleteExperience(id : number) : void{
-    let confirmation = confirm("Are you sure ?");
-    if(confirmation)
-      this.eventService.dispatchEvent({eventType : EventType.DELETE_EXPERIENCE, payload : id});
+  public handleDeleteExperience(id: number): void {
+    if (confirm("Are you sure to delete this experience?"))
+      this.eventService.dispatchEvent({eventType: EventType.DELETE_EXPERIENCE, payload: id});
   }
 }

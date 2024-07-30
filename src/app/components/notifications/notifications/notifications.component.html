@@ -1,4 +1,4 @@
-<div *ngIf="notificationsPage" class="message-wrapper border-0 bg-white shadow rounded">
+<div *ngIf="notificationsPage" class="message-wrapper border-0 bg-white shadow rounded mt-2">
   <div *ngFor="let notification of notificationsPage.content"
        class="card hover-state border-bottom rounded-0 rounded-top py-3"
   >
@@ -50,7 +50,7 @@
         <a (click)="handleOnClickNotification(notification)"
            class="fw-normal text-gray-600-900 truncate-text">
         <span
-          class="ps-lg-5 text-wrap" [ngClass]="{'fw-bold' : !notification.clicked}">{{notification.body}}</span> </a>
+          class="ps-lg-5" [ngClass]="{'fw-bold' : !notification.clicked}">{{notification.body}}</span> </a>
       </div>
     </div>
   </div>

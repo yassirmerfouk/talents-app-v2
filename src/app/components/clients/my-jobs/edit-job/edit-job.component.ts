@@ -46,6 +46,7 @@ export class EditJobComponent implements OnInit, OnDestroy{
             sector : this.formBuilder.control(this.job.sector),
             minSalary : this.formBuilder.control(this.job.minSalary),
             maxSalary : this.formBuilder.control(this.job.maxSalary),
+            salaryUnit: this.formBuilder.control(this.job.salaryUnit),
             currency : this.formBuilder.control(this.job.currency),
             yearsOfExperiences : this.formBuilder.control(this.job.yearsOfExperiences),
             numberOfTalents : this.formBuilder.control(this.job.numberOfTalents),

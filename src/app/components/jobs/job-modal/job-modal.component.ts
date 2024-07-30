@@ -33,6 +33,7 @@ export class JobModalComponent implements OnInit, OnDestroy {
   }
 
   public handleApplyToJob(id: number): void {
+    if(confirm("Are you sure for to apply to the job?"))
     this.eventService.dispatchEvent({eventType: EventType.APPLY_TO_JOB, payload: id});
   }
 

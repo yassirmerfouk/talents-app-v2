@@ -7,7 +7,6 @@ import {Meet} from "../../../models/meet.model";
 import {EventType} from "../../../state/event-type.enum";
 import {AuthStateService} from "../../../services/auth.state.service";
 import {FormBuilder, FormGroup} from "@angular/forms";
-import {format} from "date-fns";
 import {Helper} from "../../../helper/helper";
 import {ErrorSuccessState} from "../../../state/states.model";
 
@@ -97,14 +96,17 @@ export class MeetsComponent implements OnInit, OnDestroy{
 
   public handleChangePage(page: number): void {
     this.page = page;
+    this.getMeets();
   }
 
   public handlePreviousPage(): void {
     this.page--;
+    this.getMeets();
   }
 
   public handleNextPage(): void {
     this.page++;
+    this.getMeets();
   }
 
   public ngOnDestroy() : void {

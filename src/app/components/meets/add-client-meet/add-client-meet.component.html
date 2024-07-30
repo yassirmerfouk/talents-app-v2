@@ -37,7 +37,7 @@
           </div>
           <div *ngIf="clientMeetForm.value.contactType == 'VIDEO_CALL'" class="mb-3">
             <label class="form-label">Meet link</label>
-            <input formControlName="resource" type="url" class="form-control" placeholder="Meet link">
+            <input (change)="handleOnChangeLink()" formControlName="resource" type="url" class="form-control" placeholder="Meet link">
             <div *ngIf="errorSuccessState.errors?.has('resource')"
                  class="text-danger mt-2 small">{{errorSuccessState.errors?.get('resource')}}</div>
           </div>

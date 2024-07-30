@@ -1,9 +1,7 @@
 import {Component, inject, OnDestroy, OnInit} from '@angular/core';
 import {EventService} from "../../../services/event.service";
 import {EventType} from "../../../state/event-type.enum";
-import {Store} from "../../../state/store.service";
 import {Subscription} from "rxjs";
-import {NgToastService} from "ng-angular-popup";
 import {Helper} from "../../../helper/helper";
 import {ErrorSuccessState} from "../../../state/states.model";
 

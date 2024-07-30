@@ -44,7 +44,7 @@ export class AddClientMeetComponent implements OnInit, OnDestroy {
 
     + "\n\nI hope this message finds you well."
 
-    + "\n\nWe are pleased to inform you that we have arranged the interview you requested for the job '[Job Title]'. The selected freelancer is [Freelancer’s Name], and we believe they are a strong candidate for this position. The interview meeting has been scheduled to discuss their qualifications and experience further."
+    + "\n\nWe are pleased to inform you that we have arranged the interview you requested for the job '[Job Title]'. The interview meeting has been scheduled to discuss their qualifications and experience further."
 
     + "\n\nPlease join the meeting using the following Google Meet link [link will be generated]."
 
@@ -54,9 +54,11 @@ export class AddClientMeetComponent implements OnInit, OnDestroy {
 
     + "\n\n Pulse Digital Company;";
 
+  private oldGeneratedLink: string = "[link will be generated]";
+
   private helper: Helper = inject(Helper);
   private errorSuccessSubscription !: Subscription;
-  public errorSuccessState : ErrorSuccessState = {};
+  public errorSuccessState: ErrorSuccessState = {};
 
   public ngOnInit(): void {
     if (this.programClientMeet) {
@@ -69,7 +71,6 @@ export class AddClientMeetComponent implements OnInit, OnDestroy {
         secondBody: this.formBuilder.control(this.clientMassage.replace('[Client’s Name]', `${this.programClientMeet.job.client.firstName} ${this.programClientMeet.job.client.lastName}`).replace('[Job Title]', this.programClientMeet.job.title)),
         resource: this.formBuilder.control(null),
       });
-      console.log(this.programClientMeet);
     }
 
     this.errorSuccessSubscription = this.helper.subscribeToErrorSuccessState(this.errorSuccessState);
@@ -89,8 +90,18 @@ export class AddClientMeetComponent implements OnInit, OnDestroy {
     this.eventService.dispatchEvent({eventType: EventType.PROGRAM_CLIENT_MEET, payload: meet});
   }
 
+  public handleOnChangeLink(): void {
+    this.replaceLinkInBody(this.clientMeetForm.value.resource);
+  }
+
+  public replaceLinkInBody(newLink: string): void {
+    this.clientMeetForm.get('firstBody')?.setValue(this.clientMeetForm.value.firstBody.replace(this.oldGeneratedLink, newLink));
+    this.clientMeetForm.get('secondBody')?.setValue(this.clientMeetForm.value.secondBody.replace(this.oldGeneratedLink, newLink));
+    this.oldGeneratedLink = newLink;
+  }
+
   public ngOnDestroy(): void {
-    if(this.errorSuccessSubscription)
+    if (this.errorSuccessSubscription)
       this.errorSuccessSubscription.unsubscribe();
   }
 }

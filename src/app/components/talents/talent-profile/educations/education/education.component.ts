@@ -11,20 +11,19 @@ import {Helper} from "../../../../../helper/helper";
 })
 export class EducationComponent {
 
-  private eventService : EventService = inject(EventService);
+  private eventService: EventService = inject(EventService);
 
-  public helper : Helper = inject(Helper);
+  public helper: Helper = inject(Helper);
 
   @Input()
   public education !: Education;
 
-  public handleOpenEditEducation(education : Education) : void {
-    this.eventService.dispatchEvent({eventType : EventType.OPEN_EDIT_EDUCATION, payload : education})
+  public handleOpenEditEducation(education: Education): void {
+    this.eventService.dispatchEvent({eventType: EventType.OPEN_EDIT_EDUCATION, payload: education})
   }
 
-  public handleDeleteEducation(id : number) : void{
-    let confirmation = confirm("Are you sure?");
-    if(confirmation)
-      this.eventService.dispatchEvent({eventType : EventType.DELETE_EDUCATION, payload : id});
+  public handleDeleteEducation(id: number): void {
+    if (confirm("Are you sure to delete this education?"))
+      this.eventService.dispatchEvent({eventType: EventType.DELETE_EDUCATION, payload: id});
   }
 }

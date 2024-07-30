@@ -19,7 +19,7 @@ export class Helper {
 
   private router: Router = inject(Router);
 
-  private authStateService : AuthStateService = inject(AuthStateService);
+  private authStateService: AuthStateService = inject(AuthStateService);
 
   public getMonth(monthNumber: number): string | undefined {
     let month: string = "";
@@ -103,7 +103,7 @@ export class Helper {
   }
 
   public navigateToNotificationPage(notification: Notification): void {
-    if (notification.type == 'JOB_STATUS_CHANGED')
+    if (notification.type == 'JOB_STATUS_CHANGED' || notification.type == 'INTERVIEW_REQUEST')
       this.router.navigateByUrl('/job/' + notification.relatedModel);
     if (notification.type == 'MEET')
       this.router.navigateByUrl('/meets');

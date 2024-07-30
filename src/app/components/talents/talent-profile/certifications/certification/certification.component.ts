@@ -20,6 +20,7 @@ export class CertificationComponent {
   }
 
   public handleDeleteCertification(id : number) : void {
+    if(confirm("Are you sure to delete this certification?"))
     this.eventService.dispatchEvent({eventType : EventType.DELETE_CERTIFICATION, payload : id});
   }
 

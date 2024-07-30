@@ -36,7 +36,7 @@
               <span>{{job.sector}}</span><br>
               <span>{{job.type == 'FULL_TIME' ? 'Full Time' : 'Part Time'}}</span><br>
               <span>{{job.contractType == 'FIXED_DATE' ? 'Fixed Date' : 'Open Ended'}}</span><br>
-              <span>{{job.minSalary}} - {{job.maxSalary}} {{job.currency}}</span><br>
+              <span>{{job.minSalary}} - {{job.maxSalary}} {{job.currency}} {{job.salaryUnit.toLowerCase()}}</span><br>
               <span>{{job.numberOfTalents}} {{job.numberOfTalents > 1 ? 'talents' : 'talent'}}</span><br>
               <span>{{job.applicationsNumber}} applications</span><br>
               <span class="fw-normal small"
