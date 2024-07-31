@@ -62,7 +62,7 @@ import { InterviewRequestComponent } from './components/jobs/job/interview-reque
 import { InterviewComponent } from './components/jobs/job/interview/interview.component';
 import { AddClientMeetComponent } from './components/meets/add-client-meet/add-client-meet.component';
 import { NotificationsComponent } from './components/notifications/notifications/notifications.component';
-
+import { AdminSkillsComponent } from './components/skills/admin-skills/admin-skills.component';
 
 @NgModule({
   declarations: [
@@ -119,6 +119,7 @@ import { NotificationsComponent } from './components/notifications/notifications
     InterviewComponent,
     AddClientMeetComponent,
     NotificationsComponent,
+    AdminSkillsComponent,
   ],
   imports: [
     BrowserModule,

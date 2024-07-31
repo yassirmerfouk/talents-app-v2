@@ -2,18 +2,28 @@ import {HttpClient} from "@angular/common/http";
 import {inject, Injectable} from "@angular/core";
 import {environment} from "../../environments/environment";
 import {Observable} from "rxjs";
+import {Page} from "../models/page.model";
+import {Skill} from "../models/skill.model";
 
 @Injectable({
-  providedIn : 'root'
+  providedIn: 'root'
 })
-export class SkillService{
+export class SkillService {
 
 
-  private httpClient : HttpClient = inject(HttpClient);
+  private httpClient: HttpClient = inject(HttpClient);
 
-  private api : string = `${environment.api}/skills`;
+  private api: string = `${environment.api}/skills`;
 
-  public getSkills() : Observable<Array<any>>{
+  public getSkills(): Observable<Array<any>> {
     return this.httpClient.get<Array<any>>(this.api);
+  }
+
+  public getSkillsByPage(page: number, size: number): Observable<Page<Skill>> {
+    return this.httpClient.get<Page<Skill>>(`${this.api}/page?page${page}&size=${size}`);
+  }
+
+  public addSkill(skill: Skill): Observable<Skill> {
+    return this.httpClient.post<Skill>(`${this.api}`, skill);
   }
 }

@@ -26,10 +26,11 @@ import {JobComponent} from "./components/jobs/job/job.component";
 import {TalentsComponent} from "./components/talents/talents/talents.component";
 import {MeetsComponent} from "./components/meets/meets/meets.component";
 import {NotificationsComponent} from "./components/notifications/notifications/notifications.component";
+import {AdminSkillsComponent} from "./components/skills/admin-skills/admin-skills.component";
 
 const routes: Routes = [
   {
-    path: 'auth',canActivate : [guestGuard] ,children: [
+    path: 'auth', canActivate: [guestGuard], children: [
       {
         path: 'registration', children: [
           {path: 'talent', component: RegistrationTalentComponent},
@@ -83,10 +84,10 @@ const routes: Routes = [
   },
 
   {
-    path : 'admin/meets',
-    component : MeetsComponent,
-    canActivate : [authenticationGuard, authorizationGuard],
-    data : {role : 'ADMIN'}
+    path: 'admin/meets',
+    component: MeetsComponent,
+    canActivate: [authenticationGuard, authorizationGuard],
+    data: {role: 'ADMIN'}
   },
 
   {
@@ -94,28 +95,35 @@ const routes: Routes = [
   },
 
   {
-    path : 'client/:id', component : ClientComponent, canActivate : [authenticationGuard]
+    path: 'client/:id', component: ClientComponent, canActivate: [authenticationGuard]
   },
 
   {
-    path : 'jobs', component : JobsComponent, canActivate : [authenticationGuard]
+    path: 'jobs', component: JobsComponent, canActivate: [authenticationGuard]
   },
 
   {
-    path : 'job/:id', component : JobComponent, canActivate : [authenticationGuard]
+    path: 'job/:id', component: JobComponent, canActivate: [authenticationGuard]
   },
 
   {
-    path : 'talents', component : TalentsComponent, canActivate : [authenticationGuard]
+    path: 'talents', component: TalentsComponent, canActivate: [authenticationGuard]
   },
 
   {
-    path : 'meets', component : MeetsComponent, canActivate : [authenticationGuard]
+    path: 'meets', component: MeetsComponent, canActivate: [authenticationGuard]
   },
 
   {
-    path : 'notifications', component : NotificationsComponent, canActivate : [authenticationGuard]
-  }
+    path: 'notifications', component: NotificationsComponent, canActivate: [authenticationGuard]
+  },
+
+  {
+    path: 'admin/skills',
+    component: AdminSkillsComponent,
+    canActivate: [authenticationGuard, authorizationGuard],
+    data: {role: 'ADMIN'}
+  },
 ];
 
 @NgModule({
