@@ -77,13 +77,37 @@ export class AdminSkillsComponent implements OnInit {
     this.updateSkillForm.get('title')?.setValue(skill.title);
   }
 
-  public handleCloseUpdate() : void {
+  public handleCloseUpdate(): void {
     this.showUpdateForm = false;
   }
 
-  public handleUpdateSkill() : void {
-    let skill : Skill = this.updateSkillForm.value;
-    console.log(skill);
+  public handleUpdateSkill(): void {
+    let skill: Skill = this.updateSkillForm.value;
+    this.skillService.updateSkill(skill).subscribe({
+      next: (skill: Skill) => {
+        this.skillsPage.content = this.skillsPage.content.map(skillL => {
+          if (skillL.id == skill.id) skillL = skill;
+          return skillL;
+        });
+        this.helper.setSuccessMessageInState("Skill has been updated with success.");
+      },
+      error: (error: HttpErrorResponse) => {
+        this.helper.setErrorInState(error);
+      }
+    });
+  }
+
+  public handleDeleteSkill(skill: Skill): void {
+    if (confirm("Are you sure to delete this skill?"))
+      this.skillService.deleteSkill(skill.id).subscribe({
+        next: () => {
+          this.skillsPage.content = this.skillsPage.content.filter(skillL => skillL.id != skill.id);
+          this.helper.setSuccessMessageInState("Skill has been deleted with success.");
+        },
+        error: (error: HttpErrorResponse) => {
+          this.helper.setErrorInState(error);
+        }
+      })
   }
 
   public handleChangePage(page: number): void {

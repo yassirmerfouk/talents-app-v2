@@ -99,7 +99,7 @@ export class Helper {
     this.store.setErrorSuccessState({
       successMessage: successMessage
     });
-    this.toast.success(successMessage, "", 5000);
+    this.toast.success(successMessage, "", 12000);
   }
 
   public navigateToNotificationPage(notification: Notification): void {

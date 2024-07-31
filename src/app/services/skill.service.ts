@@ -20,10 +20,18 @@ export class SkillService {
   }
 
   public getSkillsByPage(page: number, size: number): Observable<Page<Skill>> {
-    return this.httpClient.get<Page<Skill>>(`${this.api}/page?page${page}&size=${size}`);
+    return this.httpClient.get<Page<Skill>>(`${this.api}/page?page=${page}&size=${size}`);
   }
 
   public addSkill(skill: Skill): Observable<Skill> {
     return this.httpClient.post<Skill>(`${this.api}`, skill);
+  }
+
+  public updateSkill(skill: Skill): Observable<Skill> {
+    return this.httpClient.put<Skill>(`${this.api}/${skill.id}`, skill);
+  }
+
+  public deleteSkill(id: number): Observable<any> {
+    return this.httpClient.delete(`${this.api}/${id}`);
   }
 }
