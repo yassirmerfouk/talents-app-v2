@@ -66,6 +66,7 @@ export class JobComponent implements OnInit, OnDestroy {
     this.stateSubscription = this.store.state$.subscribe(
       (state: any) => {
         this.job = state.jobsState?.job;
+        if(this.job)  this.job.description = this.job.description.replace(/\n/g, "<br>");
         this.applicationsPage = state.jobsState?.applicationsPage;
         this.selectedApplications = state.jobsState?.selectedApplications;
 

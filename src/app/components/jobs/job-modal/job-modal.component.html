@@ -9,7 +9,8 @@
         <div *ngIf="job">
           <div class="">
             <div class="d-flex justify-content-between">
-              <a [routerLink]="'/job/' + job.id" target="_blank"><h6 class="h6 fw-bold mb-0 custom-link">{{job.title}}</h6></a>
+              <a [routerLink]="'/job/' + job.id" target="_blank"><h6
+                class="h6 fw-bold mb-0 custom-link">{{job.title}}</h6></a>
               <h6 class="small pe-4">{{job.type == 'FULL_TIME' ? 'Full TIME' : 'PART TIME'}}</h6>
             </div>
             <ul class="list-group list-group-flush">
@@ -18,13 +19,24 @@
                   <p class="small pe-4">{{job.sector}}</p>
                   <p class="small pe-4 mt-2">Years of experiences : {{job.yearsOfExperiences}} years</p>
                   <p class="small pe-4 mt-2">Number of talents : {{job.numberOfTalents}} talents</p>
-                  <p class="small pe-4 mt-2">Salary : {{job.minSalary}} - {{job.maxSalary}} {{job.currency}} per {{job.salaryUnit.toLowerCase()}}</p>
-                  <p class="small pe-4 mt-2">Contract : {{job.contractType == 'FIXED_DATE' ? 'FIXED DATE' : 'OPEN ENDED'}}</p>
-                  <p class="small pe-4 mt-2" *ngIf="job.contractType == 'FIXED_DATE'">Period : {{job.period}} {{job.periodUnit}}</p>
-                  <p class="small pe-4 mt-2">{{job.description}}</p>
+                  <p class="small pe-4 mt-2">Salary : {{job.minSalary}} - {{job.maxSalary}} {{job.currency}}
+                    per {{job.salaryUnit.toLowerCase()}}</p>
+                  <p class="small pe-4 mt-2">Contract
+                    : {{job.contractType == 'FIXED_DATE' ? 'FIXED DATE' : 'OPEN ENDED'}}</p>
+                  <p class="small pe-4 mt-2" *ngIf="job.contractType == 'FIXED_DATE'">Period
+                    : {{job.period}} {{job.periodUnit}}</p>
+                  <div class="d-flex me-2 mt-3 flex-wrap">
+          <span *ngFor="let skill of job.skills" class="badge bg-primary small me-2"
+                style="padding: 5px 8px;">{{skill}}</span>
+                  </div>
+                  <p class="small pe-4 mt-3" style="white-space: pre-line;">{{job.description}}</p>
                   <p class="small pe-4 mt-3 text-end fw-bold">{{job.createdAt | date : 'short'}}</p>
-                  <div *ngIf="authStateService.hasAuthority('TALENT') && authStateService.authState.status == 'VERIFIED'" class="d-flex justify-content-end pe-4 ps-4 mt-3">
-                    <button [disabled]="job.applied" (click)="handleApplyToJob(job.id)" class="btn btn-primary btn-sm col-3">Apply to job</button>
+                  <div
+                    *ngIf="authStateService.hasAuthority('TALENT') && authStateService.authState.status == 'VERIFIED'"
+                    class="d-flex justify-content-end pe-4 ps-4 mt-3">
+                    <button [disabled]="job.applied" (click)="handleApplyToJob(job.id)"
+                            class="btn btn-primary btn-sm col-3">Apply to job
+                    </button>
                   </div>
                 </div>
               </li>

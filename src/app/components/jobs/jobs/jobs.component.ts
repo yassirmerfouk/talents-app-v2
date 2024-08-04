@@ -1,7 +1,7 @@
 import {Component, inject, OnDestroy, OnInit} from '@angular/core';
 import {Page} from "../../../models/page.model";
 import {Job} from "../../../models/job.model";
-import {FormBuilder, FormGroup} from "@angular/forms";
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {EventService} from "../../../services/event.service";
 import {EventType} from "../../../state/event-type.enum";
 import {Store} from "../../../state/store.service";
@@ -36,7 +36,7 @@ export class JobsComponent implements OnInit, OnDestroy {
 
   private helper: Helper = inject(Helper);
   private errorSuccessSubscription !: Subscription;
-  public errorSuccessState : ErrorSuccessState = {};
+  public errorSuccessState: ErrorSuccessState = {};
 
 
   public ngOnInit(): void {
@@ -50,17 +50,25 @@ export class JobsComponent implements OnInit, OnDestroy {
     );
 
     this.searchForm = this.formBuilder.group({
-      keyword: this.formBuilder.control("")
+      keyword: this.formBuilder.control(null, [Validators.required])
     });
 
     this.errorSuccessSubscription = this.helper.subscribeToErrorSuccessState(this.errorSuccessState);
+
+    /*this.searchForm.get('keyword')?.valueChanges.subscribe(
+      (value: string) => {
+        this.keyword = value;
+        this.searchJobs();
+      }
+    );*/
 
     this.searchJobs();
   }
 
   public searchJobs(): void {
     this.eventService.dispatchEvent({
-      eventType : EventType.SEARCH_JOBS, payload : {keyword : this.keyword, page : this.page, size : this.size}});
+      eventType: EventType.SEARCH_JOBS, payload: {keyword: this.keyword, page: this.page, size: this.size}
+    });
   }
 
   public handleSearchJobs(): void {
@@ -88,9 +96,9 @@ export class JobsComponent implements OnInit, OnDestroy {
   }
 
   public ngOnDestroy() {
-    if(this.stateSubscription)
+    if (this.stateSubscription)
       this.stateSubscription.unsubscribe();
-    if(this.errorSuccessSubscription)
+    if (this.errorSuccessSubscription)
       this.errorSuccessSubscription.unsubscribe();
   }
 
