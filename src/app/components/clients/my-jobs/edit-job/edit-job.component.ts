@@ -36,44 +36,42 @@ export class EditJobComponent implements OnInit, OnDestroy{
   public errorSuccessState : ErrorSuccessState = {};
 
   public ngOnInit()  : void{
+
     if(this.job){
       this.skillService.getSkills().subscribe({
         next : (skills : Array<any>) => {
-
-          this.jobForm = this.formBuilder.group({
-            id : this.formBuilder.control(this.job.id),
-            title : this.formBuilder.control(this.job.title),
-            sector : this.formBuilder.control(this.job.sector),
-            minSalary : this.formBuilder.control(this.job.minSalary),
-            maxSalary : this.formBuilder.control(this.job.maxSalary),
-            salaryUnit: this.formBuilder.control(this.job.salaryUnit),
-            currency : this.formBuilder.control(this.job.currency),
-            yearsOfExperiences : this.formBuilder.control(this.job.yearsOfExperiences),
-            numberOfTalents : this.formBuilder.control(this.job.numberOfTalents),
-            type : this.formBuilder.control(this.job.type),
-            contractType : this.formBuilder.control(this.job.contractType),
-            period : this.formBuilder.control(this.job.period),
-            periodUnit : this.formBuilder.control(this.job.periodUnit ? this.job.periodUnit : ''),
-            description : this.formBuilder.control(this.job.description),
-            skill: this.formBuilder.control("")
-          });
-
-          this.skillsList = this.job.skills;
-
           this.existedSkills = skills.map(skill => skill.title);
-
-          this.jobForm.get('skill')?.valueChanges.subscribe((value: string) => {
-            if (value)
-              this.searchedSkills = this.existedSkills.filter(skill => skill.includes(value.toUpperCase()));
-            else
-              this.searchedSkills = [];
-          });
         }
       });
 
-      this.errorSuccessSubscription = this.helper.subscribeToErrorSuccessState(this.errorSuccessState);
+      this.jobForm = this.formBuilder.group({
+        id : this.formBuilder.control(this.job.id),
+        title : this.formBuilder.control(this.job.title),
+        sector : this.formBuilder.control(this.job.sector),
+        minSalary : this.formBuilder.control(this.job.minSalary),
+        maxSalary : this.formBuilder.control(this.job.maxSalary),
+        salaryUnit: this.formBuilder.control(this.job.salaryUnit),
+        currency : this.formBuilder.control(this.job.currency),
+        yearsOfExperiences : this.formBuilder.control(this.job.yearsOfExperiences),
+        numberOfTalents : this.formBuilder.control(this.job.numberOfTalents),
+        type : this.formBuilder.control(this.job.type),
+        contractType : this.formBuilder.control(this.job.contractType),
+        period : this.formBuilder.control(this.job.period),
+        periodUnit : this.formBuilder.control(this.job.periodUnit ? this.job.periodUnit : ''),
+        description : this.formBuilder.control(this.job.description),
+        skill: this.formBuilder.control("")
+      });
+      this.skillsList = this.job.skills;
+
+      this.jobForm.get('skill')?.valueChanges.subscribe((value: string) => {
+        if (value)
+          this.searchedSkills = this.existedSkills.filter(skill => skill.includes(value.toUpperCase()));
+        else
+          this.searchedSkills = [];
+      });
 
     }
+    this.errorSuccessSubscription = this.helper.subscribeToErrorSuccessState(this.errorSuccessState);
   }
 
   public handleAddSkill(skill : string): void {

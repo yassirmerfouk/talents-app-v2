@@ -30,39 +30,38 @@ export class AddJobComponent implements OnInit, OnDestroy {
 
   private helper: Helper = inject(Helper);
   private errorSuccessSubscription !: Subscription;
-  public errorSuccessState : ErrorSuccessState = {};
+  public errorSuccessState: ErrorSuccessState = {};
 
   public ngOnInit(): void {
 
     this.skillService.getSkills().subscribe({
       next: (skills: Array<any>) => {
-
-        this.jobForm = this.formBuilder.group({
-          title: this.formBuilder.control(null),
-          sector: this.formBuilder.control(null),
-          minSalary: this.formBuilder.control(""),
-          maxSalary: this.formBuilder.control(""),
-          salaryUnit: this.formBuilder.control(""),
-          currency: this.formBuilder.control(""),
-          yearsOfExperiences: this.formBuilder.control(""),
-          numberOfTalents: this.formBuilder.control(""),
-          type: this.formBuilder.control(""),
-          contractType: this.formBuilder.control(""),
-          period: this.formBuilder.control(""),
-          periodUnit: this.formBuilder.control(""),
-          description: this.formBuilder.control(null),
-          skill: this.formBuilder.control("")
-        });
-
         this.existedSkills = skills.map(skill => skill.title);
-
-        this.jobForm.get('skill')?.valueChanges.subscribe((value: string) => {
-          if (value)
-            this.searchedSkills = this.existedSkills.filter(skill => skill.includes(value.toUpperCase()));
-          else
-            this.searchedSkills = [];
-        });
       }
+    });
+
+    this.jobForm = this.formBuilder.group({
+      title: this.formBuilder.control(null),
+      sector: this.formBuilder.control(null),
+      minSalary: this.formBuilder.control(""),
+      maxSalary: this.formBuilder.control(""),
+      salaryUnit: this.formBuilder.control(""),
+      currency: this.formBuilder.control(""),
+      yearsOfExperiences: this.formBuilder.control(""),
+      numberOfTalents: this.formBuilder.control(""),
+      type: this.formBuilder.control(""),
+      contractType: this.formBuilder.control(""),
+      period: this.formBuilder.control(""),
+      periodUnit: this.formBuilder.control(""),
+      description: this.formBuilder.control(null),
+      skill: this.formBuilder.control("")
+    });
+
+    this.jobForm.get('skill')?.valueChanges.subscribe((value: string) => {
+      if (value)
+        this.searchedSkills = this.existedSkills.filter(skill => skill.includes(value.toUpperCase()));
+      else
+        this.searchedSkills = [];
     });
 
     this.errorSuccessSubscription = this.helper.subscribeToErrorSuccessState(this.errorSuccessState);
@@ -94,7 +93,7 @@ export class AddJobComponent implements OnInit, OnDestroy {
   }
 
   public ngOnDestroy(): void {
-    if(this.errorSuccessSubscription)
+    if (this.errorSuccessSubscription)
       this.errorSuccessSubscription.unsubscribe();
   }
 }
