@@ -63,6 +63,8 @@ import { InterviewComponent } from './components/jobs/job/interview/interview.co
 import { AddClientMeetComponent } from './components/meets/add-client-meet/add-client-meet.component';
 import { NotificationsComponent } from './components/notifications/notifications/notifications.component';
 import { AdminSkillsComponent } from './components/skills/admin-skills/admin-skills.component';
+import { ClientSelectionsComponent } from './components/selections/client-selections/client-selections.component';
+import { AdminSelectionsComponent } from './components/selections/admin-selections/admin-selections.component';
 
 @NgModule({
   declarations: [
@@ -120,6 +122,8 @@ import { AdminSkillsComponent } from './components/skills/admin-skills/admin-ski
     AddClientMeetComponent,
     NotificationsComponent,
     AdminSkillsComponent,
+    ClientSelectionsComponent,
+    AdminSelectionsComponent,
   ],
   imports: [
     BrowserModule,

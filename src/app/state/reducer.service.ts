@@ -34,6 +34,8 @@ import {MeetService} from "../services/meet.service";
 import {JobInterview} from "../models/job.interview.model";
 import {JobInterviewService} from "../services/job.interview.service";
 import {Helper} from "../helper/helper";
+import {SelectionService} from "../services/selection.service";
+import {Selection, SelectionRequest} from "../models/selection.model";
 
 @Injectable({
   providedIn: 'root'
@@ -58,6 +60,7 @@ export class Reducer {
   private certificationService: CertificationService = inject(CertificationService);
   private meetService: MeetService = inject(MeetService);
   private jobInterviewService: JobInterviewService = inject(JobInterviewService);
+  private selectionService : SelectionService = inject(SelectionService);
 
   private router: Router = inject(Router);
 
@@ -384,6 +387,19 @@ export class Reducer {
             break;
           case EventType.PROGRAM_CLIENT_MEET :
             this.programClientMeet($event.payload);
+            break;
+
+          case EventType.GET_MY_SELECTIONS :
+            this.getMySelections($event.payload);
+            break;
+          case EventType.GET_SELECTIONS :
+            this.getSelections($event.payload);
+            break;
+          case EventType.GET_SELECTION :
+            this.getSelection($event.payload);
+            break;
+          case EventType.ADD_SELECTION :
+            this.addSelection($event.payload);
             break;
         }
       }
@@ -1483,6 +1499,48 @@ export class Reducer {
             this.helper.setErrorInState(error);
           }
         });
+      }, error : (error : HttpErrorResponse) => {
+        this.helper.setErrorInState(error);
+      }
+    });
+  }
+
+
+  public getMySelections(payload : any) : void {
+    this.selectionService.getMySelections(payload.page, payload.size).subscribe({
+      next : (selectionsPage : Page<Selection>) => {
+        this.store.setState({mySelectionsState : {selectionsPage : selectionsPage}});
+      }, error : (error : HttpErrorResponse) => {
+        this.helper.setErrorInState(error);
+      }
+    });
+  }
+
+  public getSelections(payload : any) : void {
+    this.selectionService.getSelections(payload.status, payload.page, payload.size).subscribe({
+      next : (selectionsPage : Page<Selection>) => {
+        this.store.setState({selectionsState : {selectionsPage : selectionsPage}});
+      }, error : (error : HttpErrorResponse) => {
+        this.helper.setErrorInState(error);
+      }
+    });
+  }
+
+  public getSelection(id : number) : void {
+    this.selectionService.getSelectionById(id).subscribe({
+      next : (selection : Selection) => {
+        this.store.setState({selectionState : {selection : selection}});
+      }, error : (error : HttpErrorResponse) => {
+        this.helper.setErrorInState(error);
+      }
+    });
+  }
+
+  public addSelection(selection : SelectionRequest) : void {
+    this.selectionService.addSelection(selection).subscribe({
+      next : (selection : Selection) => {
+        this.helper.setSuccessMessageInState("Your selection has been added with success.");
+        this.router.navigateByUrl("/client/my-selections");
       }, error : (error : HttpErrorResponse) => {
         this.helper.setErrorInState(error);
       }

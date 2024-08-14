@@ -33,19 +33,18 @@ export class RegistrationTalentComponent implements OnInit, OnDestroy {
   public ngOnInit(): void {
 
     this.locationService.getCities().subscribe({
-      next: (cities: Array<string>) => {
-        this.cities = cities;
-        this.talentRegistration = this.formBuilder.group({
-          lastName: this.formBuilder.control(null),
-          firstName: this.formBuilder.control(null),
-          email: this.formBuilder.control(null),
-          password: this.formBuilder.control(null),
-          phone: this.formBuilder.control(null),
-          title: this.formBuilder.control(null),
-          dateOfBirth: this.formBuilder.control(null),
-          city: this.formBuilder.control("")
-        });
-      }
+      next : (cities: Array<string>) => this.cities = cities
+    });
+
+    this.talentRegistration = this.formBuilder.group({
+      lastName: this.formBuilder.control(null),
+      firstName: this.formBuilder.control(null),
+      email: this.formBuilder.control(null),
+      password: this.formBuilder.control(null),
+      phone: this.formBuilder.control(null),
+      title: this.formBuilder.control(null),
+      dateOfBirth: this.formBuilder.control(null),
+      city: this.formBuilder.control("")
     });
 
     this.stateSubscription = this.helper.subscribeToErrorSuccessState(this.errorSuccessState);

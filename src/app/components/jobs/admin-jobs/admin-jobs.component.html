@@ -23,7 +23,7 @@
           <th class="border-0">Titre</th>
           <th class="border-0">Secteur</th>
           <th class="border-0">Date de création</th>
-          <th class="border-0">Type</th>
+          <th class="border-0">Client</th>
           <th class="border-0">Statut</th>
           <th class="border-0"></th>
         </tr>
@@ -34,7 +34,7 @@
           <td class="fw-bold">{{job.title}}</td>
           <td>{{job.sector}}</td>
           <td>{{job.createdAt | date : 'short'}}</td>
-          <td>{{job.type}}</td>
+          <td>{{job.client.firstName + ' ' + job.client.lastName}}</td>
           <td>
                     <span class="fw-normal"
                           [ngClass]="{

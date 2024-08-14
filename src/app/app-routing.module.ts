@@ -27,6 +27,8 @@ import {TalentsComponent} from "./components/talents/talents/talents.component";
 import {MeetsComponent} from "./components/meets/meets/meets.component";
 import {NotificationsComponent} from "./components/notifications/notifications/notifications.component";
 import {AdminSkillsComponent} from "./components/skills/admin-skills/admin-skills.component";
+import {ClientSelectionsComponent} from "./components/selections/client-selections/client-selections.component";
+import {AdminSelectionsComponent} from "./components/selections/admin-selections/admin-selections.component";
 
 const routes: Routes = [
   {
@@ -58,6 +60,13 @@ const routes: Routes = [
   {
     path: 'client/my-jobs',
     component: MyJobsComponent,
+    canActivate: [authenticationGuard, authorizationGuard],
+    data: {role: 'CLIENT'}
+  },
+
+  {
+    path: 'client/my-selections',
+    component: ClientSelectionsComponent,
     canActivate: [authenticationGuard, authorizationGuard],
     data: {role: 'CLIENT'}
   },
@@ -124,6 +133,13 @@ const routes: Routes = [
     canActivate: [authenticationGuard, authorizationGuard],
     data: {role: 'ADMIN'}
   },
+
+  {
+    path: 'admin/selections',
+    component: AdminSelectionsComponent,
+    canActivate: [authenticationGuard],
+    data: {role: 'ADMIN'}
+  }
 ];
 
 @NgModule({
