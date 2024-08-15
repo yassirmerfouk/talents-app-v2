@@ -1,0 +1,66 @@
+<div class="modal fade show" style="display: block;">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h6 class="h6 modal-title">Add new selection</h6>
+        <button (click)="handleCloseAddSelection()" type="button" class="btn-close"></button>
+      </div>
+      <form *ngIf="selectionForm" [formGroup]="selectionForm" (ngSubmit)="handleAddSelection()">
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Title</label>
+              <input formControlName="title" type="text" class="form-control" placeholder="Title">
+              <div *ngIf="errorSuccessState.errors?.has('title')"
+                   class="text-danger mt-2 small">{{errorSuccessState.errors?.get('title')}}</div>
+            </div>
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Sector</label>
+              <input formControlName="sector" type="text" class="form-control" placeholder="Sector">
+              <div *ngIf="errorSuccessState.errors?.has('sector')"
+                   class="text-danger mt-2 small">{{errorSuccessState.errors?.get('sector')}}</div>
+            </div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Description</label>
+            <textarea formControlName="description" class="form-control" rows="8"
+                      placeholder="Selection description"></textarea>
+            <div *ngIf="errorSuccessState.errors?.has('description')"
+                 class="text-danger mt-2 small">{{errorSuccessState.errors?.get('description')}}</div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Talents</label>
+            <div *ngIf="talents.length == 0" class="alert" role="alert">
+              Your talents selection list is empty, please try to add talents before adding a selection request
+            </div>
+            <div class="d-flex flex-wrap">
+              <div *ngFor="let talent of talents" style="width: 32%" class="mb-2 me-2">
+                <div class="card shadow border-0 text-center p-0">
+                  <div class="profile-cover rounded-top" style="height: 150px">
+                    <img style="width: 100%; height: 150px; filter: blur(2px);" class="profile-cover rounded-top"
+                         src="assets/img/profile-cover.jpg">
+                  </div>
+                  <div class="card-body pb-1"><img style="position: relative;"
+                                                   [src]="talent.image ? talent.image : 'assets/img/no-image.jpg'"
+                                                   class="avatar-xl rounded-circle mx-auto mt-n7 mb-2"
+                                                   alt="Neil Portrait">
+                    <h5 class="h5">{{talent.firstName + ' ' + talent.lastName}} <i (click)="handleUnselectTalent(talent.id)" class="bi bi-x-circle-fill text-danger"></i>
+                    </h5>
+                    <h6 class="h6">{{talent.title}}</h6>
+                    <p class="text-gray mb-1">{{talent.city}}, MAROC</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary btn-sm">Close</button>
+          <button type="submit" class="btn btn-primary btn-sm">Add</button>
+        </div>
+      </form>
+    </div>
+
+  </div>
+</div>

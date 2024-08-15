@@ -1,7 +1,7 @@
 <div class="card border-0 shadow mb-4">
   <div class="card-body">
     <div class="d-flex justify-content-end mb-2 container">
-      <a> <i class="bi bi-plus-circle fa-2x custom-icon"></i></a>
+      <a (click)="handleOpenAddSelection()"> <i class="bi bi-plus-circle fa-2x custom-icon"></i></a>
     </div>
     <div *ngIf="selectionsPage" class="table-responsive">
       <table class="table table-hover table-centered table-nowrap mb-0 rounded">
@@ -37,6 +37,17 @@
                 </svg>
                 <span class="visually-hidden">Toggle Dropdown</span></button>
               <div class="dropdown-menu dashboard-dropdown dropdown-menu-start mt-2 py-1">
+                <a class="dropdown-item d-flex align-items-center"
+                >
+                  <i class="bi bi-eye-fill text-info me-2 custom-icon-sm"></i>
+                  Show </a
+                >
+                <a *ngIf="selection.status == 'CREATED'" class="dropdown-item d-flex align-items-center"
+                (click)="handleDeleteSelection(selection.id)"
+                >
+                  <i class="bi bi-trash-fill text-danger me-2 custom-icon-sm"></i>
+                  Delete </a
+                >
               </div>
             </div>
           </td>
@@ -63,4 +74,6 @@
     </div>
   </div>
 </div>
+
+<app-add-selection *ngIf="openAddSelection"></app-add-selection>
 

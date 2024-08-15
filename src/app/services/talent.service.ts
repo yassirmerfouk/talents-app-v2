@@ -1,5 +1,5 @@
 import {inject, Injectable} from "@angular/core";
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpParams} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {Talent, TalentRequest} from "../models/talent.model";
 import {Page} from "../models/page.model";
@@ -32,5 +32,11 @@ export class TalentService{
 
   public updateSkills(skills : Array<string>) : Observable<Array<string>>{
     return this.httpClient.patch<Array<string>>(`${this.api}/skills`, {skills : skills});
+  }
+
+  public getTalentsByList(ids : Array<number>) : Observable<Array<Talent>>{
+    let params = new HttpParams();
+    params = params.append('ids', ids.join(','));
+    return this.httpClient.get<Array<Talent>>(`${this.api}/by-list`, { params });
   }
 }

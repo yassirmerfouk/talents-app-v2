@@ -60,7 +60,7 @@ export class Reducer {
   private certificationService: CertificationService = inject(CertificationService);
   private meetService: MeetService = inject(MeetService);
   private jobInterviewService: JobInterviewService = inject(JobInterviewService);
-  private selectionService : SelectionService = inject(SelectionService);
+  private selectionService: SelectionService = inject(SelectionService);
 
   private router: Router = inject(Router);
 
@@ -400,6 +400,29 @@ export class Reducer {
             break;
           case EventType.ADD_SELECTION :
             this.addSelection($event.payload);
+            break;
+          case EventType.DELETE_SELECTION :
+            this.deleteSelection($event.payload);
+            break;
+
+          case EventType.OPEN_ADD_SELECTION :
+            this.openAddSelection();
+            break;
+          case EventType.CLOSE_ADD_SELECTION :
+            this.closeAddSelection();
+            break;
+
+          case EventType.SELECT_TALENT_IN_LOCAL :
+            this.selectTalentInLocal($event.payload);
+            break;
+          case EventType.UNSELECT_TALENT_IN_LOCAL :
+            this.unselectTalentInLocal($event.payload);
+            break;
+          case EventType.GET_TALENTS_IN_LOCAL :
+            this.getTalentsInLocal();
+            break;
+          case EventType.LOAD_LOCAL_TALENTS :
+            this.loadLocalTalents();
             break;
         }
       }
@@ -983,8 +1006,8 @@ export class Reducer {
         this.helper.setSuccessMessageInState("Your experience has been updated with success.");
       },
       error: (error: HttpErrorResponse) => {
-      this.helper.setErrorInState(error);
-    }
+        this.helper.setErrorInState(error);
+      }
     });
   }
 
@@ -1488,7 +1511,7 @@ export class Reducer {
 
   public programClientMeet(meet: Meet): void {
     this.jobInterviewService.acceptJobInterview(meet.application.jobInterviews[0].id).subscribe({
-      next : () => {
+      next: () => {
         this.meetService.addMeet(meet).subscribe({
           next: () => {
             this.dispatcherSubject.next({eventType: EventType.CLOSE_ADD_CLIENT_MEET});
@@ -1499,51 +1522,119 @@ export class Reducer {
             this.helper.setErrorInState(error);
           }
         });
-      }, error : (error : HttpErrorResponse) => {
+      }, error: (error: HttpErrorResponse) => {
         this.helper.setErrorInState(error);
       }
     });
   }
 
 
-  public getMySelections(payload : any) : void {
+  public getMySelections(payload: any): void {
     this.selectionService.getMySelections(payload.page, payload.size).subscribe({
-      next : (selectionsPage : Page<Selection>) => {
-        this.store.setState({mySelectionsState : {selectionsPage : selectionsPage}});
-      }, error : (error : HttpErrorResponse) => {
+      next: (selectionsPage: Page<Selection>) => {
+        this.store.setState({mySelectionsState: {selectionsPage: selectionsPage}});
+      }, error: (error: HttpErrorResponse) => {
         this.helper.setErrorInState(error);
       }
     });
   }
 
-  public getSelections(payload : any) : void {
+  public getSelections(payload: any): void {
     this.selectionService.getSelections(payload.status, payload.page, payload.size).subscribe({
-      next : (selectionsPage : Page<Selection>) => {
-        this.store.setState({selectionsState : {selectionsPage : selectionsPage}});
-      }, error : (error : HttpErrorResponse) => {
+      next: (selectionsPage: Page<Selection>) => {
+        this.store.setState({selectionsState: {selectionsPage: selectionsPage}});
+      }, error: (error: HttpErrorResponse) => {
         this.helper.setErrorInState(error);
       }
     });
   }
 
-  public getSelection(id : number) : void {
+  public getSelection(id: number): void {
     this.selectionService.getSelectionById(id).subscribe({
-      next : (selection : Selection) => {
-        this.store.setState({selectionState : {selection : selection}});
-      }, error : (error : HttpErrorResponse) => {
+      next: (selection: Selection) => {
+        this.store.setState({selectionState: {selection: selection}});
+      }, error: (error: HttpErrorResponse) => {
         this.helper.setErrorInState(error);
       }
     });
   }
 
-  public addSelection(selection : SelectionRequest) : void {
+  public addSelection(selection: SelectionRequest): void {
     this.selectionService.addSelection(selection).subscribe({
-      next : (selection : Selection) => {
+      next: (selection: Selection) => {
+        let mySelectionsState = this.store.state.mySelectionsState;
+        mySelectionsState.selectionsPage.content.unshift(selection);
+        this.store.setState({mySelectionsState: mySelectionsState});
+        this.dispatcherSubject.next({eventType: EventType.CLOSE_ADD_SELECTION});
+        this.clearLocalTalents();
         this.helper.setSuccessMessageInState("Your selection has been added with success.");
-        this.router.navigateByUrl("/client/my-selections");
-      }, error : (error : HttpErrorResponse) => {
+      }, error: (error: HttpErrorResponse) => {
         this.helper.setErrorInState(error);
       }
     });
+  }
+
+  public deleteSelection(id: number): void {
+    this.selectionService.deleteSelection(id).subscribe({
+      next: () => {
+        let mySelectionsState = this.store.state.mySelectionsState;
+        mySelectionsState.selectionsPage.content = mySelectionsState.selectionsPage.content
+          .filter((selection: Selection) => selection.id != id);
+        this.store.setState({mySelectionsState: mySelectionsState});
+        this.helper.setSuccessMessageInState("Your selection has been deleted with success.");
+      }, error: (error: HttpErrorResponse) => {
+        this.helper.setErrorInState(error);
+      }
+    });
+  }
+
+  public selectTalentInLocal(talentId: number): void {
+    let localTalentsState = this.store.state.localTalentsState;
+    if (localTalentsState.localTalents.includes(talentId))
+      alert("Talent is already selected!");
+    else if (localTalentsState.localTalents.length == 5)
+      alert("You can't select more than 5 talents.");
+    else {
+      localTalentsState.localTalents.push(talentId);
+      this.store.setState({localTalentsState: localTalentsState});
+      localStorage.setItem("localTalents", localTalentsState.localTalents);
+    }
+  }
+
+  public unselectTalentInLocal(talentId: number): void {
+    let localTalentsState = this.store.state.localTalentsState;
+    if (!localTalentsState.localTalents.includes(talentId))
+      alert("Talent does not exists in selected list!")
+    else {
+      localTalentsState.localTalents = localTalentsState.localTalents.filter((id: number) => id != talentId);
+      this.store.setState({localTalentsState: localTalentsState});
+      localStorage.setItem("localTalents", localTalentsState.localTalents);
+    }
+  }
+
+  public getTalentsInLocal(): void {
+    this.store.setState({localTalentsState: this.store.state.localTalentsState});
+  }
+
+  public loadLocalTalents(): void {
+    let localTalents = localStorage.getItem("localTalents");
+    if (localTalents) {
+      this.store.setState({localTalentsState: {localTalents: localTalents.split(",").map(Number)}});
+    }
+  }
+
+  public clearLocalTalents(): void {
+    this.store.setState({localTalentsState: {localTalents: []}});
+    localStorage.removeItem("localTalents");
+  }
+
+  public openAddSelection(): void {
+    let mySelectionsState = {...this.store.state.mySelectionsState, ...{openAddSelection: true}};
+    this.store.setState({mySelectionsState: mySelectionsState});
+  }
+
+  public closeAddSelection(): void {
+    let mySelectionsState = {...this.store.state.mySelectionsState, ...{openAddSelection: false}};
+    this.store.setState({mySelectionsState: mySelectionsState});
   }
 }

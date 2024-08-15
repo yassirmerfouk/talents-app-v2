@@ -80,8 +80,11 @@ export class AppComponent implements OnInit {
     );
 
 
-    if (login)
+    if (login){
       this.reducer.dispatcherSubject.next({eventType: EventType.CONNECT_TO_NOTIFICATION});
+    }
+
+    this.reducer.dispatcherSubject.next({eventType : EventType.LOAD_LOCAL_TALENTS});
 
   }
 

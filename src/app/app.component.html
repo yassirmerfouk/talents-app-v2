@@ -53,12 +53,28 @@
             <span class="sidebar-text">Jobs</span>
           </a>
         </li>
+        <li *ngIf="authStateService.hasAuthority('ADMIN')" class="nav-item">
+          <a routerLink="/admin/selections" class="nav-link">
+            <span class="sidebar-icon">
+          <i class="bi bi-person-workspace custom-side-icon me-1"></i>
+        </span>
+            <span class="sidebar-text">Selections</span>
+          </a>
+        </li>
         <li *ngIf="authStateService.hasAuthority('CLIENT')" class="nav-item">
           <a routerLink="/client/my-jobs" class="nav-link">
             <span class="sidebar-icon">
           <i class="bi bi-person-workspace custom-side-icon me-1"></i>
         </span>
             <span class="sidebar-text">My jobs</span>
+          </a>
+        </li>
+        <li *ngIf="authStateService.hasAuthority('CLIENT')" class="nav-item">
+          <a routerLink="/client/my-selections" class="nav-link">
+            <span class="sidebar-icon">
+          <i class="bi bi-person-workspace custom-side-icon me-1"></i>
+        </span>
+            <span class="sidebar-text">My selections</span>
           </a>
         </li>
         <li class="nav-item">

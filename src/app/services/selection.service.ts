@@ -29,4 +29,8 @@ export class SelectionService {
   public getSelectionById(id: number): Observable<Selection> {
     return this.httpClient.get<Selection>(`${this.api}/${id}`);
   }
+
+  public deleteSelection(id : number) : Observable<any> {
+    return this.httpClient.delete(`${this.api}/${id}`);
+  }
 }

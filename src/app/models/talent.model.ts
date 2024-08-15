@@ -14,7 +14,8 @@ export interface TalentRequest{
   summary : string,
   dateOfBirth : string,
   city : string,
-  address : string
+  address : string,
+  available : boolean
 }
 
 export interface Talent extends User{
@@ -24,6 +25,7 @@ export interface Talent extends User{
   dateOfBirth: string,
   city: string,
   address: string,
+  available : boolean
 
   experiences : Array<Experience>,
 

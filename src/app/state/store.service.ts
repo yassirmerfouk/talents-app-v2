@@ -13,7 +13,7 @@ export class Store {
   private errorSuccessStateSubject : Subject<ErrorSuccessState> = new Subject<ErrorSuccessState>();
   public errorSuccessState$ : Observable<ErrorSuccessState> = this.errorSuccessStateSubject.asObservable();
 
-  public state: any = {};
+  public state: any = {localTalentsState : {localTalents : []}};
   public errorSuccessState : ErrorSuccessState = {};
 
   public setState(state: any): void {

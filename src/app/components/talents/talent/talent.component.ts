@@ -26,31 +26,44 @@ export class TalentComponent implements OnInit, OnDestroy {
 
   public helper: Helper = inject(Helper);
   private errorSuccessSubscription !: Subscription;
-  public errorSuccessState : ErrorSuccessState = {};
+  public errorSuccessState: ErrorSuccessState = {};
+
+  public localTalents !: Array<any>;
 
   public ngOnInit(): void {
 
     this.stateSubscription = this.store.state$.subscribe(
-      (state : any) => {
+      (state: any) => {
         this.talent = state.talentState?.talent;
+        this.localTalents = state.localTalentsState?.localTalents;
       }
     );
 
     this.activatedRoute.params.subscribe(
       (params: any) => {
         this.id = params['id'];
-        if(this.id)
-          this.eventService.dispatchEvent({eventType : EventType.GET_TALENT, payload : this.id});
+        if (this.id)
+          this.eventService.dispatchEvent({eventType: EventType.GET_TALENT, payload: this.id});
       }
     );
 
     this.errorSuccessSubscription = this.helper.subscribeToErrorSuccessState(this.errorSuccessState);
   }
 
+  public handleSelectTalent(talentId: number): void {
+    if (confirm("Are you sure to select this talent?"))
+      this.eventService.dispatchEvent({eventType: EventType.SELECT_TALENT_IN_LOCAL, payload: talentId});
+  }
+
+  public handleUnselectTalent(talentId: number): void {
+    if (confirm("Are you sure to unselect this talent?"))
+      this.eventService.dispatchEvent({eventType: EventType.UNSELECT_TALENT_IN_LOCAL, payload: talentId});
+  }
+
   public ngOnDestroy() {
-    if(this.stateSubscription)
+    if (this.stateSubscription)
       this.stateSubscription.unsubscribe();
-    if(this.errorSuccessSubscription)
+    if (this.errorSuccessSubscription)
       this.errorSuccessSubscription.unsubscribe();
   }
 

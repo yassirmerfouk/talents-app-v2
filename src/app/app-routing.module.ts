@@ -29,6 +29,7 @@ import {NotificationsComponent} from "./components/notifications/notifications/n
 import {AdminSkillsComponent} from "./components/skills/admin-skills/admin-skills.component";
 import {ClientSelectionsComponent} from "./components/selections/client-selections/client-selections.component";
 import {AdminSelectionsComponent} from "./components/selections/admin-selections/admin-selections.component";
+import {AddSelectionComponent} from "./components/selections/add-selection/add-selection.component";
 
 const routes: Routes = [
   {

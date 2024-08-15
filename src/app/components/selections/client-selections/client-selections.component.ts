@@ -24,6 +24,8 @@ export class ClientSelectionsComponent implements OnInit, OnDestroy {
 
   public selectionsPage !: Page<Selection>;
 
+  public openAddSelection : boolean = false;
+
 
   private helper: Helper = inject(Helper);
   private errorSuccessSubscription !: Subscription;
@@ -34,8 +36,7 @@ export class ClientSelectionsComponent implements OnInit, OnDestroy {
     this.store.state$.subscribe(
       (state: any) => {
         this.selectionsPage = state.mySelectionsState?.selectionsPage;
-        if (this.selectionsPage)
-          console.log(this.selectionsPage);
+        this.openAddSelection = state.mySelectionsState?.openAddSelection;
       }
     );
 
@@ -49,6 +50,15 @@ export class ClientSelectionsComponent implements OnInit, OnDestroy {
       eventType: EventType.GET_MY_SELECTIONS,
       payload: {page: this.page, size: this.size}
     })
+  }
+
+  public handleOpenAddSelection() : void {
+    this.eventService.dispatchEvent({eventType : EventType.OPEN_ADD_SELECTION});
+  }
+
+  public handleDeleteSelection(id : number) : void {
+    if(confirm("Are you sure to delete this selection?"))
+      this.eventService.dispatchEvent({eventType : EventType.DELETE_SELECTION, payload : id});
   }
 
   public handleChangePage(page: number): void {
