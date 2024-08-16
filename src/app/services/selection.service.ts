@@ -37,4 +37,24 @@ export class SelectionService {
   public updateSelectionItem(item : ItemResponse) : Observable<ItemResponse>{
     return this.httpClient.put<ItemResponse>(`${this.api}/item/${item.id}`, item);
   }
+
+  public acceptSelection(id : number): Observable<any>{
+    return this.httpClient.post(`${this.api}/${id}/accept`, {});
+  }
+
+  public refuseSelection(id : number): Observable<any>{
+    return this.httpClient.post(`${this.api}/${id}/refuse`, {});
+  }
+
+  public startSelectionProcess(id : number) : Observable<any>{
+    return this.httpClient.post(`${this.api}/${id}/in-process`, {});
+  }
+
+  public startSelectionChoosing(id : number) : Observable<any>{
+    return this.httpClient.post(`${this.api}/${id}/in-choosing`, {});
+  }
+
+  public closeSelection(id : number) : Observable<any>{
+    return this.httpClient.post(`${this.api}/${id}/close`, {});
+  }
 }

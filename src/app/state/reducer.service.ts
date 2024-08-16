@@ -1674,4 +1674,49 @@ export class Reducer {
       }, error: (error: HttpErrorResponse) => this.helper.setErrorInState(error)
     });
   }
+
+  public acceptSelection(selection : Selection) : void {
+    this.selectionService.acceptSelection(selection.id).subscribe({
+      next : () => {
+        selection.status = 'ACCEPTED';
+        this.helper.setSuccessMessageInState("Selection accepted with success.");
+      }, error: (error: HttpErrorResponse) => this.helper.setErrorInState(error)
+    });
+  }
+
+  public refuseSelection(selection : Selection) : void {
+    this.selectionService.refuseSelection(selection.id).subscribe({
+      next : () => {
+        selection.status = 'REFUSED';
+        this.helper.setSuccessMessageInState("Selection refused with success.");
+      }, error: (error: HttpErrorResponse) => this.helper.setErrorInState(error)
+    });
+  }
+
+  public startSelectionProcess(selection : Selection) : void {
+    this.selectionService.startSelectionProcess(selection.id).subscribe({
+      next : () => {
+        selection.status = 'IN_PROCESS';
+        this.helper.setSuccessMessageInState("Selection in process with success.");
+      }, error: (error: HttpErrorResponse) => this.helper.setErrorInState(error)
+    });
+  }
+
+  public startSelectionChoosing(selection : Selection) : void {
+    this.selectionService.startSelectionChoosing(selection.id).subscribe({
+      next : () => {
+        selection.status = 'IN_CHOOSING';
+        this.helper.setSuccessMessageInState("Selection in choosing with success.");
+      }, error: (error: HttpErrorResponse) => this.helper.setErrorInState(error)
+    });
+  }
+
+  public closeSelection(selection : Selection) : void {
+    this.selectionService.closeSelection(selection.id).subscribe({
+      next : () => {
+        selection.status = 'CLOSED';
+        this.helper.setSuccessMessageInState("Selection closed with success.");
+      }, error: (error: HttpErrorResponse) => this.helper.setErrorInState(error)
+    });
+  }
 }
