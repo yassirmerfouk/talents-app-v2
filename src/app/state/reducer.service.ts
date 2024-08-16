@@ -35,7 +35,7 @@ import {JobInterview} from "../models/job.interview.model";
 import {JobInterviewService} from "../services/job.interview.service";
 import {Helper} from "../helper/helper";
 import {SelectionService} from "../services/selection.service";
-import {Selection, SelectionRequest} from "../models/selection.model";
+import {ItemResponse, Selection, SelectionRequest} from "../models/selection.model";
 
 @Injectable({
   providedIn: 'root'
@@ -423,6 +423,16 @@ export class Reducer {
             break;
           case EventType.LOAD_LOCAL_TALENTS :
             this.loadLocalTalents();
+            break;
+
+          case EventType.OPEN_SELECTION_REPORT:
+            this.openSelectionReport($event.payload);
+            break;
+          case EventType.CLOSE_SELECTION_REPORT:
+            this.closeSelectionReport();
+            break;
+          case EventType.UPDATE_SELECTION_ITEM :
+            this.updateSelectionItem($event.payload);
             break;
         }
       }
@@ -1636,5 +1646,32 @@ export class Reducer {
   public closeAddSelection(): void {
     let mySelectionsState = {...this.store.state.mySelectionsState, ...{openAddSelection: false}};
     this.store.setState({mySelectionsState: mySelectionsState});
+  }
+
+  public openSelectionReport(item: ItemResponse): void {
+    let selectionState = this.store.state.selectionState;
+    selectionState = {...selectionState, ...{openSelectionReport: true, selectedItem: item}};
+    this.store.setState({selectionState: selectionState});
+  }
+
+  public closeSelectionReport(): void {
+    let selectionState = this.store.state.selectionState;
+    selectionState = {...selectionState, ...{openSelectionReport: false, selectedItem: undefined}};
+    this.store.setState({selectionState: selectionState});
+  }
+
+  public updateSelectionItem(item: ItemResponse): void {
+    this.selectionService.updateSelectionItem(item).subscribe({
+      next: (itemResponse: ItemResponse) => {
+        let selectionState = this.store.state.selectionState;
+        selectionState.selection.items = selectionState.selection.items.map((item: ItemResponse) => {
+          if (item.id == itemResponse.id) item = itemResponse;
+          return item;
+        });
+        this.store.setState({selectionState: selectionState});
+        this.dispatcherSubject.next({eventType: EventType.CLOSE_SELECTION_REPORT});
+        this.helper.setSuccessMessageInState("Report has been added with success.");
+      }, error: (error: HttpErrorResponse) => this.helper.setErrorInState(error)
+    });
   }
 }

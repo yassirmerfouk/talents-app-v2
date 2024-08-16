@@ -7,6 +7,7 @@ import {Subscription} from "rxjs";
 import {EventType} from "../../../state/event-type.enum";
 import {Helper} from "../../../helper/helper";
 import {ErrorSuccessState} from "../../../state/states.model";
+import {AuthStateService} from "../../../services/auth.state.service";
 
 @Component({
   selector: 'app-talent',
@@ -20,6 +21,8 @@ export class TalentComponent implements OnInit, OnDestroy {
   private stateSubscription !: Subscription;
 
   private activatedRoute: ActivatedRoute = inject(ActivatedRoute);
+
+  public authStateService : AuthStateService = inject(AuthStateService);
 
   private id !: number;
   public talent !: Talent;

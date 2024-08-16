@@ -68,8 +68,10 @@
           <div class="card-body pb-1"><img style="position: relative;"
                                            [src]="talent.image ? talent.image : 'assets/img/no-image.jpg'"
                                            class="avatar-xl rounded-circle mx-auto mt-n7 mb-2" alt="Neil Portrait">
-            <h4 class="h4">{{talent.firstName + ' ' + talent.lastName}} <i class="bi bi-check-circle-fill custom-icon"
-                                                                           [ngClass]="{'text-success' : talent.status == 'VERIFIED', 'text-warning' : talent.status == 'WAITING', 'text-gray' : talent.status == 'NOT_VERIFIED'}"></i>
+            <h4 class="h4">{{talent.firstName + ' ' + talent.lastName}},
+              <span style="font-size: 18px;" [ngClass]="{'text-success' : talent.available, 'text-danger' : !talent.available}">{{talent.available ? 'available ' : 'anavailable '}}</span>
+              <i class="bi bi-check-circle-fill custom-icon"
+                 [ngClass]="{'text-success' : talent.status == 'VERIFIED', 'text-warning' : talent.status == 'WAITING', 'text-gray' : talent.status == 'NOT_VERIFIED'}"></i>
             </h4>
             <h5 class="fw-normal">{{talent.title}}</h5>
             <p class="text-gray mb-1">{{talent.city}}, MAROC</p>

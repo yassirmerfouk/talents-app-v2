@@ -45,6 +45,7 @@ export class UpdateTalentInfosComponent implements OnInit, OnDestroy {
         email: this.formBuilder.control(this.talent.email),
         phone: this.formBuilder.control(this.talent.phone),
         title: this.formBuilder.control(this.talent.title),
+        available: this.formBuilder.control(this.talent.available),
         summary: this.formBuilder.control(this.talent.summary),
         dateOfBirth: this.formBuilder.control(this.talent.dateOfBirth),
         city: this.formBuilder.control(this.talent.city),

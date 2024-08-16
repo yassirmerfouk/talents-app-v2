@@ -1,7 +1,7 @@
 import {inject, Injectable} from "@angular/core";
 import {HttpClient} from "@angular/common/http";
 import {environment} from "../../environments/environment";
-import {Selection, SelectionRequest} from "../models/selection.model";
+import {ItemResponse, Selection, SelectionRequest} from "../models/selection.model";
 import {Observable} from "rxjs";
 import {Page} from "../models/page.model";
 
@@ -32,5 +32,9 @@ export class SelectionService {
 
   public deleteSelection(id : number) : Observable<any> {
     return this.httpClient.delete(`${this.api}/${id}`);
+  }
+
+  public updateSelectionItem(item : ItemResponse) : Observable<ItemResponse>{
+    return this.httpClient.put<ItemResponse>(`${this.api}/item/${item.id}`, item);
   }
 }

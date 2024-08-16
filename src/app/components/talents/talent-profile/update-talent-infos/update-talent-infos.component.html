@@ -31,10 +31,20 @@
               <div *ngIf="errorSuccessState.errors?.has('phone')" class="text-danger mt-2 small">{{errorSuccessState.errors?.get('phone')}}</div>
             </div>
           </div>
-          <div class="mb-3">
-            <label class="form-label">Title</label>
-            <input formControlName="title" type="text" class="form-control">
-            <div *ngIf="errorSuccessState.errors?.has('title')" class="text-danger mt-2 small">{{errorSuccessState.errors?.get('title')}}</div>
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Title</label>
+              <input formControlName="title" type="text" class="form-control">
+              <div *ngIf="errorSuccessState.errors?.has('title')" class="text-danger mt-2 small">{{errorSuccessState.errors?.get('title')}}</div>
+            </div>
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Availability</label>
+              <select formControlName="available" class="form-select">
+                <option value="true">Available</option>
+                <option value="false">Unavailable</option>
+              </select>
+              <div *ngIf="errorSuccessState.errors?.has('available')" class="text-danger mt-2 small">{{errorSuccessState.errors?.get('available')}}</div>
+            </div>
           </div>
           <div class="mb-3">
             <label class="form-label">Summary</label>

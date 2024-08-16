@@ -66,6 +66,8 @@ import { AdminSkillsComponent } from './components/skills/admin-skills/admin-ski
 import { ClientSelectionsComponent } from './components/selections/client-selections/client-selections.component';
 import { AdminSelectionsComponent } from './components/selections/admin-selections/admin-selections.component';
 import { AddSelectionComponent } from './components/selections/add-selection/add-selection.component';
+import { SelectionComponent } from './components/selections/selection/selection.component';
+import { ReportComponent } from './components/selections/selection/report/report.component';
 
 @NgModule({
   declarations: [
@@ -126,6 +128,8 @@ import { AddSelectionComponent } from './components/selections/add-selection/add
     ClientSelectionsComponent,
     AdminSelectionsComponent,
     AddSelectionComponent,
+    SelectionComponent,
+    ReportComponent,
   ],
   imports: [
     BrowserModule,

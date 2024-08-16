@@ -1,0 +1,36 @@
+<div class="modal fade show" style="display: block;">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h6 class="h6 modal-title">Report for {{item.talent.firstName + ' ' + item.talent.lastName}}</h6>
+        <button (click)="handleCloseSelectionReport()" type="button" class="btn-close"></button>
+      </div>
+      <div *ngIf="authStateService.hasAuthority('ADMIN')">
+        <form *ngIf="itemForm" [formGroup]="itemForm" (ngSubmit)="handleUpdateSelectionItem()">
+          <div class="modal-body">
+            <div class="mb-3">
+              <label class="form-label">Report</label>
+              <textarea formControlName="report" class="form-control" rows="20"
+                        placeholder="Report for this talent"></textarea>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary btn-sm">Close</button>
+            <button type="submit" class="btn btn-primary btn-sm">Update</button>
+          </div>
+        </form>
+      </div>
+      <div *ngIf="authStateService.hasAuthority('CLIENT')">
+        <div class="modal-body">
+          <div *ngIf="!item.report" class="alert alert-warning" role="alert">
+            This talent has no report yet, a report will be added after the interview with the admins
+          </div>
+          <div *ngIf="item.report">
+            <p class="pe-4 custom-p mt-2 pre-line">{{item.report}}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
