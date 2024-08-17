@@ -5,7 +5,7 @@
         <h6 class="h6 modal-title">Report for {{item.talent.firstName + ' ' + item.talent.lastName}}</h6>
         <button (click)="handleCloseSelectionReport()" type="button" class="btn-close"></button>
       </div>
-      <div *ngIf="authStateService.hasAuthority('ADMIN')">
+      <div *ngIf="authStateService.hasAuthority('ADMIN') && item.selectionStatus == 'ACCEPTED'">
         <form *ngIf="itemForm" [formGroup]="itemForm" (ngSubmit)="handleUpdateSelectionItem()">
           <div class="modal-body">
             <div class="mb-3">
@@ -20,7 +20,7 @@
           </div>
         </form>
       </div>
-      <div *ngIf="authStateService.hasAuthority('CLIENT')">
+      <div *ngIf="item.selectionStatus == 'IN_CHOOSING' || item.selectionStatus == 'CLOSED'">
         <div class="modal-body">
           <div *ngIf="!item.report" class="alert alert-warning" role="alert">
             This talent has no report yet, a report will be added after the interview with the admins

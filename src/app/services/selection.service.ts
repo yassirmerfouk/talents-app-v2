@@ -46,15 +46,15 @@ export class SelectionService {
     return this.httpClient.post(`${this.api}/${id}/refuse`, {});
   }
 
-  public startSelectionProcess(id : number) : Observable<any>{
-    return this.httpClient.post(`${this.api}/${id}/in-process`, {});
-  }
-
   public startSelectionChoosing(id : number) : Observable<any>{
-    return this.httpClient.post(`${this.api}/${id}/in-choosing`, {});
+    return this.httpClient.post(`${this.api}/${id}/choosing`, {});
   }
 
   public closeSelection(id : number) : Observable<any>{
     return this.httpClient.post(`${this.api}/${id}/close`, {});
+  }
+
+  public selectTalent(itemId : number) : Observable<any>{
+    return this.httpClient.post(`${this.api}/select-talent/${itemId}`, {});
   }
 }

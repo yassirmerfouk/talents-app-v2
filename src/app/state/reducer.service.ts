@@ -434,6 +434,22 @@ export class Reducer {
           case EventType.UPDATE_SELECTION_ITEM :
             this.updateSelectionItem($event.payload);
             break;
+
+          case EventType.ACCEPT_SELECTION:
+            this.acceptSelection($event.payload);
+            break;
+          case EventType.REFUSE_SELECTION:
+            this.refuseSelection($event.payload);
+            break;
+          case EventType.START_SELECTION_CHOOSING:
+            this.startSelectionChoosing($event.payload);
+            break
+          case EventType.CLOSE_SELECTION:
+            this.closeSelection($event.payload);
+            break;
+          case EventType.SELECT_TALENT_FOR_SELECTION:
+            this.selectTalentForSelection($event.payload);
+            break;
         }
       }
     );
@@ -1675,47 +1691,63 @@ export class Reducer {
     });
   }
 
-  public acceptSelection(selection : Selection) : void {
+  public acceptSelection(selection: Selection): void {
     this.selectionService.acceptSelection(selection.id).subscribe({
-      next : () => {
+      next: () => {
         selection.status = 'ACCEPTED';
+        selection.items = selection.items.map(se => {
+          se.selectionStatus = 'ACCEPTED';
+          return se;
+        });
         this.helper.setSuccessMessageInState("Selection accepted with success.");
       }, error: (error: HttpErrorResponse) => this.helper.setErrorInState(error)
     });
   }
 
-  public refuseSelection(selection : Selection) : void {
+  public refuseSelection(selection: Selection): void {
     this.selectionService.refuseSelection(selection.id).subscribe({
-      next : () => {
+      next: () => {
         selection.status = 'REFUSED';
+        selection.items = selection.items.map(se => {
+          se.selectionStatus = 'REFUSED';
+          return se;
+        });
         this.helper.setSuccessMessageInState("Selection refused with success.");
       }, error: (error: HttpErrorResponse) => this.helper.setErrorInState(error)
     });
   }
 
-  public startSelectionProcess(selection : Selection) : void {
-    this.selectionService.startSelectionProcess(selection.id).subscribe({
-      next : () => {
-        selection.status = 'IN_PROCESS';
-        this.helper.setSuccessMessageInState("Selection in process with success.");
-      }, error: (error: HttpErrorResponse) => this.helper.setErrorInState(error)
-    });
-  }
-
-  public startSelectionChoosing(selection : Selection) : void {
+  public startSelectionChoosing(selection: Selection): void {
     this.selectionService.startSelectionChoosing(selection.id).subscribe({
-      next : () => {
+      next: () => {
         selection.status = 'IN_CHOOSING';
+        selection.items = selection.items.map(se => {
+          se.selectionStatus = 'IN_CHOOSING';
+          return se;
+        });
         this.helper.setSuccessMessageInState("Selection in choosing with success.");
       }, error: (error: HttpErrorResponse) => this.helper.setErrorInState(error)
     });
   }
 
-  public closeSelection(selection : Selection) : void {
+  public closeSelection(selection: Selection): void {
     this.selectionService.closeSelection(selection.id).subscribe({
-      next : () => {
+      next: () => {
         selection.status = 'CLOSED';
+        selection.items = selection.items.map(se => {
+          se.selectionStatus = 'CLOSED';
+          return se;
+        });
         this.helper.setSuccessMessageInState("Selection closed with success.");
+      }, error: (error: HttpErrorResponse) => this.helper.setErrorInState(error)
+    });
+  }
+
+  public selectTalentForSelection(selectionItem: ItemResponse): void {
+    this.selectionService.selectTalent(selectionItem.id).subscribe({
+      next: () => {
+        selectionItem.selected = !selectionItem.selected;
+        this.helper.setSuccessMessageInState("Selection status for this talent has been changed with success.");
       }, error: (error: HttpErrorResponse) => this.helper.setErrorInState(error)
     });
   }

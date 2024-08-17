@@ -26,7 +26,8 @@ export interface ItemResponse {
   id : number,
   selected : boolean,
   level : string,
-  report : string
+  report : string,
+  selectionStatus :string,
   talent : Talent
 }
 

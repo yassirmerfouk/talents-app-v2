@@ -53,6 +53,31 @@ export class SelectionComponent implements OnInit, OnDestroy {
     this.eventService.dispatchEvent({eventType : EventType.OPEN_SELECTION_REPORT, payload : item});
   }
 
+  public handleAcceptSelection(selection : Selection) : void {
+    if(confirm("Are you sure to accept this selection?"))
+    this.eventService.dispatchEvent({eventType : EventType.ACCEPT_SELECTION, payload : selection});
+  }
+
+  public handleRefuseSelection(selection : Selection) : void {
+    if(confirm("Are you sure to refuse this selection?"))
+    this.eventService.dispatchEvent({eventType : EventType.REFUSE_SELECTION, payload : selection});
+  }
+
+  public handleStartSelectionChoosing(selection : Selection) : void {
+    if(confirm("Are you sure to start client choosing for this selection?"))
+      this.eventService.dispatchEvent({eventType : EventType.START_SELECTION_CHOOSING, payload : selection});
+  }
+
+  public handleCloseSelection(selection : Selection) : void {
+    if(confirm("Are you sure to close this selection?"))
+      this.eventService.dispatchEvent({eventType : EventType.CLOSE_SELECTION, payload : selection});
+  }
+
+  public handleSelectTalent(selectionItem : ItemResponse) : void {
+    if(confirm("Are you sure to change selection status for this talent?"))
+      this.eventService.dispatchEvent({eventType : EventType.SELECT_TALENT_FOR_SELECTION, payload : selectionItem});
+  }
+
   public ngOnDestroy(): void {
     if(this.stateSubscription)
       this.stateSubscription.unsubscribe();

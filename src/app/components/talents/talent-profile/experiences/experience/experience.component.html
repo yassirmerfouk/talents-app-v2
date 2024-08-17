@@ -2,6 +2,7 @@
   <div>
     <h3 class="h6 mb-1">{{experience.title}} - {{experience.company}}</h3>
     <p class="small pe-4">{{experience.city}}, {{experience.company}}</p>
+    <p class="small pe-4">{{helper.getMonth(experience.monthOfStart)}} {{experience.yearOfStart}} to {{helper.getMonth(experience.monthOfEnd)}} {{experience.yearOfEnd}}</p>
     <p class="small pe-4 pre-line">{{experience.description}}</p>
   </div>
   <div class="d-flex justify-content-between">

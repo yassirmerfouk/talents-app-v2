@@ -35,8 +35,8 @@ export class ReportComponent implements OnInit {
     this.eventService.dispatchEvent({eventType: EventType.CLOSE_SELECTION_REPORT});
   }
 
-  public handleUpdateSelectionItem() : void {
+  public handleUpdateSelectionItem(): void {
     this.item.report = this.itemForm.value.report;
-    this.eventService.dispatchEvent({eventType : EventType.UPDATE_SELECTION_ITEM, payload : this.item});
+    this.eventService.dispatchEvent({eventType: EventType.UPDATE_SELECTION_ITEM, payload: this.item});
   }
 }
