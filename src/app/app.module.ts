@@ -68,6 +68,8 @@ import { AdminSelectionsComponent } from './components/selections/admin-selectio
 import { AddSelectionComponent } from './components/selections/add-selection/add-selection.component';
 import { SelectionComponent } from './components/selections/selection/selection.component';
 import { ReportComponent } from './components/selections/selection/report/report.component';
+import { AddSelectionMeetComponent } from './components/meets/add-selection-meet/add-selection-meet.component';
+import { DashboardComponent } from './components/dashboard/dashboard/dashboard.component';
 
 @NgModule({
   declarations: [
@@ -130,6 +132,8 @@ import { ReportComponent } from './components/selections/selection/report/report
     AddSelectionComponent,
     SelectionComponent,
     ReportComponent,
+    AddSelectionMeetComponent,
+    DashboardComponent,
   ],
   imports: [
     BrowserModule,

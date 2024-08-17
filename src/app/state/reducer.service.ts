@@ -465,9 +465,9 @@ export class Reducer {
           if (this.authStateService.hasAuthority('TALENT'))
             this.router.navigateByUrl('/jobs');
           if (this.authStateService.hasAuthority('CLIENT'))
-            this.router.navigateByUrl('/jobs');
+            this.router.navigateByUrl('/client/my-jobs');
           if (this.authStateService.hasAuthority('ADMIN'))
-            this.router.navigateByUrl('/admin/jobs');
+            this.router.navigateByUrl('/admin/dashboard');
         }
       },
       error: (error: HttpErrorResponse) => {

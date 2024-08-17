@@ -31,6 +31,7 @@ import {ClientSelectionsComponent} from "./components/selections/client-selectio
 import {AdminSelectionsComponent} from "./components/selections/admin-selections/admin-selections.component";
 import {AddSelectionComponent} from "./components/selections/add-selection/add-selection.component";
 import {SelectionComponent} from "./components/selections/selection/selection.component";
+import {DashboardComponent} from "./components/dashboard/dashboard/dashboard.component";
 
 const routes: Routes = [
   {
@@ -147,6 +148,13 @@ const routes: Routes = [
     component: AdminSelectionsComponent,
     canActivate: [authenticationGuard],
     data: {role: 'ADMIN'}
+  },
+
+  {
+    path : 'admin/dashboard',
+    component : DashboardComponent,
+    canActivate : [authenticationGuard, authorizationGuard],
+    data: {role : 'ADMIN'}
   }
 ];
 
