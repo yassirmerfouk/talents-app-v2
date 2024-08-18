@@ -450,6 +450,13 @@ export class Reducer {
           case EventType.SELECT_TALENT_FOR_SELECTION:
             this.selectTalentForSelection($event.payload);
             break;
+
+          case EventType.OPEN_ADD_SELECTION_MEET :
+            this.openAddSelectionMeet($event.payload);
+            break;
+          case EventType.CLOSE_ADD_SELECTION_MEET :
+            this.closeAddSelectionMeet();
+            break;
         }
       }
     );
@@ -1750,5 +1757,13 @@ export class Reducer {
         this.helper.setSuccessMessageInState("Selection status for this talent has been changed with success.");
       }, error: (error: HttpErrorResponse) => this.helper.setErrorInState(error)
     });
+  }
+
+  public openAddSelectionMeet(user: User): void {
+    this.store.setState({selectionMeetState: {openAddSelectionMeet: true, selectedUserForMeet: user}});
+  }
+
+  public closeAddSelectionMeet(): void {
+    this.store.setState({selectionMeetState: {openAddSelectionMeet: false, selectedUserForMeet: undefined}});
   }
 }

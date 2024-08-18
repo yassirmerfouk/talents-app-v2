@@ -6,6 +6,9 @@ import {ActivatedRoute} from "@angular/router";
 import {AuthStateService} from "../../../services/auth.state.service";
 import {EventType} from "../../../state/event-type.enum";
 import {ItemResponse, Selection} from "../../../models/selection.model";
+import {Client} from "../../../models/client.model";
+import {Talent} from "../../../models/talent.model";
+import {User} from "../../../models/user.model";
 
 @Component({
   selector: 'app-selection',
@@ -27,6 +30,9 @@ export class SelectionComponent implements OnInit, OnDestroy {
   public openSelectionReport : boolean = false;
   public selectedItem !: ItemResponse;
 
+  public openAddSelectionMeet : boolean =false;
+  public selectedUserForMeet !: User;
+
   public ngOnInit(): void {
 
     this.stateSubscription = this.store.state$.subscribe(
@@ -34,6 +40,9 @@ export class SelectionComponent implements OnInit, OnDestroy {
         this.selection = state.selectionState?.selection;
         this.openSelectionReport = state.selectionState?.openSelectionReport;
         this.selectedItem = state.selectionState?.selectedItem;
+
+        this.openAddSelectionMeet = state.selectionMeetState?.openAddSelectionMeet;
+        this.selectedUserForMeet = state.selectionMeetState?.selectedUserForMeet;
       }
     );
 
@@ -76,6 +85,14 @@ export class SelectionComponent implements OnInit, OnDestroy {
   public handleSelectTalent(selectionItem : ItemResponse) : void {
     if(confirm("Are you sure to change selection status for this talent?"))
       this.eventService.dispatchEvent({eventType : EventType.SELECT_TALENT_FOR_SELECTION, payload : selectionItem});
+  }
+
+  public handleOpenAddSelectionMeetForClient(client : Client) : void {
+    this.eventService.dispatchEvent({eventType : EventType.OPEN_ADD_SELECTION_MEET, payload : client});
+  }
+
+  public handleOpenAddSelectionMeetForTalent(talent : Talent) : void {
+    this.eventService.dispatchEvent({eventType : EventType.OPEN_ADD_SELECTION_MEET, payload : talent});
   }
 
   public ngOnDestroy(): void {
