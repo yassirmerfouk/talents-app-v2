@@ -18,20 +18,16 @@ export class MeetService{
     return this.httpClient.post<Meet>(`${this.api}`, meet);
   }
 
+  public addSelectionMeet(meet : Meet) : Observable<Meet>{
+    return this.httpClient.post<Meet>(`${this.api}/selection`, meet);
+  }
+
   public closeMeet(id : number) : Observable<any>{
     return this.httpClient.post(`${this.api}/${id}/close`, {});
   }
 
   public getMeets(date : string, page : number, size : number) : Observable<Page<Meet>>{
     return this.httpClient.get<Page<Meet>>(`${this.api}?date=${date}&page=${page}&size=${size}`);
-  }
-
-  public acceptMeet(id : number) : Observable<any>{
-    return this.httpClient.post(`${this.api}/${id}/accept`, {});
-  }
-
-  public refuseMeet(id : number) : Observable<any>{
-    return this.httpClient.post(`${this.api}/${id}/refuse`, {});
   }
 
 }

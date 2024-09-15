@@ -11,9 +11,10 @@
                                            [src]="talent.image ? talent.image : 'assets/img/no-image.jpg'"
                                            class="avatar-xl rounded-circle mx-auto mt-n7 mb-2" alt="Neil Portrait">
             <h4 class="h4">{{talent.firstName + ' ' + talent.lastName}},
-              <span style="font-size: 18px;" [ngClass]="{'text-success' : talent.available, 'text-danger' : !talent.available}">{{talent.available ? 'available ' : 'anavailable '}}</span>
+              <span style="font-size: 18px;"
+                    [ngClass]="{'text-success' : talent.available, 'text-danger' : !talent.available}">{{talent.available ? 'available ' : 'anavailable '}}</span>
               <i class="bi bi-check-circle-fill custom-icon"
-                                                                           [ngClass]="{'text-success' : talent.status == 'VERIFIED', 'text-warning' : talent.status == 'WAITING', 'text-gray' : talent.status == 'NOT_VERIFIED'}"></i>
+                 [ngClass]="{'text-success' : talent.status == 'VERIFIED', 'text-warning' : talent.status == 'WAITING', 'text-gray' : talent.status == 'NOT_VERIFIED'}"></i>
             </h4>
             <h5 class="fw-normal">{{talent.title}}</h5>
             <p class="text-gray mb-1">{{talent.city}}, MAROC</p>
@@ -66,9 +67,17 @@
 
     <div class="card card-body border-0 shadow mb-4 mb-xl-0 pt-0 pb-0">
       <div class="row mt-4 mb-3 align-items-center">
-        <div *ngIf="authStateService.hasAuthority('CLIENT') && talent.available" class="d-flex justify-content-end">
+        <!--<div *ngIf="authStateService.hasAuthority('CLIENT') && talent.available" class="d-flex justify-content-end">
           <button *ngIf="!localTalents.includes(talent.id)" (click)="handleSelectTalent(talent.id)" type="button" class="btn btn-primary btn-sm">Select Talent</button>
           <button *ngIf="localTalents.includes(talent.id)" (click)="handleUnselectTalent(talent.id)" type="button" class="btn btn-primary btn-sm">Unselect Talent</button>
+        </div>-->
+        <div class="d-flex justify-content-end">
+          <a *ngIf="!localTalents.includes(talent.id)" (click)="handleSelectTalent(talent.id)">
+            <i class="bi bi-heart" style="font-size: 25px;"></i>
+          </a>
+          <a *ngIf="localTalents.includes(talent.id)" (click)="handleUnselectTalent(talent.id)">
+            <i class="bi bi-heart-fill" style="font-size: 25px;"></i>
+          </a>
         </div>
         <div class="d-flex">
           <div class="col-sm-4 text-uppercase">Email</div>
@@ -115,7 +124,8 @@
           <div>
             <h3 class="h6 mb-1">{{experience.title}} - {{experience.company}}</h3>
             <p class="small pe-4">{{experience.city}}, {{experience.company}}</p>
-            <p class="small pe-4">{{helper.getMonth(experience.monthOfStart)}} {{experience.yearOfStart}} to {{helper.getMonth(experience.monthOfEnd)}} {{experience.yearOfEnd}}</p>
+            <p class="small pe-4">{{helper.getMonth(experience.monthOfStart)}} {{experience.yearOfStart}}
+              to {{helper.getMonth(experience.monthOfEnd)}} {{experience.yearOfEnd}}</p>
             <p class="small pe-4 pre-line">{{experience.description}}</p>
           </div>
         </li>

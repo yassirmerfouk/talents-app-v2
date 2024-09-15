@@ -71,20 +71,6 @@
               <i class="bi bi-eye-fill me-2 custom-icon-sm"></i>
               Open </a>
             <a
-            (click)="acceptMeet(meet)"
-            *ngIf="meet.status == 'CREATED'
-            && (authState.hasAuthority('TALENT') || authState.hasAuthority('CLIENT'))"
-            class="dropdown-item d-flex align-items-center">
-            <i class="bi bi-check-circle-fill text-success me-2 custom-icon-sm"></i>
-            Accept </a>
-            <a
-              (click)="refuseMeet(meet)"
-              *ngIf="meet.status == 'CREATED'
-              && (authState.hasAuthority('TALENT') || authState.hasAuthority('CLIENT'))"
-              class="dropdown-item d-flex align-items-center">
-              <i class="bi bi-x-circle-fill text-danger me-2 custom-icon-sm"></i>
-              Refuse </a>
-            <a
               (click)="closeMeet(meet)"
               *ngIf="meet.status != 'CLOSED'
 && authState.hasAuthority('ADMIN')"

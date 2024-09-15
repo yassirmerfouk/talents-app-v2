@@ -315,12 +315,6 @@ export class Reducer {
           case EventType.GET_MEETS :
             this.getMeets($event.payload);
             break;
-          case EventType.ACCEPT_MEET :
-            this.acceptMeet($event.payload);
-            break;
-          case EventType.REFUSE_MEET :
-            this.refuseMeet($event.payload);
-            break;
           case EventType.CLOSE_MEET :
             this.closeMeet($event.payload);
             break;
@@ -456,6 +450,9 @@ export class Reducer {
             break;
           case EventType.CLOSE_ADD_SELECTION_MEET :
             this.closeAddSelectionMeet();
+            break;
+          case EventType.ADD_SELECTION_MEET:
+            this.addSelectionMeet($event.payload);
             break;
         }
       }
@@ -1398,30 +1395,6 @@ export class Reducer {
     });
   }
 
-  public acceptMeet(meet: Meet): void {
-    this.meetService.acceptMeet(meet.id).subscribe({
-      next: () => {
-        meet.status = 'ACCEPTED';
-        this.helper.setSuccessMessageInState("Your meet has been accepted with success.");
-      },
-      error: (error: HttpErrorResponse) => {
-        this.helper.setErrorInState(error);
-      }
-    });
-  }
-
-  public refuseMeet(meet: Meet): void {
-    this.meetService.refuseMeet(meet.id).subscribe({
-      next: () => {
-        meet.status = 'REFUSED';
-        this.helper.setSuccessMessageInState("Your meet has been refused with success.");
-      },
-      error: (error: HttpErrorResponse) => {
-        this.helper.setErrorInState(error);
-      }
-    });
-  }
-
   public closeMeet(meet: Meet): void {
     this.meetService.closeMeet(meet.id).subscribe({
       next: () => {
@@ -1765,5 +1738,15 @@ export class Reducer {
 
   public closeAddSelectionMeet(): void {
     this.store.setState({selectionMeetState: {openAddSelectionMeet: false, selectedUserForMeet: undefined}});
+  }
+
+  public addSelectionMeet(meet : Meet) : void{
+    this.meetService.addSelectionMeet(meet).subscribe({
+      next : (meetResponse : Meet) => {
+        this.dispatcherSubject.next({eventType: EventType.CLOSE_ADD_SELECTION_MEET});
+        this.helper.setSuccessMessageInState("This meet has been programed with success.");
+      }
+      ,error: (error: HttpErrorResponse) => this.helper.setErrorInState(error)
+    });
   }
 }

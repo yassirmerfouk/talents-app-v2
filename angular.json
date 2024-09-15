@@ -48,25 +48,25 @@
             ],
             "scripts": [
               "template/assets/js/volt.js",
-              "template\\vendor\\@popperjs\\core\\dist\\umd/popper.min.js",
-              "template\\vendor\\apexcharts\\dist/apexcharts.min.js",
-              "template\\vendor\\bootstrap\\dist\\js/bootstrap.min.js",
-              "template\\vendor\\choices.js\\public\\assets\\scripts/choices.min.js",
-              "template\\vendor\\countup.js\\dist/countUp.umd.js",
-              "template\\vendor\\dropzone\\dist\\min/dropzone.min.js",
-              "template\\vendor\\fullcalendar/main.min.js",
-              "template\\vendor\\leaflet\\dist/leaflet.js",
-              "template\\vendor\\notyf/notyf.min.js",
-              "template\\vendor\\nouislider\\distribute/nouislider.min.js",
-              "template\\vendor\\onscreen\\dist/on-screen.umd.min.js",
-              "template\\vendor\\simplebar\\dist/simplebar.min.js",
-              "template\\vendor\\simple-datatables\\dist\\umd/simple-datatables.js",
-              "template\\vendor\\smooth-scroll\\dist/smooth-scroll.polyfills.min.js",
-              "template\\vendor\\sortablejs/Sortable.min.js",
-              "template\\vendor\\svgmap\\dist/svgMap.min.js",
-              "template\\vendor\\svg-pan-zoom\\dist/svg-pan-zoom.min.js",
-              "template\\vendor\\sweetalert2\\dist/sweetalert2.min.js",
-              "template\\vendor\\vanillajs-datepicker\\dist\\js/datepicker.min.js"
+              "template/vendor/@popperjs/core/dist/umd/popper.min.js",
+              "template/vendor/apexcharts/dist/apexcharts.min.js",
+              "template/vendor/bootstrap/dist/js/bootstrap.min.js",
+              "template/vendor/choices.js/public/assets/scripts/choices.min.js",
+              "template/vendor/countup.js/dist/countUp.umd.js",
+              "template/vendor/dropzone/dist/min/dropzone.min.js",
+              "template/vendor/fullcalendar/main.min.js",
+              "template/vendor/leaflet/dist/leaflet.js",
+              "template/vendor/notyf/notyf.min.js",
+              "template/vendor/nouislider/distribute/nouislider.min.js",
+              "template/vendor/onscreen/dist/on-screen.umd.min.js",
+              "template/vendor/simplebar/dist/simplebar.min.js",
+              "template/vendor/simple-datatables/dist/umd/simple-datatables.js",
+              "template/vendor/smooth-scroll/dist/smooth-scroll.polyfills.min.js",
+              "template/vendor/sortablejs/Sortable.min.js",
+              "template/vendor/svgmap/dist/svgMap.min.js",
+              "template/vendor/svg-pan-zoom/dist/svg-pan-zoom.min.js",
+              "template/vendor/sweetalert2/dist/sweetalert2.min.js",
+              "template/vendor/vanillajs-datepicker/dist/js/datepicker.min.js"
             ]
           },
           "configurations": {
@@ -75,7 +75,7 @@
                 {
                   "type": "initial",
                   "maximumWarning": "500kb",
-                  "maximumError": "1mb"
+                  "maximumError": "5mb"
                 },
                 {
                   "type": "anyComponentStyle",

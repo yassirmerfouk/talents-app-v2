@@ -74,16 +74,6 @@ export class MeetsComponent implements OnInit, OnDestroy{
     this.eventService.dispatchEvent({eventType : EventType.OPEN_SHOW_MEET, payload : meet});
   }
 
-  public acceptMeet(meet : Meet) : void {
-    if(confirm("Are you sure to accept this meet?"))
-    this.eventService.dispatchEvent({eventType : EventType.ACCEPT_MEET, payload : meet});
-  }
-
-  public refuseMeet(meet : Meet) : void {
-    if(confirm("Are you sure to refuse this meet?"))
-    this.eventService.dispatchEvent({eventType : EventType.REFUSE_MEET, payload : meet});
-  }
-
   public closeMeet(meet : Meet) : void {
     if(confirm("Are you sure to close this meet?"))
     this.eventService.dispatchEvent({eventType : EventType.CLOSE_MEET, payload : meet});

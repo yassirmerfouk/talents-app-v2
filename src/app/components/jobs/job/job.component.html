@@ -50,6 +50,10 @@
             </div>
           </div>
 
+          <div *ngIf="authStateService.hasAuthority('ADMIN') && job.status == 'ADMIN_CLOSE'" class="d-grid gap-2 mt-3">
+            <button class="btn btn-primary btn-sm">Generate contract</button>
+          </div>
+
         </div>
       </div>
     </div>
