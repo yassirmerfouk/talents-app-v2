@@ -70,6 +70,7 @@ import { SelectionComponent } from './components/selections/selection/selection.
 import { ReportComponent } from './components/selections/selection/report/report.component';
 import { AddSelectionMeetComponent } from './components/meets/add-selection-meet/add-selection-meet.component';
 import { DashboardComponent } from './components/dashboard/dashboard/dashboard.component';
+import { HomeComponent } from './components/home/home.component';
 
 @NgModule({
   declarations: [
@@ -134,6 +135,7 @@ import { DashboardComponent } from './components/dashboard/dashboard/dashboard.c
     ReportComponent,
     AddSelectionMeetComponent,
     DashboardComponent,
+    HomeComponent,
   ],
   imports: [
     BrowserModule,

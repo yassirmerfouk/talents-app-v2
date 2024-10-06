@@ -32,8 +32,12 @@ import {AdminSelectionsComponent} from "./components/selections/admin-selections
 import {AddSelectionComponent} from "./components/selections/add-selection/add-selection.component";
 import {SelectionComponent} from "./components/selections/selection/selection.component";
 import {DashboardComponent} from "./components/dashboard/dashboard/dashboard.component";
+import {HomeComponent} from "./components/home/home.component";
 
 const routes: Routes = [
+  {
+    path: "", component: HomeComponent
+  },
   {
     path: 'auth', canActivate: [guestGuard], children: [
       {
@@ -139,8 +143,8 @@ const routes: Routes = [
 
   {
     path: 'selection/:id',
-    component : SelectionComponent,
-    canActivate : [authenticationGuard]
+    component: SelectionComponent,
+    canActivate: [authenticationGuard]
   },
 
   {
@@ -151,10 +155,10 @@ const routes: Routes = [
   },
 
   {
-    path : 'admin/dashboard',
-    component : DashboardComponent,
-    canActivate : [authenticationGuard, authorizationGuard],
-    data: {role : 'ADMIN'}
+    path: 'admin/dashboard',
+    component: DashboardComponent,
+    canActivate: [authenticationGuard, authorizationGuard],
+    data: {role: 'ADMIN'}
   }
 ];
 

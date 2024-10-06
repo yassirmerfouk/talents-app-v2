@@ -484,6 +484,7 @@ export class Reducer {
     this.authService.registerTalent(talentRegistration).subscribe({
       next: (response: number) => {
         this.helper.setSuccessMessageInState("Your registration was completed successfully, please check your email for the confirmation.");
+        this.router.navigateByUrl("/auth/login");
       },
       error: (error: HttpErrorResponse) => {
         this.helper.setErrorInState(error);
@@ -495,6 +496,7 @@ export class Reducer {
     this.authService.registerClient(clientRegistration).subscribe({
       next: (response: number) => {
         this.helper.setSuccessMessageInState("Your registration was completed successfully, please check your email for the confirmation.");
+        this.router.navigateByUrl("/auth/login");
       },
       error: (error: HttpErrorResponse) => {
         this.helper.setErrorInState(error);
@@ -517,6 +519,7 @@ export class Reducer {
     this.authService.resetPassword(resetPasswordRequest).subscribe({
       next: () => {
         this.helper.setSuccessMessageInState("Your password has been reset successfully. You can now log in with your new password.");
+        this.router.navigateByUrl("/auth/login");
       },
       error: (error: HttpErrorResponse) => {
         this.helper.setErrorInState(error);
@@ -528,6 +531,7 @@ export class Reducer {
     this.authService.confirmAccount(token).subscribe({
       next: () => {
         this.helper.setSuccessMessageInState("Your account has been successfully confirmed.");
+        this.router.navigateByUrl("/auth/login");
       },
       error: (error: HttpErrorResponse) => {
         this.helper.setErrorInState(error);
@@ -1740,13 +1744,13 @@ export class Reducer {
     this.store.setState({selectionMeetState: {openAddSelectionMeet: false, selectedUserForMeet: undefined}});
   }
 
-  public addSelectionMeet(meet : Meet) : void{
+  public addSelectionMeet(meet: Meet): void {
     this.meetService.addSelectionMeet(meet).subscribe({
-      next : (meetResponse : Meet) => {
+      next: (meetResponse: Meet) => {
         this.dispatcherSubject.next({eventType: EventType.CLOSE_ADD_SELECTION_MEET});
         this.helper.setSuccessMessageInState("This meet has been programed with success.");
       }
-      ,error: (error: HttpErrorResponse) => this.helper.setErrorInState(error)
+      , error: (error: HttpErrorResponse) => this.helper.setErrorInState(error)
     });
   }
 }

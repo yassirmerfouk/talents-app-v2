@@ -72,12 +72,14 @@
           <button *ngIf="localTalents.includes(talent.id)" (click)="handleUnselectTalent(talent.id)" type="button" class="btn btn-primary btn-sm">Unselect Talent</button>
         </div>-->
         <div class="d-flex justify-content-end">
-          <a *ngIf="!localTalents.includes(talent.id)" (click)="handleSelectTalent(talent.id)">
-            <i class="bi bi-heart" style="font-size: 25px;"></i>
-          </a>
-          <a *ngIf="localTalents.includes(talent.id)" (click)="handleUnselectTalent(talent.id)">
-            <i class="bi bi-heart-fill" style="font-size: 25px;"></i>
-          </a>
+          <div class="me-2" *ngIf="authStateService.hasAuthority('CLIENT') && talent.available">
+            <a *ngIf="!localTalents?.includes(talent.id)" (click)="handleSelectTalent(talent.id)">
+              <i class="bi bi-heart" style="font-size: 25px;"></i>
+            </a>
+            <a *ngIf="localTalents?.includes(talent.id)" (click)="handleUnselectTalent(talent.id)">
+              <i class="bi bi-heart-fill" style="font-size: 25px;"></i>
+            </a>
+          </div>
         </div>
         <div class="d-flex">
           <div class="col-sm-4 text-uppercase">Email</div>

@@ -44,8 +44,15 @@
             <button type="submit" class="btn btn-gray-800">Sign in</button>
           </div>
         </form>
-        <div class="d-flex justify-content-center align-items-center mt-4"><span class="fw-normal">Not registered?
-                  <a class="fw-bold">Create account</a></span></div>
+        <div class="d-flex justify-content-center align-items-center mt-4">
+          <span class="fw-normal">Not registered?
+
+          <a class="fw-bold" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">Create account</a>
+             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+    <li><a class="dropdown-item" routerLink="/auth/registration/talent">Register as talent</a></li>
+    <li><a class="dropdown-item" routerLink="/auth/registration/client">Register as client</a></li>
+  </ul>
+          </span></div>
       </div>
     </div>
   </div>
