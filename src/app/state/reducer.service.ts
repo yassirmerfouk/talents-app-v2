@@ -1630,7 +1630,8 @@ export class Reducer {
     let localTalents = localStorage.getItem("localTalents");
     if (localTalents) {
       this.store.setState({localTalentsState: {localTalents: localTalents.split(",").map(Number)}});
-    }
+    }else
+      this.store.setState({localTalentsState: {localTalents: []}});
   }
 
   public clearLocalTalents(): void {
